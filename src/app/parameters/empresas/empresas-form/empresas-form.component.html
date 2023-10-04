@@ -1,0 +1,115 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-body">
+                <form [formGroup]="frmEmpresas" class="mb-4">
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Activo</label>
+                            <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                                <ui-switch formControlName="Estado"></ui-switch>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Código</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+                                <app-forms-messages [error]="frmEmpresas.get('Codigo')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Nit</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Nit">
+                                <app-forms-messages [error]="frmEmpresas.get('Nit')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Razon social </label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="RazonSocial">
+                                <app-forms-messages [error]="frmEmpresas.get('RazonSocial')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Marquilla</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Marquilla">
+                                <app-forms-messages [error]="frmEmpresas.get('Marquilla')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Telefono</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Telefono">
+                                <app-forms-messages [error]="frmEmpresas.get('Telefono')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Correo</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Email">
+                                <app-forms-messages [error]="frmEmpresas.get('Email')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Web </label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Web">
+                                <app-forms-messages [error]="frmEmpresas.get('Web')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Ciudad</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <ng-select [items]="listCiudades" bindLabel="textoMostrar" bindValue="id"  formControlName="CiudadId" > </ng-select>
+                                <app-forms-messages [error]="frmEmpresas.get('CiudadId')"    [statusForm]=statusForm ></app-forms-messages>
+
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Direccion</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Direccion">
+                                <app-forms-messages [error]="frmEmpresas.get('Direccion')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Logo</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
+                                <img [src]="img" alt="" width="200" height="150">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row float-right">
+                        <div class="col-md-12">
+                            <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer" *ngIf="id">
+                <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+                    <li ngbNavItem>
+                      <a ngbNavLink>Modelos por Cargos
+                        <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian los modelos por cargos pertenecientes a la Empresa">
+                          <i class="fa-solid fa-circle-question"></i>
+                        </span > 
+                      </a>
+                      <ng-template ngbNavContent>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12 col-sm-12">
+                            <app-empresas-modelos-cargos [empresaId]="id"></app-empresas-modelos-cargos>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </li>
+
+                    <li ngbNavItem>
+                        <a ngbNavLink>Archivos
+                          <span data-bs-toggle="tooltip" data-bs-placement="left"
+                            title="En este formulario se asocian los archivos pertenecientes a la Empresa">
+                            <i class="fa-solid fa-circle-question"></i>
+                          </span>
+                        </a>
+                        <ng-template ngbNavContent>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                              <app-archivo-form [TablaId]="id" Tabla="empresas"></app-archivo-form>
+                            </div>
+                          </div>
+                        </ng-template>
+                    </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</section>

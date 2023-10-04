@@ -1,0 +1,111 @@
+<!-- <app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb> -->
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <form [formGroup]="frmProductos" class="mb-4">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-2 col-md-4 col-sm-12">Activo</label>
+              <div class="form-group col-lg-2 col-md-6 col-sm-12">
+                <ui-switch formControlName="Estado"></ui-switch>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-2 col-md-4 col-sm-12">Código</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+                <app-forms-messages [error]="frmProductos.get('Codigo')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Nombre</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Nombre">
+                <app-forms-messages [error]="frmProductos.get('Nombre')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Marca</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listMarcas" bindLabel="textoMostrar" bindValue="id"  formControlName="MarcaId" > </ng-select>
+                <app-forms-messages [error]="frmProductos.get('MarcaId')"    [statusForm]=statusForm ></app-forms-messages>
+
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Categoria</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listCategorias" bindLabel="textoMostrar" bindValue="id"  formControlName="CategoriaId" > </ng-select>
+                <app-forms-messages [error]="frmProductos.get('CategoriaId')"    [statusForm]=statusForm ></app-forms-messages>
+
+
+
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Unidad Medida</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listUnidadesMedidas" bindLabel="textoMostrar" bindValue="id"  formControlName="UnidadMedidaId"></ng-select>
+                <app-forms-messages [error]="frmProductos.get('UnidadMedidaId')"    [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Minimo</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm" formControlName="Minimo" (change)="chececkMaxAndMin()"  >
+                <app-forms-messages [error]="frmProductos.get('Minimo')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Maximo</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm" formControlName="Maximo" (change)="chececkMaxAndMin()"  >
+                <div *ngIf="checkMax" class="error">
+                  Maximo debe ser mayor a Minimo
+                </div>
+                <app-forms-messages [error]="frmProductos.get('Maximo')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Precio Costo</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm" formControlName="Precio">
+                <app-forms-messages [error]="frmProductos.get('Precio')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-2 col-md-4 col-sm-12">Caracteristica</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <textarea type="text" class="form-control" formControlName="CaracteristicasData"> </textarea>
+                <app-forms-messages [error]="frmProductos.get('CaracteristicasData')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+
+              <label class="col-lg-2 col-md-4 col-sm-12">Imagen</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                  <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
+                  <img [src]="img" alt="" width="200" height="150">
+              </div>
+            </div>
+          </div>
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer" *ngIf="id">
+        <ul ngbNav #nav="ngbNav" [destroyOnHide]="true" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink>Archivos
+              <span data-bs-toggle="tooltip" data-bs-placement="left"
+                title="En este formulario se asocian los archivos pertenecientes a la Prenda">
+                <i class="fa-solid fa-circle-question"></i>
+              </span>
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-archivo-form [TablaId]="id" Tabla="productos"></app-archivo-form>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</section>

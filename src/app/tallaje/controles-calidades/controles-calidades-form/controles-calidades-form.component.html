@@ -1,0 +1,50 @@
+<section class="content">
+    <div class="container-fluid">
+        <form [formGroup]="frmControlesCalidades" class="mb-4">
+            <div class="modal-header">
+                <h6>{{ titulo }}</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="input-group">
+                        <label class="col-lg-2 col-md-4 col-sm-12">Variable</label>
+                        <div class="form-group col-lg-10 col-md-6 col-sm-12">
+                            <textarea class="form-control form-control-sm" cols="30" rows="10" formControlName="Variable"></textarea>
+                            <app-forms-messages [error]="frmControlesCalidades.get('Variable')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label class="col-lg-2 col-md-4 col-sm-12">Estándar</label>
+                        <div class="form-group col-lg-10 col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="Estandar">
+                            <app-forms-messages [error]="frmControlesCalidades.get('Estandar')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label class="col-lg-2 col-md-4 col-sm-12">Criterio Aceptación</label>
+                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="CriterioAceptacion">
+                            <app-forms-messages [error]="frmControlesCalidades.get('CriterioAceptacion')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2 col-md-4 col-sm-12">Tipo Criterio Aceptación</label>
+                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="TipoCriterio">
+                            <app-forms-messages [error]="frmControlesCalidades.get('TipoCriterio')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row float-right">
+                    <div class="col-md-12">
+                        <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

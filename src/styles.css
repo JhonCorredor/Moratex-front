@@ -1,0 +1,427 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+/*#48487f morado*/
+
+:root {
+    --main-color: rgba(72, 72, 127, 255);
+    --color-acent: rgba(80, 67, 127, 255);
+    /* --main-color: rgba(169, 41, 38, 255);
+    --color-acent: rgba(161, 36, 34, 255); */
+    --font-normal: 13px;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    text-align: left;
+    background-color: #f9f9f9 !important;
+    font-size: var(--font-normal) !important;
+    overflow-x: hidden;
+}
+
+.card-outline {
+    border-top: 3px solid var(--main-color) !important;
+}
+
+.btn-primary {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+    color: white
+}
+
+.btn-primary:hover {
+    background-color: var(--color-acent);
+    border-color: var(--color-acent);
+    color: white;
+}
+
+.btn-primary:focus,
+.btn-primary.focus {
+    background-color: var(--main-color);
+    border-color: var(--main-color);
+    color: white;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active,
+.btn-primary:not(:disabled):not(.disabled).active,
+.show>.btn-primary.dropdown-toggle {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: white;
+}
+
+.btn-primary:not(:disabled):not(.disabled):active:focus,
+.btn-primary:not(:disabled):not(.disabled).active:focus,
+.show>.btn-primary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0 var(--color-accent)
+}
+
+.bg-red {
+    background-color: var(--main-color)!important;
+}
+
+.icheck-primary>input:first-child:not(:checked):not(:disabled):hover+label::before,
+.icheck-primary>input:first-child:not(:checked):not(:disabled):hover+input[type="hidden"]+label::before {
+    border-color: var(--color-acent);
+}
+
+.icheck-primary>input:first-child:not(:checked):not(:disabled):focus+label::before,
+.icheck-primary>input:first-child:not(:checked):not(:disabled):focus+input[type="hidden"]+label::before {
+    border-color: var(--color-acent);
+}
+
+.icheck-primary>input:first-child:checked+label::before,
+.icheck-primary>input:first-child:checked+input[type="hidden"]+label::before {
+    background-color: var(--main-color);
+    border-color: var(--color-acent);
+}
+
+
+/* Works on Firefox */
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #979797 rgb(201, 201, 201);
+}
+
+
+/* Works on Chrome, Edge, and Safari */
+
+*::-webkit-scrollbar {
+    width: 12px;
+}
+
+*::-webkit-scrollbar-track {
+    background: rgb(201, 201, 201);
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #979797;
+    border-radius: 20px;
+    border: 3px solid rgb(201, 201, 201);
+}
+
+.btn {
+    border-radius: 1px !important;
+    margin: 2px !important;
+}
+
+.btn-actions-datatable {
+    line-height: 15px !important;
+    padding: 7px 14px !important;
+    font-size: var(--font-normal) !important;
+}
+
+.btn-mini {
+    line-height: 14px !important;
+    padding: 6px 12px !important;
+    font-size: var(--font-normal) !important;
+}
+
+.btn-mini>i {
+    margin-right: 0px !important;
+}
+
+.dropdown-item:hover {
+    background: rgba(161, 161, 159, 0.397) !important;
+    color: #000000 !important;
+}
+
+.btn-sm {
+    padding: 8px 14px !important;
+    line-height: 16px !important;
+    font-size: var(--font-normal) !important;
+}
+
+.ng-select .ng-select-container {
+    min-height: 32px !important;
+}
+
+.ng-select.ng-select-single .ng-select-container {
+    height: 32px !important;
+}
+
+.form-control-sm {
+    height: 32px !important;
+}
+
+.img-circle {
+    border-radius: 50%;
+}
+
+#crm-contact .img-circle,
+img.comment-img {
+    width: 40px;
+    height: 40px;
+}
+
+.imgs-screen .img-circle {
+    padding: 4px;
+    border: 1px solid #e6e6e4;
+}
+
+.img-hover {
+    position: relative;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.img-overlay {
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    border-radius: 50%;
+    transform: scale(1);
+    margin: 0 auto;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 2;
+    -webkit-transition: all 0.4s ease-in-out;
+    -o-transition: all 0.4s ease-in-out;
+    transition: all 0.4s ease-in-out;
+}
+
+.form-text {
+    font-size: var(--font-normal) !important;
+}
+
+.ng2-tag-input {
+    border: 1px solid #ced4da !important;
+    line-height: 30px !important;
+    border-radius: 2px !important;
+}
+
+.tag {
+    border-radius: 0px !important;
+}
+
+input.form-control {
+    height: 32px !important;
+    font-size: var(--font-normal) !important;
+    border-radius: 2px !important;
+    margin-top: 0% !important;
+}
+
+.form-control {
+    /*height: 31px !important; Favor no quemar los px, afecta los textarea*/
+    font-size: var(--font-normal) !important;
+    border-radius: 2px !important;
+    margin-top: 0% !important;
+}
+
+.ng2-tag-input {
+    border-bottom: 1px solid #ced4da !important;
+    border: 1px solid #ced4da;
+    padding: 2px 5px !important;
+    border-radius: 4px;
+    min-height: 31px !important;
+}
+
+.ng2-tag-input tag {
+    border-radius: 2px !important;
+    border: 1px solid #aaa !important;
+}
+
+.tag__text {
+    line-height: 2;
+    font-size: var(--font-normal);
+    font-weight: 600;
+}
+
+delete-icon svg {
+    height: 13px !important;
+    line-height: 1;
+    vertical-align: top !important;
+    margin-top: 5px;
+}
+
+.ng2-tags-container tag {
+    padding: 0 5px !important;
+    height: 22px !important;
+}
+
+delete-icon:hover {
+    transform: none !important;
+}
+
+.ng2-tag-input__text-input {
+    height: auto !important;
+}
+
+.col-form-label {
+    font-size: var(--font-normal) !important;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+    margin-top: 0.8% !important;
+}
+
+input::placeholder {
+    font-size: var(--font-normal) !important;
+}
+
+option {
+    font-size: var(--font-normal) !important;
+}
+
+.ng-option-label {
+    font-size: var(--font-normal) !important;
+}
+
+.ng-input {
+    font-size: var(--font-normal) !important;
+}
+
+.form-group {
+    margin-bottom: 1% !important;
+}
+
+* a {
+    font-size: var(--font-normal);
+}
+
+.input-group>.form-control,
+.input-group>.form-control-plaintext,
+.input-group>.custom-select,
+.input-group>.custom-file {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    min-width: 0;
+    margin-bottom: 0;
+}
+
+.input-group>.form-control:not(:last-child),
+.input-group>.custom-select:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.ng-select.custom {
+    height: 5px;
+    font-size: var(--font-normal) !important;
+}
+
+.ng-select.custom .ng-select-container ::ng-deep .ng-select-container {
+    height: 5px !important;
+    font-size: var(--font-normal) !important;
+}
+
+.paginate_button.active .page-link {
+    color: white;
+    background-color: var(--main-color) !important;
+    border: 1px solid rgb(183 183 183) !important;
+}
+
+.form-control:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.page-link:focus {
+    border-color: inherit;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+}
+
+.page-link {
+    position: relative !important;
+    display: block !important;
+    padding: .5rem .75rem !important;
+    margin-left: -1px !important;
+    line-height: 1.25 !important;
+    color: #000000 !important;
+    background-color: #fff !important;
+    border: 1px solid #dee2e6 !important;
+}
+
+.custom-slider .ngx-slider .ngx-slider-selection {
+    background: rgb(248, 225, 46) !important;
+}
+
+.custom-slider .ngx-slider .ngx-slider-pointer-min {
+    background: rgb(248, 225, 46) !important;
+}
+
+.custom-slider .ngx-slider .ngx-slider-pointer-max {
+    background: rgb(248, 225, 46) !important;
+}
+
+table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before {
+    background-color: var(--main-color) !important;
+    color: black !important;
+}
+
+.nav-tabs .nav-link.active {
+    border-color: var(--main-color) var(--main-color) #fff !important;
+    border-top: 4px solid;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid var(--main-color) !important;
+}
+
+.nav-link {
+    color: #000000 !important;
+}
+
+.autocomplete-container {
+    box-shadow: none !important;
+    border: 1px solid #ced4da !important;
+    height: auto !important;
+}
+
+.autocomplete-container .input-container input {
+    height: 32px !important;
+}
+
+.autocomplete-container .not-found {
+    padding: 0px 1.75em;
+    border: 1px solid #ced4da;
+    background: #fefefe;
+    height: 34px;
+    position: absolute;
+    width: 100%;
+}
+
+.autocomplete-container .not-found div {
+    padding: 0.4em 0;
+    font-size: .95em;
+    line-height: 1.4;
+    border-bottom: none !important;
+}
+
+.autocomplete-container .suggestions-container ul li a {
+    padding: 6px 15px !important;
+    display: block !important;
+    text-decoration: none !important;
+    cursor: pointer !important;
+    color: rgba(0, 0, 0, .87) !important;
+    font-size: 14px !important;
+}
+
+.autocomplete-container .input-container input {
+    font-size: 12px !important;
+}
+
+.dtr-details {
+    width: 100% !important;
+}
+
+.content-header h1 {
+    font-size: 25px;
+}
+
+.input-right {
+    text-align: right;
+}

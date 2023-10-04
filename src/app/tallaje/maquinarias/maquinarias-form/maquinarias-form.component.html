@@ -1,0 +1,48 @@
+<section class="content">
+    <div class="container-fluid">
+        <form [formGroup]="frmGeneral" class="mb-4">
+            <div class="modal-header">
+                <h6>{{ titulo }}</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="input-group">
+                        <label class="col-lg-2 col-md-4 col-sm-12">Estado</label>
+                        <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                            <ui-switch formControlName="Estado"></ui-switch>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label class="col-lg-2 col-md-4 col-sm-12">Código</label>
+                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+                            <app-forms-messages [error]="frmGeneral.get('Codigo')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2 col-md-4 col-sm-12">Nombre</label>
+                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="Nombre">
+                            <app-forms-messages [error]="frmGeneral.get('Nombre')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label class="col-lg-2 col-md-4 col-sm-12">Descripción</label>
+                        <div class="form-group col-lg-10 col-md-6 col-sm-12">
+                            <textarea class="form-control form-control-sm" cols="30" rows="10" formControlName="Descripcion"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row float-right">
+                    <div class="col-md-12">
+                        <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,96 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-body">
+                <form [formGroup]="frmModelos" class="mb-4">
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Activo</label>
+                            <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                                <ui-switch formControlName="Estado"></ui-switch>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Codigo</label>
+                            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+                                <app-forms-messages [error]="frmModelos.get('Codigo')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Nombre</label>
+                            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Nombre">
+                                <app-forms-messages [error]="frmModelos.get('Nombre')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Precio</label>
+                            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Precio">
+                                <app-forms-messages [error]="frmModelos.get('Precio')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Logo</label>
+                            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                                <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
+                                <img [src]="img" alt="" width="100" height="100">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row float-right">
+                        <div class="col-md-12">
+                            <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="card-footer" *ngIf="id">
+                <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+                    <li ngbNavItem>
+                      <a ngbNavLink>Prendas
+                        <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian las prendas pertenecientes al Modelo">
+                          <i class="fa-solid fa-circle-question"></i>
+                        </span > 
+                      </a>
+                      <ng-template ngbNavContent>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12 col-sm-12">
+                            <app-modelos-prendas-form [modeloId]="id"></app-modelos-prendas-form>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </li>
+                    <!-- <li ngbNavItem>
+                      <a ngbNavLink>Criterios
+                        <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian los Criterios pertenecientes al Modelo">
+                          <i class="fa-solid fa-circle-question"></i>
+                        </span > 
+                      </a>
+                      <ng-template ngbNavContent>
+                        <div class="row">
+                          <div class="col-lg-12 col-md-12 col-sm-12">
+                            <app-modelos-criterios-form [modeloId]="id"></app-modelos-criterios-form>
+                          </div>
+                        </div>
+                      </ng-template>
+                    </li> -->
+                    <li ngbNavItem>
+                        <a ngbNavLink>Archivos
+                          <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian los archivos pertenecientes al Modelo">
+                            <i class="fa-solid fa-circle-question"></i>
+                          </span > 
+                        </a>
+                        <ng-template ngbNavContent>
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <app-archivo-form [TablaId]="id"  Tabla="Modelos"> </app-archivo-form>
+                            </div>
+                          </div>
+                        </ng-template>
+                      </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</section>

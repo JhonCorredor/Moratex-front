@@ -1,0 +1,23 @@
+<table class="table table-sm">
+    <thead>
+        <tr>
+            <th colspan="4" class="text-center text-white bg-black">Piezas</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th>Pieza</th>
+            <th>Tipo pieza</th>
+            <th>Cantidad</th>
+            <th class="text-center">Imágen</th>
+        </tr>
+        <tr *ngFor="let item of listPiezas">
+            <td>{{item.pieza}}</td>
+            <td>{{item.tipoPieza }}</td>
+            <td>{{item.cantidad}}</td>
+            <td class="text-center">
+                <img [src]="item.archivo ?? img" alt="" width="50" height="50" (click)="openImage(item.imagenPiezaId, item.extension, item.archivo, item.nombreImagenPieza)">
+            </td>
+        </tr>
+    </tbody>
+</table>

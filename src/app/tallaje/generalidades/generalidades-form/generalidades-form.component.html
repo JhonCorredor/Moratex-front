@@ -1,0 +1,71 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <form [formGroup]="frmGeneralidades" class="mb-4">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Activo</label>
+              <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                <ui-switch formControlName="Estado"></ui-switch>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Código</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+                <!-- <app-forms-messages [error]="frmGeneralidades.get('Codigo')"  [statusForm]=statusForm ></app-forms-messages> -->
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Genero</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <ng-select [items]="listGeneros" bindLabel="textoMostrar" bindValue="id"  formControlName="Genero" > </ng-select>
+                <app-forms-messages [error]="frmGeneralidades.get('Genero')"    [statusForm]=statusForm ></app-forms-messages>
+
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Modelo Prenda</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">            
+                <ng-select [items]="ListModeloPrenda" bindLabel="textoMostrar" bindValue="id"  formControlName="ModeloPrendaId" > </ng-select>
+                <app-forms-messages [error]="frmGeneralidades.get('ModeloPrendaId')"    [statusForm]=statusForm ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+
+          <!-- </div> -->
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer" *ngIf="id">
+        <ul ngbNav #nav="ngbNav" [destroyOnHide]="true" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink>Tallas
+              <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian las tallas pertenecientes a las Generaldiades">
+                <i class="fa-solid fa-circle-question"></i>
+              </span > 
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-general-tallaje-index [modeloId]="id" ruta='GeneralidadesTallas' titulo="Tallas"
+                    foreignKeyRuta="Talla" foreignKeyTitle='talla' serviceKey="Tallas"></app-general-tallaje-index>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</section>

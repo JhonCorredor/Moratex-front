@@ -1,0 +1,18 @@
+<br>
+
+<div *ngIf="!hasData" class="row button-group">
+  <button class="btn btn-sm btn-primary float-right"  (click)="generarConsolidado()"><i class="fas fa-gears"></i> Armar Consolidado</button>
+</div>
+
+<form class="mb-4">
+  <hr>
+  <div class="dt-responsive">
+    <div class="row">
+      <div class="col-md-12 table-responsive">
+        <table datatable [dtOptions]="opcionesDataTable" [dtTrigger]="dtTrigger" class="display compact responsive w-100 table table-striped table-bordered  "></table>
+        <app-botones #botonesDatatableConsolidado [dropdown]="true" [hidden]="true" [botones]="arrayBotonesDatatable">
+        </app-botones>
+      </div>
+    </div>
+  </div>
+</form>

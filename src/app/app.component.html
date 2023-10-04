@@ -1,0 +1,133 @@
+<body *ngIf="localStorage.getItem('token') != null" class="hold-transition sidebar-mini">
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#F8E12E" type="ball-atom" [fullScreen]="true">
+        <p style="color: white"> Cargando... </p>
+    </ngx-spinner>
+    <div class="wrapper">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light bg-red">
+            <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i class="fas fa-bars text-white"></i></a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <a class="nav-link" data-toggle="dropdown" href="#">
+                        <i class="far fa-bell text-white"></i>
+                        <span class="badge badge-warning navbar-badge">{{ countNotifications() }}</span>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-lg dropdown-menu-right">
+                        <span class="dropdown-item dropdown-header">Notificaciones</span>
+                        <div class="dropdown-divider"></div>
+                        <a href="#" class="dropdown-item" *ngFor="let item of listNotifications">
+                            <i class="fas fa-file mr-2"></i> 3 new reports
+                        </a>
+                        <span class="dropdown-item" *ngIf="listNotifications.length <= 0">
+                            NO existen notificaciones
+                        </span>
+                        <div class="dropdown-divider"></div>
+                        <a routerLink="dashboard/notificaciones" class="dropdown-item dropdown-footer">Ver todas las notificaciones</a>
+                    </div>
+                </li>
+            </ul>
+            <div class="dropdown">
+                <button class="btn bg-red dropdown-toggle btn-admin-panel text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Administración
+                </button>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" (click)="logOut()"> <i class="fas fa-sign-out-alt " style="color: rgba(169,41,38,255);"></i> <span class="float-right">Cerrar sesión</span></a>
+                </div>
+            </div>
+        </nav>
+
+        <aside id="mainSidebar" class="main-sidebar sidebar-light-primary elevation-4">
+            <a [routerLink]="['dashboard']" class="brand-link">
+                <span id="image-logo" class="menu-name" *ngIf="ocultarLogo"><b>V</b></span>
+                <a [routerLink]="['dashboard']" class="brand-link text-center">
+                    <img *ngIf="!ocultarLogo" src="../assets/logo_moratex.png" alt="Gaffel Logo" class="brand-text font-weight-light" width="50%"> </a>
+            </a>
+            <div class="sidebar">
+                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                    <div class="image">
+                        <img src="#" class="img-circle elevation-2" alt="">
+                    </div>
+                    <div class="info">
+                        <a href="#" class="d-block">Diego Rivas</a>
+                    </div>
+                </div>
+
+                <nav class="mt-2">
+                    <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                        <li class="nav-item">
+                            <a [routerLink]="['dashboard']" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>Moratex</p>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <ng-select [items]="listFormularios" bindLabel="textoMostrar" bindValue="id" (change)="selectFormulario($event)"> </ng-select>
+                            <span *ngIf="dataFormulario"><span>&nbsp;&nbsp; Ir a : </span>&nbsp;&nbsp;<u><a href="{{document }}/{{ dataFormulario?.url}}">{{dataFormulario?.nombre}}</a></u></span>
+                        </li>
+
+                        <li class="nav-item" *ngFor="let item of listMenus">
+                            <a href="#" class="nav-link">
+                                <i [ngClass]="getClass('fas fa-cog' , item.icono)"></i>&nbsp;
+                                <p>{{item.nombre}} <i class="fas fa-angle-left right"></i></p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <ng-container *ngTemplateOutlet="recursiveList; context:{ list: item.modulos }"></ng-container>
+
+                                <li class="nav-item" *ngFor="let itemForm of item.formularios">
+                                    <a [routerLink]="itemForm.url" class="nav-link" (click)="scrollTop()">
+                                        <i [ngClass]="getClass('fa-regular fa-file' , itemForm.icono)"></i>&nbsp;
+                                        <p>{{itemForm.nombre}}</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+
+                        <ng-template #recursiveList let-list="list">
+                            <li class="nav-item" *ngFor="let item of list">
+                                <a href="#" class="nav-link">
+                                    <i [ngClass]="getClass('fas fa-cog' , item.icono)"></i>&nbsp;
+                                    <p>{{item.nombre}} <i class="fas fa-angle-left right"></i></p>
+                                </a>
+                                <ul class="nav nav-treeview">
+                                    <ng-container *ngTemplateOutlet="recursiveList; context:{ list: item.modulos }"></ng-container>
+
+                                    <li class="nav-item" *ngFor="let itemForm of item.formularios">
+                                        <a [routerLink]="itemForm.url" class="nav-link" (click)="scrollTop()">
+                                            <i [ngClass]="getClass('fa-regular fa-file' , itemForm.icono)"></i>&nbsp;
+                                            <p>{{itemForm.nombre}} </p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ng-template>
+
+                    </ul>
+                </nav>
+            </div>
+        </aside>
+
+        <div class="content-wrapper">
+            <router-outlet></router-outlet>
+        </div>
+
+        <footer class="main-footer">
+            <div class="float-right d-none d-sm-block">
+                <b>Version</b> 1.0.0
+            </div>
+            <strong>Copyright &copy; 2023 <a href="#">Moratex</a>.</strong> Todos los derechos reservados.
+        </footer>
+
+        <aside class="control-sidebar control-sidebar-dark">
+        </aside>
+    </div>
+</body>
+<!-- BODY PARA LOGIN -->
+
+<body *ngIf="localStorage.getItem('token') == null" class="hold-transition login-page">
+    <router-outlet></router-outlet>
+</body>

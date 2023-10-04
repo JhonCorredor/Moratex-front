@@ -1,0 +1,48 @@
+<!-- <app-breadcrumb [title]="title" [breadcrumb]="breadcrumb"></app-breadcrumb> -->
+<section class="content">
+    <div class="container-fluid">
+        <form [formGroup]="frmOPCalidad" class="mb-4">
+            <div class="modal-header">
+                <h6>{{ titulo }}</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="input-group">
+                        
+                        <label class="col-lg-1 col-md-3 col-sm-12">Fecha</label>
+                        <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                            <input type="date" formControlName="Fecha" class="form-control form-control-sm">
+                        </div>
+                        
+                        <label class="col-lg-1 col-md-3 col-sm-12">Control Calidad</label>
+                        <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                            <ng-select [items]="listControlesCalidades" bindLabel="textoMostrar" bindValue="id"  formControlName="ControlCalidadId"></ng-select>
+                        </div>
+
+                        <label class="col-lg-1 col-md-3 col-sm-12">Empleado</label>
+                        <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                            <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpleadoId"></ng-select>
+                        </div>
+                        
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="input-group">
+                        <label class="col-lg-1 col-md-4 col-sm-12">Observación</label>
+                        <div class="form-group col-lg-11 col-md-6 col-sm-12">
+                            <textarea type="text" class="form-control" formControlName="Observacion"> </textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row float-right">
+                    <div class="col-md-12">
+                        <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

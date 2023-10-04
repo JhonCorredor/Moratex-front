@@ -1,0 +1,68 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <form [formGroup]="frmFiltros">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-3 col-sm-12">Empresa</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <ng-select [items]="listEmpresas" bindLabel="textoMostrar" bindValue="id" formControlName="EmpresaId"
+                  (close)="changeEmpresa()"> </ng-select>
+                <app-forms-messages [error]="frmFiltros.get('EmpresaId')" [statusForm]=statusForm></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-3 col-sm-12">Total de empleados </label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="number" formControlName="TotalEmpleado" class="form-control form-control-sm">
+              </div>
+              <label class="col-lg-1 col-md-3 col-sm-12">Fecha de anticipo</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="date" formControlName="FechaPagoAnticipado" class="form-control form-control-sm">
+              </div>
+              <label class="col-lg-1 col-md-3 col-sm-12">Fecha de entrega </label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="date" formControlName="FechaEntrega" class="form-control form-control-sm">
+              </div>
+              <label class="col-lg-1 col-md-3 col-sm-12">Valor pago anticipado </label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="number" formControlName="PagoAnticipado" class="form-control form-control-sm">
+              </div>
+            </div>
+          </div>
+          <hr>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-3 col-sm-12">Modelos</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <!-- <ng-select [items]="listModelos" bindLabel="textoMostrar" bindValue="id"  formControlName="ModeloId"  (blur)="changeEmpresa()"> </ng-select> -->
+                <ng-select [items]="listModelos" bindLabel="modelo" bindValue="id" formControlName="ModeloId"> </ng-select>
+              </div>
+              <app-botones #botonesSuperior [botones]="botones" [dropdown]="false" (eventAgg)="AgregarModelo()" (eventSave)="GuardarCotizacion()">
+              </app-botones>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-12 col-md-12 col-sm-12">Total :  $ {{Subtotal  | number: '1.0-0' }} </label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="content" >
+  <div class="container-fluid">
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <ol>
+          <li *ngFor="let item of listModelosSelect;  let i = index">
+            <app-generar-cotizacion-manual-form  [Modelo]="item"   [Index]="i"  [GuardarCotizacion]="guardarCotizacion" (deleteModelo)="eliminarModelo($event)" (SubTotalAprobado)="calcularSubTotal($event)"></app-generar-cotizacion-manual-form>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>

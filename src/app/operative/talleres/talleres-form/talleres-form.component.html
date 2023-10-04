@@ -1,0 +1,76 @@
+<section class="content">
+    <div class="container-fluid">
+      <form [formGroup]="frmTalleres" class="mb-4">
+        <div class="modal-header">
+          <h6>{{ titulo }}</h6>
+        </div>
+        <div class="modal-body">
+
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-2 col-md-4 col-sm-12">Propietario</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="NombrePropietario">
+                <app-forms-messages [error]="frmTalleres.get('NombrePropietario')"  [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Especialidad</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Especialidad">
+                <app-forms-messages [error]="frmTalleres.get('Especialidad')"  [statusForm]=statusForm ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-2 col-md-4 col-sm-12">Tipo trabajo</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="TipoTrabajo">
+                <app-forms-messages [error]="frmTalleres.get('TipoTrabajo')"  [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Número de empleados</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="NumeroEmpleado">
+                <app-forms-messages [error]="frmTalleres.get('NumeroEmpleado')"  [statusForm]=statusForm ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-2 col-md-4 col-sm-12">Empresa</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listEmpresas" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpresaId"></ng-select>
+                <app-forms-messages [error]="frmTalleres.get('EmpresaId')"  [statusForm]=statusForm></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Estado</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listEstados" bindLabel="textoMostrar" bindValue="id"  formControlName="EstadoId"></ng-select>
+                <app-forms-messages [error]="frmTalleres.get('EstadoId')"  [statusForm]=statusForm></app-forms-messages>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-group">
+
+              <label class="col-lg-2 col-md-4 col-sm-12">Observaciones</label>
+              <div class="form-group col-lg-10 col-md-8 col-sm-12">
+                <textarea formControlName="Observacion" class="form-control form-control-sm" rows="3"></textarea>
+                <app-forms-messages [error]="frmTalleres.get('Observacion')" [statusForm]=statusForm></app-forms-messages>
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  

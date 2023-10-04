@@ -1,0 +1,10 @@
+.card-title{
+    position: relative;
+    left: 40%;
+}
+
+.card:hover{
+    background-color: #aaaaaa;;
+    transition: 1s;
+}
+

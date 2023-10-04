@@ -1,0 +1,79 @@
+<section class="content">
+  <div class="container-fluid">
+    <form [formGroup]="frmFormularios" class="mb-4">
+      <div class="modal-header">
+        <h6>{{ titulo }}</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="input-group">
+            <label class="col-lg-1 col-md-4 col-sm-12">Estado</label>
+            <div class="form-group col-lg-1 col-md-6 col-sm-12">
+              <ui-switch formControlName="Estado"></ui-switch>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-group">
+            <label class="col-lg-1 col-md-4 col-sm-12">Codigo</label>
+            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+              <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+              <app-forms-messages [error]="frmFormularios.get('Codigo')"  [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-1 col-md-4 col-sm-12">Nombre</label>
+            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+              <input type="text" class="form-control form-control-sm" formControlName="Nombre">
+              <app-forms-messages [error]="frmFormularios.get('Nombre')"  [statusForm]=statusForm ></app-forms-messages>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-group">
+            <label class="col-lg-1 col-md-4 col-sm-12">Url</label>
+            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+              <input type="text" class="form-control form-control-sm" formControlName="Url">
+            </div>
+            <label class="col-lg-1 col-md-4 col-sm-12">Modulo</label>
+            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+              <ng-select [items]="listModulos" bindLabel="textoMostrar" bindValue="id"  formControlName="ModuloId" > </ng-select>
+              <app-forms-messages [error]="frmFormularios.get('ModuloId')"    [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-1 col-md-4 col-sm-12">Icono</label>
+            <div class="form-group col-lg-12 col-md-12 col-sm-12">
+
+
+              <div class="row row-cols-2 row-cols-md-5 g-4">
+                <div class="col" *ngFor="let item of listIcons; let i = index">
+                  <div class="card" (click)="iconoSelect(i , this)"   id="icon{{i}}"  #iconoHTML>
+                    <div class="card-body">
+                      <h5 class="card-title"><i class="{{item.textoMostrar}}"></i></h5>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div *ngFor="let item of listIcons; let i = index">
+                <input type="radio" id="icon{{i}}"  formControlName="Icono" value="{{item.textoMostrar}}">
+                <label for="icon{{i}}"><i class="{{item.textoMostrar}}"> </i></label><br>
+              </div> -->
+
+
+              <!-- <select formControlName="Icono" class="form-select">
+                 <option  *ngFor="let item of listIcons" [value]="item.textoMostrar" ><i [class]="item.textoMostrar"> </i></option>
+              </select> -->
+
+              <app-forms-messages [error]="frmFormularios.get('Icono')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row float-right">
+          <div class="col-md-12">
+            <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,105 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb" *ngIf="admin"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+    <form [formGroup]="frmRadicados" class="mb-4">
+      <div class="modal-header">
+        <h6 *ngIf="!admin">{{ titulo }}</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row" *ngIf="admin">
+          <div class="input-group">
+            <label class="col-lg-2 col-md-4 col-sm-12">Estado</label>
+            <div class="form-group col-lg-2 col-md-6 col-sm-12">
+              <ui-switch formControlName="Estado"></ui-switch>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-group">
+            <label class="col-lg-1 col-md-4 col-sm-12">Identificación</label>
+            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+              <input type="text" class="form-control form-control-sm" formControlName="NumeroIdentificacion"
+                (blur)="searchByDocument()">
+            </div>
+            <label class="col-lg-1 col-md-4 col-sm-12">Nombres</label>
+            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+              <input type="text" class="form-control form-control-sm" formControlName="Nombres" readonly>
+            </div>
+            <label class="col-lg-1 col-md-4 col-sm-12">Apellidos</label>
+            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+              <input type="text" class="form-control form-control-sm" formControlName="Apellidos" readonly>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-group">
+            <label class="col-lg-2 col-md-4 col-sm-12" *ngIf="admin">Folio</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12" *ngIf="admin">
+              <input type="number" class="form-control form-control-sm" formControlName="Folio">
+            </div>
+
+            <label class="col-lg-2 col-md-4 col-sm-12" *ngIf="admin">Medio</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12" *ngIf="admin">
+                <ng-select [items]="listMedios" bindLabel="textoMostrar" bindValue="id"  formControlName="MedioId"></ng-select>
+                <app-forms-messages [error]="frmRadicados.get('MedioId')"    [statusForm]=statusForm ></app-forms-messages>
+            </div>
+
+            <label class="col-lg-2 col-md-4 col-sm-12" *ngIf="admin">Fecha</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12" *ngIf="admin">
+              <input type="date" class="form-control form-control-sm" formControlName="Fecha">
+            </div>
+
+            <label class="col-lg-2 col-md-4 col-sm-12" *ngIf="admin">Empleado</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12" *ngIf="admin">
+                <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpleadoId" > </ng-select>
+                <app-forms-messages [error]="frmRadicados.get('EmpleadoId')"    [statusForm]=statusForm ></app-forms-messages>
+
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12" >Pedido</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12" >
+              <input type="text" class="form-control form-control-sm" formControlName="Pedido" class="form-control">
+            </div>
+
+            <label class="col-lg-2 col-md-4 col-sm-12" *ngIf="admin && id">Numero Radicado</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12" *ngIf="admin && id">
+              <input type="text" class="form-control form-control-sm" formControlName="NumeroRadicado">
+            </div>
+
+            <label class="col-lg-2 col-md-4 col-sm-12" *ngIf="admin && id">Estado</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12" *ngIf=" admin && id">
+                <ng-select [items]="listEstados" bindLabel="textoMostrar" bindValue="id"  formControlName="EstadoId" > </ng-select>
+                <app-forms-messages [error]="frmRadicados.get('EstadoId')"    [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12">Tipo Radicado</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listTiposRadicados" bindLabel="textoMostrar" bindValue="id"  formControlName="TipoRadicadoId" > </ng-select>
+                <app-forms-messages [error]="frmRadicados.get('TipoRadicadoId')"    [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12">Empresa</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listEmpresas" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpresaId" > </ng-select>
+                <app-forms-messages [error]="frmRadicados.get('EmpresaId')"    [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12">Asunto</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+              <input type="text" class="form-control form-control-sm" formControlName="Asunto">
+            </div>
+
+            <label class="col-lg-2 col-md-4 col-sm-12">Descripcion</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+              <textarea formControlName="Descripcion" class="form-control"></textarea>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row float-right">
+          <div class="col-md-12">
+            <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

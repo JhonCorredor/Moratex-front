@@ -1,0 +1,88 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <form [formGroup]="frmCotizaciones" class="mb-4">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-3 col-sm-12">Empresas</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <ng-select [items]="listEmpresas" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpresaId" [readonly]=disableForm></ng-select>
+                <app-forms-messages [error]="frmCotizaciones.get('EmpresaId')"    [statusForm]=statusForm ></app-forms-messages>
+              </div>
+                
+              <label class="col-lg-1 col-md-3 col-sm-12">Total de empleados </label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="number" formControlName="TotalEmpleado" class="form-control form-control-sm" [readonly]=disableForm>
+              </div>
+
+              <label class="col-lg-1 col-md-3 col-sm-12">Fecha de anticipo</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="date" formControlName="FechaPago" class="form-control form-control-sm" [readonly]=disableForm>
+              </div>
+
+              <label class="col-lg-1 col-md-3 col-sm-12">Fecha de entrega </label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="date" formControlName="FechaEntrega" class="form-control form-control-sm" [readonly]=disableForm>
+              </div>
+
+              <label class="col-lg-1 col-md-3 col-sm-12">Valor pago anticipado </label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="text" formControlName="PagoAnticipo" class="form-control form-control-sm text-right" [textMask]="{mask: helperService.mascarasPredeterminadas('dinero',null,null), guide: false}" [readonly]=disableForm>
+              </div>
+
+              <label class="col-lg-1 col-md-3 col-sm-12" *ngIf="this.id">Estado</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12"  *ngIf="this.id">
+                <ng-select [items]="ListEstados" bindLabel="textoMostrar" bindValue="id"  formControlName="EstadoId" [readonly]=disableForm> </ng-select>
+                <app-forms-messages [error]="frmCotizaciones.get('EstadoId')"    [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              
+            </div>
+          </div>
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card-footer" *ngIf="id" > 
+        <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+          <li ngbNavItem >
+            <a ngbNavLink>Detalle</a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-cotizacionesDetalles-index  [cotizacion]="id" [status]="disableForm" [EmpresaId]="this.frmCotizaciones.controls.EmpresaId.value" ></app-cotizacionesDetalles-index>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li ngbNavItem >
+            <a ngbNavLink>Empleados</a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-cotizaciones-consolidado-form  [cotizacionId]="id"  [status]="disableForm" ></app-cotizaciones-consolidado-form>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li ngbNavItem >
+            <a ngbNavLink>Consolidado</a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-consolidado-index  [cotizacionId]="id"  ></app-consolidado-index>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</section>

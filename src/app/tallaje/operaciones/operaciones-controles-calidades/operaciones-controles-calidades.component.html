@@ -1,0 +1,30 @@
+<form [formGroup]="frmOperacionControlCalidad" class="mb-4">
+    <div class="row">
+        <div class="input-group">
+            <label class="col-lg-1 col-md-4 col-sm-12">Activo</label>
+            <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                <ui-switch formControlName="Estado"></ui-switch>
+            </div>
+            <label class="col-lg-1 col-md-4 col-sm-12">Control calidad</label>
+            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <ng-select [items]="listControlesCalidades" bindLabel="textoMostrar" bindValue="id"  formControlName="ControlCalidadId" > </ng-select>
+                <app-forms-messages [error]="frmOperacionControlCalidad.get('ControlCalidadId')"    [statusForm]=statusForm ></app-forms-messages>
+            </div>
+        </div>
+    </div>
+    <div class="row float-right">
+        <div class="col-md-12">
+            <app-botones [botones]="botones" (eventSave)="save()"></app-botones>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="dt-responsive">
+        <div class="row">
+            <div class="col-md-12 table-responsive">
+            <table datatable [dtOptions]="opcionesDataTable" [dtTrigger]="dtTrigger" class="display compact responsive w-100 table table-striped table-bordered  "></table>
+            <app-botones #botonesDatatable [dropdown]="true" [hidden]="true" [botones]="arrayBotonesDatatable" ></app-botones>
+            </div>
+        </div>
+    </div>
+</form>

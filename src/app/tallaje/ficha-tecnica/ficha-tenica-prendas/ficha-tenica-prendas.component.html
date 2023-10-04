@@ -1,0 +1,55 @@
+<div *ngFor="let item of listPrendas; let i = index" id="accordion">
+  <table class="table table-sm">
+    <thead>
+      <tr>
+        <th colspan="8" class="text-center text-white bg-gray">Prenda  :  {{item.prenda}}
+          <a data-toggle="collapse" href="#prenda{{i+1}}"  (click)="pas(this)">
+            <button class=" btn btn-info btn-sm" >Ver Mas <i class="fa-solid fa-arrow-down"></i></button>
+          </a>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Prenda</th>
+        <th>Tipo prenda</th>
+        <th>Descripción</th>
+        <th>Ancho</th>
+        <th>Longitud</th>
+        <th>Aprovechamiento</th>
+        <th>Tiempo</th>
+        <th class="text-center">Imágen</th>
+      </tr>
+      <tr>
+        <td>{{item.prenda}}</td>
+        <td>{{item.tipoPrenda }}</td>
+        <td>{{item.descripcion}}</td>
+        <td>{{item.ancho | number }}</td>
+        <td>{{item.longitud | number }}</td>
+        <td>{{item.aprovechamiento}}</td>
+        <td>{{item.tiempo }}</td>
+        <td class="text-center">
+          <img [src]="item.archivo ?? img" alt="" width="100" height="100" (click)="openImage(item.imagenPrendaId, item.extension, item.archivo, item.nombreImagenPrenda)">
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div id="prenda{{i+1}}" class="collapse" data-parent="#accordion">
+    <div class="row">
+      <div class="col-lg-6 col-md-6">
+        <app-ficha-tecnica-piezas [PrendaId]="item.id"></app-ficha-tecnica-piezas>
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <app-ficha-tecnica-insumos [PrendaId]="item.id"></app-ficha-tecnica-insumos>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 col-md-6">
+        <app-ficha-tecnica-insumos-tallas [PrendaId]="item.id"></app-ficha-tecnica-insumos-tallas>
+      </div>
+      <div class="col-lg-6 col-md-6">
+        <app-ficha-tecnica-operaciones [PrendaId]="item.id"></app-ficha-tecnica-operaciones>
+      </div>
+    </div>
+  </div>
+</div>

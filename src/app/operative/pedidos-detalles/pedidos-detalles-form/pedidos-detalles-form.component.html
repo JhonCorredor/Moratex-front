@@ -1,0 +1,46 @@
+<!-- <app-breadcrumb [title]="title" [breadcrumb]="breadcrumb"></app-breadcrumb> -->
+<section class="content">
+  <div class="container-fluid">
+    <form [formGroup]="frmPedidosDetalles" class="mb-4">
+      <div class="modal-header">
+        <h6>{{ titulo }}</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="input-group">
+            <label class="col-lg-1 col-md-4 col-sm-12">Estado</label>
+              <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                  <ui-switch formControlName="Estado"></ui-switch>
+              </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-group">
+            <label class="col-lg-1 col-md-4 col-sm-12">Empleados </label>
+            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+              <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpleadoId" > </ng-select>
+             <app-forms-messages [error]="frmPedidosDetalles.get('EmpleadoId')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-1 col-md-4 col-sm-12">Pedidos</label>
+            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <ng-select [items]="listPedidos" bindLabel="textoMostrar" bindValue="id"  formControlName="PedidoId" > </ng-select>
+             <app-forms-messages [error]="frmPedidosDetalles.get('PedidoId')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-1 col-md-4 col-sm-12">Modelos</label>
+            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <ng-select [items]="listModelos" bindLabel="textoMostrar" bindValue="id"  formControlName="ModeloId" > </ng-select>
+                <app-forms-messages [error]="frmPedidosDetalles.get('ModeloId')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row float-right">
+          <div class="col-md-12">
+            <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

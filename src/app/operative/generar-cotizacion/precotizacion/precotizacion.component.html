@@ -1,0 +1,23 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-botones #botonesSuperior [botones]="botones" [dropdown]="false"></app-botones>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="dt-responsive">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <table datatable [dtOptions]="opcionesDataTable" [dtTrigger]="dtTrigger" class="display compact responsive w-100 table table-striped table-bordered  "></table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

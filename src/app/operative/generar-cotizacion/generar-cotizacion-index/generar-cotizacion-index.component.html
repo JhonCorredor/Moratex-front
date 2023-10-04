@@ -1,0 +1,35 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-md-12">
+                        <app-botones #botonesSuperior [botones]="botones" [dropdown]="false" (eventPrecotizacion)="precotizacion()"  ></app-botones>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <form [formGroup]="frmFiltros">
+                    <div class="row">
+                        <div class="input-group">
+                            
+                            <label class="col-lg-1 col-md-4 col-sm-12">Empresa</label>
+                            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                               <ng-select [items]="listEmpresas" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpresaId"  (blur)="changeEmpresa()"> </ng-select>
+                               <app-forms-messages [error]="frmFiltros.get('EmpresaId')"    [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Iva </label>
+                            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                                <input type="text" formControlName="Iva" class="form-control form-control-sm">
+                            </div>
+                            
+                        </div>
+                    </div>
+                </form>
+                <app-generar-cotizacion-modeloscargos *ngIf="mostrarTabla" [empresaId]="frmFiltros.controls.EmpresaId.value"></app-generar-cotizacion-modeloscargos>
+                <app-generar-cotizacion-empleados *ngIf="mostrarTabla" [empresaId]="frmFiltros.controls.EmpresaId.value"></app-generar-cotizacion-empleados>
+            </div>
+        </div>
+    </div>
+</section>

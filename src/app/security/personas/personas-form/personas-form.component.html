@@ -1,0 +1,95 @@
+<section class="content">
+    <div class="container-fluid">
+        <form [formGroup]="frmPersonas" class="mb-4">
+            <div class="modal-header">
+                <h6>{{ titulo }}</h6>
+            </div>
+            <div class="modal-body">
+                <div class="row" *ngIf="!radicado">
+                    <div class="input-group">
+                        <label class="col-lg-2  col-md-4 col-sm-12">Activo</label>
+                        <div class="form-group col-lg-2  col-md-6 col-sm-12">
+                            <ui-switch formControlName="Estado"></ui-switch>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="input-group">
+                        <label class="col-lg-2  col-md-4 col-sm-12">Tipo Documento</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <ng-select [items]="ListTipoIdentificacion" bindLabel="textoMostrar" bindValue="id"  formControlName="TipoDocumento" > </ng-select>
+                            <app-forms-messages [error]="frmPersonas.get('TipoDocumento')"    [statusForm]=statusForm ></app-forms-messages>
+                        </div>                  
+                        <label class="col-lg-2  col-md-4 col-sm-12">Numero Identificación</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="NumeroIdentificacion">
+                            <app-forms-messages [error]="frmPersonas.get('NumeroIdentificacion')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2  col-md-4 col-sm-12">Primer Nombre</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="PrimerNombre">
+                            <app-forms-messages [error]="frmPersonas.get('PrimerNombre')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2  col-md-4 col-sm-12">Segundo Nombre</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="SegundoNombre">
+                            <app-forms-messages [error]="frmPersonas.get('SegundoNombre')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2  col-md-4 col-sm-12">Primer Apellido</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="PrimerApellido">
+                            <app-forms-messages [error]="frmPersonas.get('PrimerApellido')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2  col-md-4 col-sm-12">Segundo Apellido</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="SegundoApellido">
+                            <app-forms-messages [error]="frmPersonas.get('SegundoApellido')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2 col-md-4 col-sm-12">Genero</label>
+                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                            <ng-select [items]="listGeneros" bindLabel="textoMostrar" bindValue="id"  formControlName="Genero" > </ng-select>
+                            <app-forms-messages [error]="frmPersonas.get('Genero')"    [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2  col-md-4 col-sm-12">Correo </label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="Email">
+                            <app-forms-messages [error]="frmPersonas.get('Email')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2  col-md-4 col-sm-12">Telefono </label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="Telefono">
+                            <app-forms-messages [error]="frmPersonas.get('Telefono')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>                        
+                        <label class="col-lg-2  col-md-4 col-sm-12">Ciudad</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <ng-select [items]="listCiudades" bindLabel="textoMostrar" bindValue="id"  formControlName="CiudadId" > </ng-select>
+                            <app-forms-messages [error]="frmPersonas.get('CiudadId')"    [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <!-- <label class="col-lg-2  col-md-4 col-sm-12">Genero</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <ng-select [items]="listGeneros" bindLabel="textoMostrar" bindValue="id"  formControlName="Genero" > </ng-select>
+                            <app-forms-messages [error]="frmPersonas.get('Genero')"    [statusForm]=statusForm ></app-forms-messages>
+                        </div> -->
+                        <label class="col-lg-2  col-md-4 col-sm-12">Direccion</label>
+                        <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                            <input type="text" class="form-control form-control-sm" formControlName="Direccion">
+                            <app-forms-messages [error]="frmPersonas.get('Direccion')"  [statusForm]=statusForm ></app-forms-messages>
+                        </div>
+                        <label class="col-lg-2 col-md-4 col-sm-12">Imagen</label>
+                        <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                            <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
+                            <img [src]="img" alt="" width="200" height="150">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="row float-right">
+                    <div class="col-md-12">
+                        <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</section>

@@ -1,0 +1,99 @@
+<app-breadcrumb [title]="title" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+    
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        
+        <form [formGroup]="frmEncabezadoConsolidado">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-3 col-sm-12">Empresa</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="text" formControlName="Empresa" class="form-control form-control-sm" [readonly]="true">
+                <app-forms-messages [error]="frmEncabezadoConsolidado.get('Empresa')"  [statusForm]="!frmEncabezadoConsolidado.invalid" ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-3 col-sm-12">Total de Modelos</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="number" formControlName="TotalModelo" class="form-control form-control-sm" [readonly]="true">
+                <app-forms-messages [error]="frmEncabezadoConsolidado.get('TotalModelo')"  [statusForm]="!frmEncabezadoConsolidado.invalid" ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-3 col-sm-12">Cotizacion</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="text" formControlName="Cotizacion" class="form-control form-control-sm" [readonly]="true">
+                <app-forms-messages [error]="frmEncabezadoConsolidado.get('Cotizacion')"  [statusForm]="!frmEncabezadoConsolidado.invalid" ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-3 col-sm-12">Total de Prendas</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="number" formControlName="TotalPrenda" class="form-control form-control-sm" [readonly]="true">
+                <app-forms-messages [error]="frmEncabezadoConsolidado.get('TotalPrendas')"  [statusForm]="!frmEncabezadoConsolidado.invalid" ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-3 col-sm-12">Prendas Actuales</label>
+              <div class="form-group col-lg-3 col-md-3 col-sm-12">
+                <input type="number" formControlName="PrendasActuales" class="form-control form-control-sm" [readonly]="true">
+                <app-forms-messages [error]="frmEncabezadoConsolidado.get('PrendasActuales')"  [statusForm]="!frmEncabezadoConsolidado.invalid" ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+          <div class="row float-right">
+            <div class="col-md-12">
+              <button class="btn btn-sm btn-primary" (click)="guardar()">Guardar Consolidado</button>
+            </div>
+          </div>
+        </form>
+        <br>
+        <br>
+        <br>
+        <div class="row">
+          <div class="col-md-12 table-responsive">
+            <table class="display compact responsive w-100 table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>Sede</th>
+                  <th>Area</th>
+                  <th>Cargo</th>
+                  <th>No. Uniforme * Cargo</th>
+                  <th>Modelo</th>
+                  <th>Prenda</th>
+                  <th>Tela</th>
+                  <th>Género</th>
+                  <th>Talla</th>
+                  <th>No. Empleados * Talla</th>
+                  <th>Remanente</th>
+                  <th>Total Prendas</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="dataConsolidados.length > 0">
+                <tr *ngFor="let item of dataConsolidados">
+                  <td>{{item.sedeNombre}}</td>
+                  <td>{{item.areaNombre}}</td>
+                  <td>{{item.cargoNombre}}</td>
+                  <td>{{item.numeroDotacion}}</td>
+                  <td>{{item.modeloNombre}}</td>
+                  <td>{{item.prendaNombre}}</td>
+                  <td>{{item.tela}}</td>
+                  <td>{{item.genero}}</td>
+                  <td>{{item.talla}}</td>
+                  <td>{{item.cantidadEmpeladosTalla}}</td>
+                  <td>
+                    <input type="number" [(ngModel)]="item.remanente" placeholder="Remanente" (change)="this.calcularPrendasActuales()">
+                  </td>
+                  <td>{{item.totalPrendas + item.remanente}}</td>
+                </tr>
+              </tbody>
+              <tbody *ngIf="dataConsolidados.length <= 0">
+                <tr>
+                  <td colspan="12">No se encontraron registros</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

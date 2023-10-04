@@ -1,0 +1,56 @@
+<!-- <app-breadcrumb [title]="title" [breadcrumb]="breadcrumb"></app-breadcrumb> -->
+<section class="content">
+  <div class="container-fluid">
+    <form [formGroup]="frmCotizacionesDetalles" class="mb-4">
+      <div class="modal-header">
+        <h6>{{ titulo }}</h6>
+      </div>
+      <div class="modal-body">
+        <div class="row">
+          <div class="input-group">
+            <label class="col-lg-2 col-md-4 col-sm-12">Modelos </label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+              <ng-select [items]="listModelos" bindLabel="TextoMostrar" bindValue="Id" formControlName="ModeloId" (change)="ChangeModeloSelect($event)"> </ng-select>
+              <app-forms-messages [error]="frmCotizacionesDetalles.get('ModeloId')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12" *ngIf="ModeloCargoData">Dotacion por persona</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12" *ngIf="ModeloCargoData">
+              {{this.ModeloCargoData?.NumeroDotacion}} 
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12">Cantidad</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm text-right" formControlName="Cantidad" (change)="calculateValorTotal()" [textMask]="{mask: helperService.mascarasPredeterminadas('soloNumeros',null,null), guide: false}">
+                <app-forms-messages [error]="frmCotizacionesDetalles.get('Cantidad')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12">Valor Unitario</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm text-right" formControlName="ValorUnitario" (change)="calculateValorTotal()" [textMask]="{mask: helperService.mascarasPredeterminadas('dinero',null,null), guide: false}">
+               <app-forms-messages [error]="frmCotizacionesDetalles.get('ValorUnitario')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12">Iva</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm text-right" formControlName="Iva" (change)="calculateValorTotal()" [textMask]="{mask: helperService.mascarasPredeterminadas('Porcentaje',null,null), guide: false}">
+               <app-forms-messages [error]="frmCotizacionesDetalles.get('Iva')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12">Valor Total</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+              {{valorTotal | currency }}
+            </div>
+            <label class="col-lg-2 col-md-4 col-sm-12">Observaciones</label>
+            <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Observacion">
+               <app-forms-messages [error]="frmCotizacionesDetalles.get('Observacion')" [statusForm]=statusForm ></app-forms-messages>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div class="row float-right">
+          <div class="col-md-12">
+            <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,40 @@
+<!-- <app-breadcrumb [title]="title" [breadcrumb]="breadcrumb"></app-breadcrumb> -->
+ <ngx-spinner  bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#F8E12E" type="ball-atom" [fullScreen]="true">
+        <p style="color: white"> Cargando... </p>
+  </ngx-spinner>
+<section class="content">
+    <div class="container-fluid">
+      <form [formGroup]="frmEmpleadosCargeMasivo" class="mb-4">
+        <div class="modal-header">
+          <h6>{{ titulo }}</h6>
+
+            <app-botones [botones]="botonesHeader" (eventImportarEmpleado)="fileInput.click()" ></app-botones>
+            <input hidden (change)="importarEmpleado($event)" #fileInput type="file" id="file">
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Empresa</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <ng-select [items]="listEmpresas" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpresaId" > </ng-select>
+                <app-forms-messages [error]="frmEmpleadosCargeMasivo.get('EmpresaId')"    [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <!-- <label class="col-lg-1 col-md-4 col-sm-12">Sede</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <ng-select [items]="listSedes" bindLabel="textoMostrar" bindValue="id"  formControlName="SedeId" > </ng-select>
+                <app-forms-messages [error]="frmEmpleadosCargeMasivo.get('SedeId')"    [statusForm]=statusForm ></app-forms-messages>
+              </div> -->
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  

@@ -1,0 +1,82 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-body">
+                <form [formGroup]="frmOperaciones" class="mb-4">
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Estado</label>
+                            <div class="form-group col-lg-1 col-md-8 col-sm-12">
+                                <ui-switch formControlName="Estado"></ui-switch>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Código</label>
+                            <div class="form-group col-lg-5 col-md-8 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+                                <app-forms-messages [error]="frmOperaciones.get('Codigo')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Nombre</label>
+                            <div class="form-group col-lg-5 col-md-8 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Nombre">
+                                <app-forms-messages [error]="frmOperaciones.get('Nombre')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Maquinaria</label>
+                            <div class="form-group col-lg-3 col-md-8 col-sm-12">
+                                <ng-select [items]="listMaquinaria" bindLabel="textoMostrar" bindValue="id"  formControlName="MaquinariaId" > </ng-select>
+                                <app-forms-messages [error]="frmOperaciones.get('MaquinariaId')"    [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Tipo operación</label>
+                            <div class="form-group col-lg-3 col-md-8 col-sm-12">
+                                <ng-select [items]="listTipoOperacion" bindLabel="textoMostrar" bindValue="id"  formControlName="TipoOperacionId" > </ng-select>
+                                <app-forms-messages [error]="frmOperaciones.get('TipoOperacionId')"    [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Observacion</label>
+                            <div class="form-group col-lg-11 col-md-8 col-sm-12">
+                                <textarea class="form-control form-control-sm"  formControlName="Observacion"></textarea>
+                                <app-forms-messages [error]="frmOperaciones.get('Observacion')"  [statusForm]=statusForm ></app-forms-messages>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row float-right">
+                        <div class="col-md-12">
+                            <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+                        </div>
+                    </div>
+                </form>
+                <br>
+                <div class="card-footer" *ngIf="id">
+                    <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+                        <li ngbNavItem>
+                            <a ngbNavLink>Control Calidad</a>
+                            <ng-template ngbNavContent>
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12">
+                                        <app-operaciones-controles-calidades [operacionId]="id"></app-operaciones-controles-calidades>
+                                    </div>
+                                </div>
+                            </ng-template>
+                        </li>
+                    </ul>
+                    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

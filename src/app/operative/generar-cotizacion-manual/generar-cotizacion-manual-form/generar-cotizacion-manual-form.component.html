@@ -1,0 +1,40 @@
+<form [formGroup]="frmCotizacionManual">
+  <table class="table table-sm table-bordered">
+    <thead class="text-center">
+      <tr>
+        <th>Cargo</th>
+        <th>Modelo</th>
+        <th>Cantidad <br> uniformes</th>
+        <th>Precio <br> modelo</th>
+        <th>Cantidad <br> personas</th>
+        <th>Observacion</th>
+        <th>Subtotal</th>
+      </tr>
+    </thead>
+    <tbody class="text-center">
+      <tr>
+        <td >{{Cargo?.nombre}}</td>
+        <td >{{ModeloData?.nombre}}</td>
+        <td >{{ModeloCargoData?.numeroDotacion}}</td>
+        <td>
+          <input type="number" formControlName="ValorUnitario"  class="form-control form-control-sm" (change)=" CalcularSubTotal()">
+        </td>
+        <td>
+          <input type="number" formControlName="Cantidad"  class="form-control form-control-sm" (change)=" CalcularSubTotal()">
+        </td>
+        <td>
+          <textarea formControlName="Observacion" class="form-control"  id="" cols="15" rows="1"></textarea>
+        </td>
+        <td class="text-center" >$ {{SubTotal | number: '1.0-0'}}</td>
+        <td>
+          <app-botones #botonesSuperior [botones]="botones" [dropdown]="false" (eventDelete)="deleteModelo.emit([Index , SubTotal])"></app-botones>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</form>
+<hr>
+<!-- Lorem ipsum, dolor sit amet consectetur adipisicing elit. Molestiae id
+   perspiciatis dolorem inventore omnis tenetur debitis similique, 
+   iure modi odit sit explicabo in accusantium ut, magnam quam reprehenderit sed numquam. -->
+

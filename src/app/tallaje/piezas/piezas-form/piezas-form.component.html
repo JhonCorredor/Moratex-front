@@ -1,0 +1,67 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <form [formGroup]="frmPiezas" class="mb-4">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Estado</label>
+              <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                <ui-switch formControlName="Estado"></ui-switch>
+               <app-forms-messages [error]="frmPiezas.get('Longitud')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Código</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+               <app-forms-messages [error]="frmPiezas.get('Codigo')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Nombre</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Nombre">
+                <app-forms-messages [error]="frmPiezas.get('Nombre')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Tipos Piezas</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <ng-select [items]="listTiposPiezas" bindLabel="textoMostrar" bindValue="id"  formControlName="TipoPiezaId" > </ng-select>
+               <app-forms-messages [error]="frmPiezas.get('TipoPiezaId')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+            </div>
+          </div>
+        </form>
+        <br>
+      <div class="card-footer" *ngIf="id">
+          <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+            <li ngbNavItem>
+              <a ngbNavLink>Archivos
+                <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian los archivos pertenecientes a las Piezas">
+                  <i class="fa-solid fa-circle-question"></i>
+                </span > 
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <app-archivo-form [TablaId]="id"  Tabla="Piezas"></app-archivo-form>       
+                  </div>
+                </div>
+              </ng-template>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

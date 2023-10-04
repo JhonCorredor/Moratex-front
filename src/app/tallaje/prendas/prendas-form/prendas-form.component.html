@@ -1,0 +1,152 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+    
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <form [formGroup]="frmPrendas" class="mb-4">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Activo</label>
+              <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                <ui-switch formControlName="Estado"></ui-switch>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Nombre</label>
+              <div class="form-group col-lg-5 col-md-8 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Nombre">
+                <app-forms-messages [error]="frmPrendas.get('Nombre')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Tipo Prenda</label>
+              <div class="form-group col-lg-5 col-md-8 col-sm-12">
+                <ng-select [items]="listTipoPrenda" bindLabel="textoMostrar" bindValue="id"  formControlName="TipoPrendaId" > </ng-select>
+                <app-forms-messages [error]="frmPrendas.get('TipoPrendaId')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Descripción</label>
+              <div class="form-group col-lg-11 col-md-8 col-sm-12">
+                <textarea formControlName="Descripcion"  class="form-control"></textarea>
+                <app-forms-messages [error]="frmPrendas.get('Descripcion')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+            </div>
+          </div>
+          <hr>
+          <h3>Parametros de trazo</h3>
+          <br>
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Ancho (CM)</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm text-right" formControlName="Ancho" [textMask]="{mask: helperService.mascarasPredeterminadas('Numero_15_enteros_2_decimales',null,null), guide: false}">
+                <app-forms-messages [error]="frmPrendas.get('Ancho')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Longitud (CM)</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm text-right" formControlName="Longitud" >
+                <app-forms-messages [error]="frmPrendas.get('Longitud')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Aprovechamiento (CM)</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm text-right" formControlName="Aprovechamiento" [textMask]="{mask: helperService.mascarasPredeterminadas('Numero_15_enteros_2_decimales',null,null), guide: false}">
+                <app-forms-messages [error]="frmPrendas.get('Aprovechamiento')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Tiempo (Minutos)</label>
+              <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm text-right" formControlName="Tiempo" [textMask]="{mask: helperService.mascarasPredeterminadas('Numero_15_enteros_2_decimales',null,null), guide: false}">
+                <app-forms-messages [error]="frmPrendas.get('Tiempo')" [statusForm]=statusForm ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Imagen</label>
+              <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
+                <img [src]="img" id="imgPrenda" alt="" width="200" height="150">
+              </div>
+            </div>
+          </div>
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+            </div>
+          </div>
+        </form>
+      </div>
+      
+      <div class="card-footer" *ngIf="id">
+        <ul ngbNav #nav="ngbNav" [destroyOnHide]="true" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink>Piezas
+              <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian las piezas pertenecientes a la Prenda">
+                <i class="fa-solid fa-circle-question"></i>
+              </span > 
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-prendas-piezas-form [prendaId]="id"></app-prendas-piezas-form>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li ngbNavItem>
+            <a ngbNavLink>Insumos
+              <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian el  consumo  pertenecientes a la Prenda">
+                <i class="fa-solid fa-circle-question"></i>
+              </span > 
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-consumos-prendas-form [prendaId]="id"></app-consumos-prendas-form>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li ngbNavItem>
+            <a ngbNavLink>Consumos 
+              <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian los consumo pertenecientes a la Prenda">
+                <i class="fa-solid fa-circle-question"></i>
+              </span > 
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-consumos-prendas-tallas-form  [prendaId]="id" ></app-consumos-prendas-tallas-form>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li ngbNavItem>
+            <a ngbNavLink> Operaciónes
+              <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian operaciónes pertenecientes a la Prenda">
+                <i class="fa-solid fa-circle-question"></i>
+              </span > 
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-prendas-operaciones-form [prendaId]="id"></app-prendas-operaciones-form>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+          <li ngbNavItem>
+            <a ngbNavLink>Archivos
+              <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian los archivos pertenecientes a la Prenda">
+                <i class="fa-solid fa-circle-question"></i>
+              </span > 
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-archivo-form [TablaId]="id"  Tabla="Prendas"></app-archivo-form>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</section>

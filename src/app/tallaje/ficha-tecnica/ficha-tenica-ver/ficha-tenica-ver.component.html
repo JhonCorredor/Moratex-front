@@ -1,0 +1,38 @@
+<app-breadcrumb [title]="title" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-body">
+                <hr>
+                <div class="" *ngIf="modelo">
+                    <table class="table table-sm table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="4" class="text-center text-white bg-red">Modelo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th>Código</th>
+                                <th>Nombre</th>
+                                <th class="text-right">Precio</th>
+                                <th class="text-center">Imágen</th>
+                            </tr>
+                            <tr>
+                                <td>{{modelo.codigo}}</td>
+                                <td>{{modelo.nombre}}</td>
+                                <td class="text-right">{{modelo.precio | currency}}</td>
+                                <td class="text-center">
+                                    <img [src]="img" alt="" width="100" height="100" (click)="openImage()">
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <hr>
+                <app-ficha-tenica-prendas *ngIf="modeloId" [modeloId]="modeloId"></app-ficha-tenica-prendas>
+                <hr>
+            </div>
+        </div>
+    </div>
+</section>

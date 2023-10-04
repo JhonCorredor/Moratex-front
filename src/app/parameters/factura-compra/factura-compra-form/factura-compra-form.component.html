@@ -1,0 +1,100 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <form [formGroup]="frmFacturaCompra" class="mb-4" >
+          <fieldset  [disabled]=disableForm >
+          <div class="row">
+            <div class="input-group">
+                <label class="col-lg-2   col-md-4 col-sm-12">Codigo</label>
+                <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                  <input type="text" class="form-control form-control-sm" formControlName="Codigo"  >
+                  <app-forms-messages [error]="frmFacturaCompra.get('Codigo')" [statusForm]=statusForm>
+                  </app-forms-messages>
+                </div>
+                <label class="col-lg-2   col-md-4 col-sm-12">Fecha</label>
+                <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                <input type="date" class="form-control form-control-sm" formControlName="Fecha" [disabled]=disableForm >
+                <app-forms-messages [error]="frmFacturaCompra.get('Fecha')" [statusForm]=statusForm>
+                </app-forms-messages>
+              </div>
+              <label class="col-lg-2   col-md-4 col-sm-12">Total</label>
+              <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm" formControlName="Total" [disabled]=disableForm >
+                <app-forms-messages [error]="frmFacturaCompra.get('Total')" [statusForm]=statusForm>
+                </app-forms-messages>
+              </div>
+              <label class="col-lg-2   col-md-4 col-sm-12">Descuento</label>
+              <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm" formControlName="Descuento" [disabled]=disableForm >
+                <app-forms-messages [error]="frmFacturaCompra.get('Descuento')" [statusForm]=statusForm>
+                </app-forms-messages>
+              </div>
+              <label class="col-lg-2   col-md-4 col-sm-12">Iva</label>
+              <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                <input type="number" class="form-control form-control-sm" formControlName="Iva" [disabled]=disableForm >
+                <app-forms-messages [error]="frmFacturaCompra.get('Iva')" [statusForm]=statusForm></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Estado</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listEstados" bindLabel="textoMostrar" bindValue="id" formControlName="EstadoId"  [readonly]=disableForm >
+                </ng-select>
+                <app-forms-messages [error]="frmFacturaCompra.get('EstadoId')" [statusForm]=statusForm>
+                </app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Empleado</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id" formControlName="EmpleadoId" [readonly]=disableForm>
+                </ng-select>
+                <app-forms-messages [error]="frmFacturaCompra.get('EmpleadoId')" [statusForm]=statusForm>
+                </app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12">Proveedor</label>
+              <div class="form-group col-lg-4 col-md-6 col-sm-12">
+                <ng-select [items]="listProveedores" bindLabel="textoMostrar" bindValue="id" formControlName="ProveedorId"  [readonly]=disableForm> 
+                </ng-select>
+                <app-forms-messages [error]="frmFacturaCompra.get('ProveedorId')" [statusForm]=statusForm >
+                </app-forms-messages>
+              </div>
+              <label class="col-lg-2   col-md-4 col-sm-12">Observacion</label>
+              <div class="form-group col-lg-4  col-md-6 col-sm-12">
+                <input type="text" class="form-control form-control-sm" formControlName="Observacion" [disabled]=disableForm >
+                <app-forms-messages [error]="frmFacturaCompra.get('Observacion')" [statusForm]=statusForm>
+                </app-forms-messages>
+              </div>
+            </div>
+          </div>
+        </fieldset>
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="card-footer" *ngIf="id">
+        <ul ngbNav #nav="ngbNav" [destroyOnHide]="true" class="nav-tabs">
+          <li ngbNavItem>
+            <a ngbNavLink>Detalle
+              <span data-bs-toggle="tooltip" data-bs-placement="left"
+                title="En este formulario se asocian las piezas pertenecientes a la Prenda">
+                <i class="fa-solid fa-circle-question"></i>
+              </span>
+            </a>
+            <ng-template ngbNavContent>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-factura-compra-detalle-form [facturaCompraId]="id" [seeForm]="disableForm" ></app-factura-compra-detalle-form>
+                </div>
+              </div>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
+    </div>
+  </div>
+</section>
