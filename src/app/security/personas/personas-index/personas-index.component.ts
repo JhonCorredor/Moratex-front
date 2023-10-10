@@ -83,7 +83,7 @@ export class PersonasIndexComponent implements OnInit {
             },
             {
               title: "Número Identificación",
-              data: 'numeroIdentificacion',
+              data: 'documento',
             },
             {
               title: "Imagen",

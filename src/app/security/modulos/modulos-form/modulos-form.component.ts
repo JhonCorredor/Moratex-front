@@ -59,15 +59,16 @@ export class ModulosFormComponent implements OnInit {
 
     this.listIcons = [
       { textoMostrar :"fa-solid fa-user"  , name : "user"} ,
-      { textoMostrar :"fa-solid fa-play" ,  name : "play" } ,
-      { textoMostrar :"fa-solid fa-location-pin" ,  name : "location" } , 
       { textoMostrar :"fa-solid fa-eye" ,   name : "eye" },
       { textoMostrar :"fa-solid fa-boxes-stacked" ,   name : "boxes"},
       { textoMostrar :"fa-solid fa-cart-shopping" ,   name : "cart"},
       { textoMostrar :"fa-solid fa-lock" ,   name : "security"},
       { textoMostrar :"fa-solid fa-folder" ,   name : "folder"},
       { textoMostrar :"fa-solid fa-briefcase" ,   name : "boxes"},
-      { textoMostrar :"fa-solid fa-handshake" ,   name : "boxes"}
+      { textoMostrar :"fa-solid fa-handshake" ,   name : "boxes"},
+      { textoMostrar :"fa-solid fa-vest-patches" ,   name : "patches"},
+      { textoMostrar :"fa-solid fa-gears" ,   name : "gears"},
+      { textoMostrar :"fa-solid fa-window-maximize" ,   name : "window"}
     ]
   }
 

@@ -25,7 +25,7 @@ export class RolesFormularioFormComponent implements OnInit {
   public botones = ['btn-guardar'];
   public Id = null;
 
-  @Input() RolId: any = null;
+  @Input() Rol_Id: any = null;
 
   public frmRolesFormulario! : FormGroup;
   public statusForm : boolean = true
@@ -43,7 +43,7 @@ export class RolesFormularioFormComponent implements OnInit {
 
   buildForm(): void {
     this.frmRolesFormulario = this.fb.group({
-      FormularioId: [null, [Validators.required]],
+      Formulario_Id: [null, [Validators.required]],
       Estado : [true, [Validators.required]]
     });
     this.buildSelect()
@@ -73,7 +73,7 @@ export class RolesFormularioFormComponent implements OnInit {
     let data  = { 
       id: this.Id ?? 0,
       ...this.frmRolesFormulario.value,
-     RolId : this.RolId,
+     Rol_Id : this.Rol_Id,
     };
     this.service.save(this.Id, data).subscribe(l => {
       if (!l.status) {
@@ -113,7 +113,7 @@ export class RolesFormularioFormComponent implements OnInit {
           data.filter = dataTablesParameters.search.value;
           data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());;
           data.directionOrder = dataTablesParameters.order[0].dir;
-          data.foreignKey = this.RolId;
+          data.foreignKey = this.Rol_Id;
           this.service.getAllRolesFormulario(data).subscribe((res: any) => {
             callback({
               recordsTotal: res.meta.totalCount,

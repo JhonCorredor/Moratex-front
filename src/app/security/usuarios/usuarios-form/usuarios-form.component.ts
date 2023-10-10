@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { PersonasService } from '../../personas/personas.service';
 import { UsuariosService } from '../usuarios.service';
@@ -24,9 +23,10 @@ export class UsuariosFormComponent implements OnInit {
   constructor(public routerActive: ActivatedRoute, private service: UsuariosService, private helperService: HelperService, private Personasservice: PersonasService) { 
     this.frmUsuarios = new FormGroup({      
       Usuario: new FormControl(null, [Validators.required , Validators.maxLength(100)]),
+      Codigo: new FormControl(null, Validators.required),
       Password: new FormControl(null, [Validators.required , Validators.maxLength(200)]),
       Estado: new FormControl(true, Validators.required),
-      PersonaId: new FormControl(null, Validators.required)
+      Persona_Id: new FormControl(null, Validators.required)
     });
     this.routerActive.params.subscribe(l => this.id = l.id);
   }
@@ -36,9 +36,10 @@ export class UsuariosFormComponent implements OnInit {
       this.titulo = "Editar usuario";
       this.service.getById(this.id).subscribe(l => {
         this.frmUsuarios.controls.Usuario.setValue(l.data.usuario);
+        this.frmUsuarios.controls.Codigo.setValue(l.data.codigo);
         this.frmUsuarios.controls.Password.setValue(l.data.password);
         this.frmUsuarios.controls.Estado.setValue(l.data.estado);
-        this.frmUsuarios.controls.PersonaId.setValue(l.data.personaId);
+        this.frmUsuarios.controls.Persona_Id.setValue(l.data.Persona_Id);
       })
     }else {
       this.titulo = "Crear usuario";

@@ -36,7 +36,7 @@ export class RolesFormComponent implements OnInit {
   ngOnInit(): void {
     if (this.id != undefined && this.id != null) {
       this.titulo = `Editar Roles`;
-      this.service.getById("Roles", this.id).subscribe(l => {
+      this.service.getById(this.id).subscribe(l => {
         this.frmRoles.controls.Codigo.setValue(l.data.codigo);
         this.frmRoles.controls.Nombre.setValue(l.data.nombre);
         this.frmRoles.controls.Estado.setValue(l.data.estado);
@@ -56,7 +56,7 @@ export class RolesFormComponent implements OnInit {
       id: this.id ?? 0,
       ...this.frmRoles.value
     };
-    this.service.save("Roles", this.id, data).subscribe(l => {
+    this.service.save(this.id, data).subscribe(l => {
       if (!l.status) {
         // this.modalActive.close();
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)

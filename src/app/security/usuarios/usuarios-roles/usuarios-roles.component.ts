@@ -23,7 +23,7 @@ export class UsuariosRolesComponent implements OnInit {
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
   public botones = ['btn-guardar'];
 
-  @Input() usuarioId: any = null;
+  @Input() Usuario_Id: any = null;
 
   public frmUsuariosRol: FormGroup;
   public statusForm : boolean = true
@@ -32,8 +32,8 @@ export class UsuariosRolesComponent implements OnInit {
   constructor(private generalService: GeneralParameterService, private helperService: HelperService, private service: UsuariosRolesService) { 
     this.frmUsuariosRol = new FormGroup({
       Id: new FormControl(0, Validators.required),
-      UsuarioId: new FormControl(this.usuarioId, Validators.required),
-      RolId: new FormControl(null, Validators.required),
+      Usuario_Id: new FormControl(this.Usuario_Id, Validators.required),
+      Rol_Id: new FormControl(null, Validators.required),
       Estado: new FormControl(true, Validators.required)
     });
   }
@@ -58,7 +58,7 @@ export class UsuariosRolesComponent implements OnInit {
   }
 
   save() {
-    this.frmUsuariosRol.controls.UsuarioId.setValue(this.usuarioId);
+    this.frmUsuariosRol.controls.Usuario_Id.setValue(this.Usuario_Id);
     if (this.frmUsuariosRol.invalid) {
       this.statusForm  = false
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
@@ -102,7 +102,7 @@ export class UsuariosRolesComponent implements OnInit {
           data.filter = dataTablesParameters.search.value;
           data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());;
           data.directionOrder = dataTablesParameters.order[0].dir;
-          data.foreignKey = this.usuarioId;
+          data.foreignKey = this.Usuario_Id;
           this.service.datatable(data).subscribe(res => {
             callback({
               recordsTotal: res.meta.totalCount,
@@ -146,7 +146,7 @@ export class UsuariosRolesComponent implements OnInit {
           $('.btn-dropdown-modificar').off().on('click', (event : any) => {
             this.service.getById(event.target.dataset.id).subscribe(res => {
               this.frmUsuariosRol.controls.Id.setValue(res.data.id);
-              this.frmUsuariosRol.controls.RolId.setValue(res.data.prendaId);
+              this.frmUsuariosRol.controls.Rol_Id.setValue(res.data.prendaId);
               this.frmUsuariosRol.controls.Estado.setValue(res.data.estado);
             })
           });

@@ -22,8 +22,8 @@
                         </div>                  
                         <label class="col-lg-2  col-md-4 col-sm-12">Numero Identificación</label>
                         <div class="form-group col-lg-4  col-md-6 col-sm-12">
-                            <input type="text" class="form-control form-control-sm" formControlName="NumeroIdentificacion">
-                            <app-forms-messages [error]="frmPersonas.get('NumeroIdentificacion')"  [statusForm]=statusForm ></app-forms-messages>
+                            <input type="text" class="form-control form-control-sm" formControlName="Documento">
+                            <app-forms-messages [error]="frmPersonas.get('Documento')"  [statusForm]=statusForm ></app-forms-messages>
                         </div>
                         <label class="col-lg-2  col-md-4 col-sm-12">Primer Nombre</label>
                         <div class="form-group col-lg-4  col-md-6 col-sm-12">
@@ -62,8 +62,8 @@
                         </div>                        
                         <label class="col-lg-2  col-md-4 col-sm-12">Ciudad</label>
                         <div class="form-group col-lg-4  col-md-6 col-sm-12">
-                            <ng-select [items]="listCiudades" bindLabel="textoMostrar" bindValue="id"  formControlName="CiudadId" > </ng-select>
-                            <app-forms-messages [error]="frmPersonas.get('CiudadId')"    [statusForm]=statusForm ></app-forms-messages>
+                            <ng-select [items]="listCiudades" bindLabel="textoMostrar" bindValue="id"  formControlName="Ciudad_Id" > </ng-select>
+                            <app-forms-messages [error]="frmPersonas.get('Ciudad_Id')"    [statusForm]=statusForm ></app-forms-messages>
                         </div>
                         <!-- <label class="col-lg-2  col-md-4 col-sm-12">Genero</label>
                         <div class="form-group col-lg-4  col-md-6 col-sm-12">

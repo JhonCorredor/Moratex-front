@@ -70,7 +70,7 @@ export class RolesIndexComponent implements OnInit {
           data.filter = dataTablesParameters.search.value;
           data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());;
           data.directionOrder = dataTablesParameters.order[0].dir;
-          this.service.datatable("roles", data).subscribe(res => {
+          this.service.datatable(data).subscribe(res => {
             callback({
               recordsTotal: res.meta.totalCount,
               recordsFiltered: res.meta.totalCount,
@@ -120,7 +120,7 @@ export class RolesIndexComponent implements OnInit {
           });
           $('.btn-dropdown-eliminar').off().on('click', (event : any) => {
             this.helperService.confirmDelete(() => {
-              this.service.delete("Roles", event.target.dataset.id).subscribe(l => {
+              this.service.delete(event.target.dataset.id).subscribe(l => {
                 if (l.status) {
                   this.helperService.showMessage(MessageType.SUCCESS, Messages.DELETESUCCESS);
                   

@@ -31,9 +31,9 @@ export class PersonasFormComponent implements OnInit {
     private ArchivoService: ArchivoService
     ) { 
     this.frmPersonas = new FormGroup({
-      NumeroIdentificacion: new FormControl(null, [Validators.required , Validators.maxLength(20)]),
+      Documento: new FormControl(null, [Validators.required , Validators.maxLength(20)]),
       TipoDocumento: new FormControl(null, [Validators.required]),
-      PrimerNombre: new FormControl(null, [Validators.required , Validators.maxLength(100)]),
+      PrimerNombre: new FormControl(null),
       SegundoNombre: new FormControl(null, [Validators.maxLength(100)]),
       PrimerApellido: new FormControl(null, [Validators.required , Validators.maxLength(100)]),
       SegundoApellido: new FormControl(null, [Validators.maxLength(100)]),
@@ -41,9 +41,9 @@ export class PersonasFormComponent implements OnInit {
       Direccion: new FormControl(null, [Validators.required , Validators.maxLength(150)]),
       Telefono: new FormControl(null, [Validators.required , Validators.maxLength(50)]),
       Estado: new FormControl(true, Validators.required),
-      CiudadId: new FormControl(null, Validators.required),
+      Ciudad_Id: new FormControl(null, Validators.required),
       Genero: new FormControl(1, Validators.required),
-      ImagenPersonaId: new FormControl(null),
+      imagenPersonaId_Id: new FormControl(null),
     });
   }
 
@@ -51,7 +51,7 @@ export class PersonasFormComponent implements OnInit {
     if (this.id != undefined && this.id != null) {
       this.titulo = "Editar Persona";
       this.service.getById(this.id).subscribe(({data} : any) => {
-        this.frmPersonas.controls.NumeroIdentificacion.setValue(data.numeroIdentificacion);
+        this.frmPersonas.controls.Documento.setValue(data.documento);
         this.frmPersonas.controls.TipoDocumento.setValue(data.tipoDocumento);
         this.frmPersonas.controls.PrimerNombre.setValue(data.primerNombre);
         this.frmPersonas.controls.SegundoNombre.setValue(data.segundoNombre);
@@ -62,13 +62,13 @@ export class PersonasFormComponent implements OnInit {
         this.frmPersonas.controls.Direccion.setValue(data.direccion);
         this.frmPersonas.controls.Telefono.setValue(data.telefono);
         this.frmPersonas.controls.Estado.setValue(data.estado);
-        this.frmPersonas.controls.CiudadId.setValue(data.ciudadId);
+        this.frmPersonas.controls.Ciudad_Id.setValue(data.Ciudad_Id);
         this.frmPersonas.controls.Genero.setValue(data.genero);
 
-        if(data.imagenPersonaId > 0){
+        if(data.imagenPersonaId_Id > 0){
           this.ArchivoService.getArchivoById(data.imagenPrendaId).subscribe(({data}) => {
           this.img = data.archivo;
-          this.frmPersonas.controls.ImagenPersonaId.setValue(data.id);
+          this.frmPersonas.controls.imagenPersonaId_Id.setValue(data.id);
         })}
       })
     }else {
@@ -104,11 +104,11 @@ export class PersonasFormComponent implements OnInit {
     }
     if (this.id != undefined && this.id != null) {
       if (this.dataArchivo != undefined) {
-        this.ArchivoService.delete(this.frmPersonas.controls.ImagenPersonaId.value).subscribe(() => {})
+        this.ArchivoService.delete(this.frmPersonas.controls.imagenPersonaId_Id.value).subscribe(() => {})
         this.ArchivoService.save(this.dataArchivo).subscribe(l => {
           if (l.status != "Error") {
             this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-            this.frmPersonas.controls.ImagenPersonaId.setValue(l.data.id);
+            this.frmPersonas.controls.imagenPersonaId_Id.setValue(l.data.id);
             this.guardarPersona()
           } else {
             this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
@@ -121,7 +121,7 @@ export class PersonasFormComponent implements OnInit {
       this.ArchivoService.save(this.dataArchivo).subscribe(l => {
         if (l.status != "Error") {
           this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-          this.frmPersonas.controls.ImagenPersonaId.value.setValue(l.data.id);
+          this.frmPersonas.controls.imagenPersonaId_Id.value.setValue(l.data.id);
           this.guardarPersona()
         } else {
           this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)

@@ -53,22 +53,19 @@ export class FormulariosFormComponent implements OnInit {
       Codigo: [null, [Validators.required , Validators.maxLength(50)]],
       Nombre: [null, [Validators.required  , Validators.maxLength(100)]],
       Url : [null, [Validators.required , Validators.maxLength(200)]],
-      ModuloId: [null, [Validators.required]],
+      Modulo_Id: [null, [Validators.required]],
       Icono : [null, [Validators.required]],
       Estado: [true, [Validators.required]]
     });
 
     this.listIcons = [
       { textoMostrar :"fa-solid fa-user"  , name : "user"} ,
-      { textoMostrar :"fa-solid fa-play" ,  name : "play" } ,
-      { textoMostrar :"fa-solid fa-location-pin" ,  name : "location" } , 
-      { textoMostrar :"fa-solid fa-eye" ,   name : "eye" },
-      { textoMostrar :"fa-solid fa-boxes-stacked" ,   name : "boxes"},
-      { textoMostrar :"fa-solid fa-cart-shopping" ,   name : "cart"},
-      { textoMostrar :"fa-solid fa-lock" ,   name : "security"},
-      { textoMostrar :"fa-solid fa-folder" ,   name : "folder"},
-      { textoMostrar :"fa-solid fa-briefcase" ,   name : "boxes"},
-      { textoMostrar :"fa-solid fa-handshake" ,   name : "boxes"}
+      { textoMostrar :"fa-solid fa-window-maximize" ,   name : "window"},
+      { textoMostrar :"fa-solid fa-folder-tree" ,   name : "folder-tree"},
+      { textoMostrar :"fa-solid fa-user-tag" ,   name : "user-tag"},
+      { textoMostrar :"fa-solid fa-file" ,   name : "file"},
+      { textoMostrar :"fa-solid fa-building-columns" ,   name : "bank"},
+      { textoMostrar :"fa-solid fa-users-gear" ,   name : "users-gear"}
     ]
   }
 
