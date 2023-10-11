@@ -21,8 +21,8 @@
                         <a href="#" class="dropdown-item" *ngFor="let item of listNotifications">
                             <i class="fas fa-file mr-2"></i> 3 new reports
                         </a>
-                        <span class="dropdown-item" *ngIf="listNotifications.length <= 0">
-                            NO existen notificaciones
+                        <span class="dropdown-item text-center text-secondary" *ngIf="listNotifications.length <= 0">
+                            No tienes notificaciones
                         </span>
                         <div class="dropdown-divider"></div>
                         <a routerLink="dashboard/notificaciones" class="dropdown-item dropdown-footer">Ver todas las notificaciones</a>
@@ -31,44 +31,45 @@
             </ul>
             <div class="dropdown">
                 <button class="btn bg-red dropdown-toggle btn-admin-panel text-white" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Administración
+                    {{ userLogin() }}
                 </button>
-                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="#" (click)="logOut()"> <i class="fas fa-sign-out-alt " style="color: rgba(169,41,38,255);"></i> <span class="float-right">Cerrar sesión</span></a>
+                <div class="dropdown-menu dropdown-menu-right text-center" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="#" (click)="logOut()"> <i class="fas fa-sign-out-alt " style="color: rgba(169,41,38,255);"></i>&nbsp;<span>Cerrar sesión</span></a>
                 </div>
             </div>
         </nav>
 
         <aside id="mainSidebar" class="main-sidebar sidebar-light-primary elevation-4">
             <a [routerLink]="['dashboard']" class="brand-link">
-                <span id="image-logo" class="menu-name" *ngIf="ocultarLogo"><b>V</b></span>
-                <a [routerLink]="['dashboard']" class="brand-link text-center">
-                    <img *ngIf="!ocultarLogo" src="../assets/logo_moratex.png" alt="Gaffel Logo" class="brand-text font-weight-light" width="50%"> </a>
+                <a [routerLink]="['dashboard']" class="brand-link text-center" *ngIf="!ocultarLogo">
+                    <img src="../assets/logo_moratex.ico" alt="Moratex Logo" class="brand-text font-weight-light" width="20%">
+                </a>
+
+                <a [routerLink]="['dashboard']" class="brand-link text-center" *ngIf="ocultarLogo">
+                    <img src="../assets/logo_moratex.png" alt="Moratex Logo" class="brand-text font-weight-light" width="50%">
+                </a>
             </a>
+            <div class="mb-2 mt-3 pr-3 pl-3">
+                <ng-select [items]="listFormularios" bindLabel="textoMostrar" bindValue="id" (change)="selectFormulario($event)"> </ng-select>
+                <span *ngIf="dataFormulario"><span>&nbsp;&nbsp; Ir a : </span>&nbsp;&nbsp;<u><a class="nav-link text-decoration-none text-black" href="{{document }}/{{ dataFormulario?.url}}">{{dataFormulario?.nombre}}</a></u></span>
+            </div>
             <div class="sidebar">
-                <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+                <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
                     <div class="image">
                         <img src="#" class="img-circle elevation-2" alt="">
                     </div>
                     <div class="info">
                         <a href="#" class="d-block">Diego Rivas</a>
                     </div>
-                </div>
-
+                </div> -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li class="nav-item">
+                        <!-- <li class="nav-item">
                             <a [routerLink]="['dashboard']" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Moratex</p>
                             </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <ng-select [items]="listFormularios" bindLabel="textoMostrar" bindValue="id" (change)="selectFormulario($event)"> </ng-select>
-                            <span *ngIf="dataFormulario"><span>&nbsp;&nbsp; Ir a : </span>&nbsp;&nbsp;<u><a href="{{document }}/{{ dataFormulario?.url}}">{{dataFormulario?.nombre}}</a></u></span>
-                        </li>
-
+                        </li> -->
                         <li class="nav-item" *ngFor="let item of listMenus">
                             <a href="#" class="nav-link">
                                 <i [ngClass]="getClass('fas fa-cog' , item.icono)"></i>&nbsp;
@@ -79,7 +80,7 @@
 
                                 <li class="nav-item" *ngFor="let itemForm of item.formularios">
                                     <a [routerLink]="itemForm.url" class="nav-link" (click)="scrollTop()">
-                                        <i [ngClass]="getClass('fa-regular fa-file' , itemForm.icono)"></i>&nbsp;
+                                        &nbsp;&nbsp;&nbsp;<i [ngClass]="getClass('fa-regular fa-file' , itemForm.icono)"></i>&nbsp;
                                         <p>{{itemForm.nombre}}</p>
                                     </a>
                                 </li>

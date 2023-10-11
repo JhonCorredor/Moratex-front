@@ -9,36 +9,40 @@ import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 })
 export class EmpresasService {
 
-  private BASE_URL = environment.url + "Empresas/";
-  private headers = new HttpHeaders({
-    "Content-Type": "application/json", 
-  });
+  private url = environment.url;
+  private ruta =  "Empresas";
 
-  constructor(private http: HttpClient) { }
+  // private BASE_URL : any;
+  private header = new HttpHeaders();
+
+  constructor(private http: HttpClient) { 
+    this.header.set("Content-Type", "application/json");
+    // this.header.set("allow-origin", "*");
+  }
 
   public getAllEmpresas( data : DatatableParameter) : Observable<any> {
-    return this.http.get<any>(`${this.BASE_URL}datatable?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}`, {headers: this.headers});
+    return this.http.get<any>(`${this.url}${this.ruta}/datatable?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}`, {headers: this.header});
   }
 
   public getEmpresasById(id : any) : Observable<any> {
-    return this.http.get<any>(`${this.BASE_URL}${id}`, {headers: this.headers});
+    return this.http.get<any>(`${this.url}${this.ruta}/${id}`, {headers: this.header});
   }
 
 
   public getAll(ruta : string) : Observable<any> {
-    return this.http.get<any>(`${environment.url}${ruta}/AllSelect`, {headers: this.headers});
+    return this.http.get<any>(`${environment.url}${ruta}/AllSelect`, {headers: this.header});
   }
 
   public save(id : any, data : any) : Observable<any> {
     if (id != null && id != undefined) {
-      return this.http.put<any>(`${this.BASE_URL}${id}`, JSON.stringify(data), {headers: this.headers});
+      return this.http.put<any>(`${this.url}${this.ruta}/${id}`, JSON.stringify(data), {headers: this.header});
     } else {
-      return this.http.post<any>(`${this.BASE_URL}`, JSON.stringify(data), {headers: this.headers});
+      return this.http.post<any>(`${this.url}${this.ruta}`, JSON.stringify(data), {headers: this.header});
     }
   }
 
   public delete(id : any ) : Observable<any> {
-    return this.http.delete<any>(`${this.BASE_URL}${id}`, {headers: this.headers});
+    return this.http.delete<any>(`${this.url}${this.ruta}/${id}`, {headers: this.header});
   }
 
 }

@@ -25,7 +25,7 @@ export class ProductoPorveedoresFormComponent implements OnInit {
   // public botones = ['btn-guardar'];
   public Id = null;
 
-  @Input() ProveedorId: any = null;
+  @Input() Proveedor_Id: any = null;
 
   public frmProductoProveedores! : FormGroup;
   public statusForm : boolean = true
@@ -43,7 +43,7 @@ export class ProductoPorveedoresFormComponent implements OnInit {
 
   buildForm(): void {
     this.frmProductoProveedores = this.fb.group({
-      ProductoId: [null, [Validators.required]],
+      Producto_Id: [null, [Validators.required]],
       Estado : [true, [Validators.required]]
     });
     this.buildSelect()
@@ -73,7 +73,7 @@ export class ProductoPorveedoresFormComponent implements OnInit {
     let data  = { 
       id: this.Id ?? 0,
       ...this.frmProductoProveedores.value,
-     ProveedorId : this.ProveedorId,
+     Proveedor_Id : this.Proveedor_Id,
     };
     this.service.save(this.Id, data).subscribe(l => {
       if (!l.status) {
@@ -112,7 +112,7 @@ export class ProductoPorveedoresFormComponent implements OnInit {
           data.filter = dataTablesParameters.search.value;
           data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());;
           data.directionOrder = dataTablesParameters.order[0].dir;
-          data.foreignKey = this.ProveedorId;
+          data.foreignKey = this.Proveedor_Id;
           this.service.getAllProductoProveedores(data).subscribe((res: any) => {
             callback({
               recordsTotal: res.meta.totalCount,
@@ -156,7 +156,7 @@ export class ProductoPorveedoresFormComponent implements OnInit {
           $('.btn-dropdown-modificar').off().on('click', (event : any) => {
             this.service.getProductoProveedoresById(event.target.dataset.id).subscribe(({data}) => {
               this.Id = data.id;
-              this.frmProductoProveedores.controls.ProductoId.setValue(data.productoId);
+              this.frmProductoProveedores.controls.Producto_Id.setValue(data.producto_Id);
               this.frmProductoProveedores.controls.Estado.setValue(data.estado);
             })
           });

@@ -81,23 +81,16 @@ export class EmpresasIndexComponent implements OnInit {
               data: 'codigo',
             },
             {
+              title: 'RazonSocial',
+              data: 'razonSocial',
+            },
+            {
               title: 'Nit',
               data: 'nit',
             },
             {
-              title: 'Razon Social',
-              data: 'razonSocial',
-            },
-            {
-              title: "Logo",
-              data: 'logo',
-              render : function(data : any,) {
-                return   `<img src='${data}'  width='70' height='70'>`;
-              }
-            },
-            {
-              title: "Marquilla",
-              data: 'marquilla'
+              title: "Direccion",
+              data: 'direccion'
             },
             {
               title: 'Telefono',
@@ -116,8 +109,11 @@ export class EmpresasIndexComponent implements OnInit {
               data: 'ciudad',
             },
             {
-              title: 'Direccion',
-              data: 'direccion',
+              title: "Logo",
+              data: 'logo',
+              render : function(data : any,) {
+                return   `<img src='${data}'  width='70' height='70'>`;
+              }
             },
             {
               title: "Estado",

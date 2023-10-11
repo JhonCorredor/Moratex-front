@@ -36,7 +36,6 @@ export class ProductosFormComponent implements OnInit {
       CaracteristicaData: new FormControl(null, [Validators.required , Validators.maxLength(500)]),
       ProductoTerminado: new FormControl(null),
       Estado: new FormControl(true, Validators.required),
-      Marca_Id: new FormControl(null, Validators.required),
       Categoria_Id: new FormControl(null, Validators.required),
       UnidadMedida_Id: new FormControl(null, Validators.required),
       ImagenProductoId: new FormControl(null)

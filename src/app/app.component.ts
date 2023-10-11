@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment.prod';
 import { HelperService } from './admin/helper.service';
 import { GeneralParameterService } from './parameters/general-parameter/general-parameter.service';
+import { UsuariosService } from './security/usuarios/usuarios.service';
 
 @Component({
   selector: 'app-root',
@@ -26,20 +27,24 @@ export class AppComponent implements OnInit {
   
   public localStorage = localStorage;
   public document = document.location.origin
-  public ocultarLogo = false;
+  public ocultarLogo = true;
   public innerWidth: number;
   public minWidth: number = 1000;
   public listMenus: any[] = localStorage.getItem("menu") == null || localStorage.getItem("menu") == undefined ? 
   [] : JSON.parse(localStorage.getItem("menu")!);
   public listNotifications: [] = [];
+  public user: any;
   
   constructor(
     private primeNgConfig: PrimeNGConfig ,
     private helperService : HelperService,
     private http: HttpClient ,
-    private generalService: GeneralParameterService) {
-    this.innerWidth = window.innerWidth;
-  }
+    private generalService: GeneralParameterService,
+    private usuariosService: UsuariosService
+    )
+    {
+      this.innerWidth = window.innerWidth;
+    }
   
   ngOnInit(): void {
     this.primeNgConfig.ripple = true;
@@ -48,6 +53,7 @@ export class AppComponent implements OnInit {
     this.getListInventory();
     this.getListSizing();
     this.getListOperative();
+    this.getUserLogin();
     if (localStorage.getItem("token") != null) {
       this.loadNotifications().subscribe(res => {
         this.listNotifications = res.data;
@@ -71,6 +77,17 @@ export class AppComponent implements OnInit {
 
   public countNotifications() {
     return this.listNotifications.filter((l: any) => l.Estado).length;
+  }
+
+  public userLogin() {
+    return this.user;
+  }
+
+  public getUserLogin(){
+    var userId = localStorage.getItem("userId")
+    this.usuariosService.getById(userId).subscribe(res => {
+      this.user = res.data.usuario;
+    })
   }
   
   cargarFormulario() {

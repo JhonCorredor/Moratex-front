@@ -16,8 +16,8 @@
             <div class="input-group">
               <label class="col-lg-1 col-md-4 col-sm-12">Identificación</label>
               <div class="form-group col-lg-3 col-md-6 col-sm-12">
-                <input type="text" class="form-control form-control-sm" formControlName="NumeroIdentificacion" (blur)="searchByDocument()">
-                <app-forms-messages [error]="frmEmpleados.get('NumeroIdentificacion')"  [statusForm]=statusForm ></app-forms-messages>
+                <input type="text" class="form-control form-control-sm" formControlName="Documento" (blur)="searchByDocument()">
+                <app-forms-messages [error]="frmEmpleados.get('Documento')"  [statusForm]=statusForm ></app-forms-messages>
               </div>
               <label class="col-lg-1 col-md-4 col-sm-12">Nombres</label>
               <div class="form-group col-lg-3 col-md-6 col-sm-12">
@@ -49,28 +49,13 @@
             <div class="input-group">
               <label class="col-lg-1 col-md-4 col-sm-12">Empresa</label>
               <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <ng-select [items]="listEmpresas" bindLabel="textoMostrar" bindValue="id"  formControlName="EmpresaId" > </ng-select>
-                <app-forms-messages [error]="frmEmpleados.get('EmpresaId')"    [statusForm]=statusForm ></app-forms-messages>
+                <ng-select [items]="listEmpresas" bindLabel="textoMostrar" bindValue="id"  formControlName="Empresa_Id" > </ng-select>
+                <app-forms-messages [error]="frmEmpleados.get('Empresa_Id')"    [statusForm]=statusForm ></app-forms-messages>
               </div>
               <label class="col-lg-1 col-md-4 col-sm-12">Cargo</label>
               <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <ng-select [items]="listCargos" bindLabel="textoMostrar" bindValue="id"  formControlName="CargoId" > </ng-select>
-                <app-forms-messages [error]="frmEmpleados.get('CargoId')"    [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-1 col-md-4 col-sm-12">Area</label>
-              <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <ng-select [items]="listAreas" bindLabel="textoMostrar" bindValue="id"  formControlName="AreaId" > </ng-select>
-                <app-forms-messages [error]="frmEmpleados.get('AreaId')"    [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-1 col-md-4 col-sm-12">Camisa</label>
-              <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <ng-select [items]="listTallas" bindLabel="textoMostrar" bindValue="id"  formControlName="TallaSuperiorId" > </ng-select>
-                <app-forms-messages [error]="frmEmpleados.get('TallaSuperiorId')"    [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-1 col-md-4 col-sm-12">Pantalón</label>
-              <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <ng-select [items]="listTallas" bindLabel="textoMostrar" bindValue="id"  formControlName="TallaInferiorId" > </ng-select>
-                <app-forms-messages [error]="frmEmpleados.get('TallaInferiorId')"    [statusForm]=statusForm ></app-forms-messages>
+                <ng-select [items]="listCargos" bindLabel="textoMostrar" bindValue="id"  formControlName="Cargo_Id" > </ng-select>
+                <app-forms-messages [error]="frmEmpleados.get('Cargo_Id')"    [statusForm]=statusForm ></app-forms-messages>
               </div>
             </div>
           </div>
@@ -83,20 +68,6 @@
         <br>
         <div class="card-footer" *ngIf="id">
           <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
-              <li ngbNavItem>
-                <a ngbNavLink>Medidas
-                  <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian las medidas pertenecientes al Empleado">
-                    <i class="fa-solid fa-circle-question"></i>
-                  </span > 
-                </a>
-                <ng-template ngbNavContent>
-                  <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                      <app-empleados-medidas [empleadoId]="id"></app-empleados-medidas>
-                    </div>
-                  </div>
-                </ng-template>
-              </li>
               <li ngbNavItem>
                 <a ngbNavLink>Archivos
                   <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian los archivos pertenecientes al Empleado">

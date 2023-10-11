@@ -35,17 +35,16 @@ export class EmpresasFormComponent implements OnInit {
         this.frmEmpresas.controls.RazonSocial.setValue(data.razonSocial);
         this.frmEmpresas.controls.Nit.setValue(data.nit);
 
-        this.ArchivoService.getArchivoById(data.logoId).subscribe(({data}) => {
+        this.ArchivoService.getArchivoById(data.logo_Id).subscribe(({data}) => {
           this.img = data.archivo;
-          this.frmEmpresas.controls.LogoId.setValue(data.id);
+          this.frmEmpresas.controls.logo_Id.setValue(data.id);
         })
 
-        this.frmEmpresas.controls.Marquilla.setValue(data.marquilla);
         this.frmEmpresas.controls.Direccion.setValue(data.direccion);
         this.frmEmpresas.controls.Telefono.setValue(data.telefono);
         this.frmEmpresas.controls.Email.setValue(data.email);
         this.frmEmpresas.controls.Web.setValue(data.web);
-        this.frmEmpresas.controls.CiudadId.setValue(data.ciudadId);
+        this.frmEmpresas.controls.Ciudad_Id.setValue(data.ciudad_Id);
         this.frmEmpresas.controls.Estado.setValue(data.estado);
       })
     }else {
@@ -63,9 +62,8 @@ export class EmpresasFormComponent implements OnInit {
       Telefono : [null, [Validators.maxLength(50)]],
       Email : [null, [Validators.maxLength(100)]],
       Web : [null, [ Validators.maxLength(100)]],
-      CiudadId : [null, [Validators.required] ],
-      LogoId : [0,  ],
-      Marquilla: [null, [Validators.required , Validators.maxLength(200)]],
+      Ciudad_Id : [null, [Validators.required] ],
+      logo_Id : [0,  ],
       Estado : [true, [Validators.required]]
     });
 
@@ -109,11 +107,11 @@ export class EmpresasFormComponent implements OnInit {
 
     if (this.id != undefined && this.id != null) {
       if(this.dataArchivo != undefined){
-        this.ArchivoService.delete(this.frmEmpresas.controls.LogoId.value).subscribe(() => {})
+        this.ArchivoService.delete(this.frmEmpresas.controls.logo_Id.value).subscribe(() => {})
         this.ArchivoService.save(this.dataArchivo).subscribe(l => {
           if (l.status != "Error") {
             this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-            this.frmEmpresas.controls.LogoId.setValue(l.data.id);
+            this.frmEmpresas.controls.logo_Id.setValue(l.data.id);
             this.guardarEmpresa()
           } else {
             this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
@@ -126,7 +124,7 @@ export class EmpresasFormComponent implements OnInit {
         this.ArchivoService.save(this.dataArchivo).subscribe(l => {
           if (l.status != "Error") {
             this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-            this.frmEmpresas.controls.LogoId.setValue(l.data.id);
+            this.frmEmpresas.controls.logo_Id.setValue(l.data.id);
             this.guardarEmpresa()
           } else {
             this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
@@ -144,8 +142,8 @@ export class EmpresasFormComponent implements OnInit {
       if (l.status == "Error") {
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
       } else {
-        this.helperService.redirectApp(`parametros/empresas/editar/${l.data.id}`);
         this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+        this.helperService.redirectApp(`parametros/empresas`);
       }
     })
   }

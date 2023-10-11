@@ -7,24 +7,24 @@ import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 @Injectable({
   providedIn: 'root'
 })
-export class EmpleadosService {
+export class ClientesService {
 
-  private url = environment.url;
-  private ruta =  "Empleados";
+    private url = environment.url;
+    private ruta =  "Clientes";
+  
+    // private url : any;
+    private header = new HttpHeaders();
+  
+    constructor(private http: HttpClient) { 
+      this.header.set("Content-Type", "application/json");
+      // this.header.set("allow-origin", "*");
+    }
 
-  // private BASE_URL : any;
-  private header = new HttpHeaders();
-
-  constructor(private http: HttpClient) { 
-    this.header.set("Content-Type", "application/json");
-    // this.header.set("allow-origin", "*");
-  }
-
-  public getAllEmpleados( data : DatatableParameter) : Observable<any> {
+  public getAllClientes( data : DatatableParameter) : Observable<any> {
     return this.http.get<any>(`${this.url}${this.ruta}/datatable?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, {headers: this.header});
   }
 
-  public getEmpleadosById(id : any) : Observable<any> {
+  public getClientesById(id : any) : Observable<any> {
     return this.http.get<any>(`${this.url}${this.ruta}/${id}`, {headers: this.header});
   }
 
@@ -43,10 +43,4 @@ export class EmpleadosService {
   public delete(id : any ) : Observable<any> {
     return this.http.delete<any>(`${this.url}${this.ruta}/${id}`, {headers: this.header});
   }
-
-  public importer(data : any) : Observable<any> {
-    return this.http.post<any>(`${this.url}${this.ruta}/importar`, JSON.stringify(data), {headers: this.header});
-  }
-
-
 }
