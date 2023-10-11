@@ -86,12 +86,8 @@ export class ProductosIndexComponent implements OnInit {
               data: 'nombre'
             },
             {
-              title: "Marca",
-              data: "marca",
-            },
-            {
               title: "Caracteristica",
-              data: 'caracteristicasData'
+              data: 'caracteristicaData'
             },
             {
               title: "Categoria",
@@ -114,7 +110,7 @@ export class ProductosIndexComponent implements OnInit {
             },
             {
               title: "Precio Costo",
-              data: "precio",
+              data: "precioCosto",
               className: "text-right",
               render : function(data : any,) {
                 return  "$"+that.helperService.formaterNumber(data);

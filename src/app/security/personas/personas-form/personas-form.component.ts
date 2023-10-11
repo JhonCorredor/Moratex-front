@@ -62,11 +62,11 @@ export class PersonasFormComponent implements OnInit {
         this.frmPersonas.controls.Direccion.setValue(data.direccion);
         this.frmPersonas.controls.Telefono.setValue(data.telefono);
         this.frmPersonas.controls.Estado.setValue(data.estado);
-        this.frmPersonas.controls.Ciudad_Id.setValue(data.Ciudad_Id);
+        this.frmPersonas.controls.Ciudad_Id.setValue(data.ciudad_Id);
         this.frmPersonas.controls.Genero.setValue(data.genero);
 
         if(data.imagenPersonaId_Id > 0){
-          this.ArchivoService.getArchivoById(data.imagenPrendaId).subscribe(({data}) => {
+          this.ArchivoService.getArchivoById(data.imagenPersonaId_Id).subscribe(({data}) => {
           this.img = data.archivo;
           this.frmPersonas.controls.imagenPersonaId_Id.setValue(data.id);
         })}

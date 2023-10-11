@@ -32,7 +32,7 @@ export class FormulariosFormComponent implements OnInit {
       this.service.getFormulariosById(this.id).subscribe(({data}) => {
         this.frmFormularios.controls.Codigo.setValue(data.codigo);
         this.frmFormularios.controls.Nombre.setValue(data.nombre);
-        this.frmFormularios.controls.ModuloId.setValue(data.moduloId);
+        this.frmFormularios.controls.Modulo_Id.setValue(data.modulo_Id);
         this.frmFormularios.controls.Url.setValue(data.url);
         this.frmFormularios.controls.Estado.setValue(data.estado);
 

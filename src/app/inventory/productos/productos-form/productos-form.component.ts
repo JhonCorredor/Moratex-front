@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { ArchivoService } from 'src/app/parameters/archivo/archivo.service';
 import { GeneralParameterService } from '../../../parameters/general-parameter/general-parameter.service';
@@ -24,21 +23,22 @@ export class ProductosFormComponent implements OnInit {
   public listUnidadesMedidas = [];
   public checkMax : boolean = false;
   
-  public img = "../../../../assets/imagen-usuario.png";
+  public img = "../../../../assets/imagen-producto.png";
   public dataArchivo : any = undefined;
   
   constructor(public routerActive: ActivatedRoute, private service: ProductosService, private helperService: HelperService, private marcasservice: GeneralParameterService,private categoriasservice: GeneralParameterService,private unidadesMedidasservice: GeneralParameterService,private ArchivoService: ArchivoService) { 
     this.frmProductos = new FormGroup({
       Minimo : new FormControl(null, [Validators.required , Validators.pattern(/^([0-9])*$/)]),
       Maximo : new FormControl(null, [Validators.required , Validators.pattern(/^([0-9])*$/)]),
-      Precio : new FormControl(null, [Validators.required , Validators.pattern(/^([0-9])*$/)]),
+      PrecioCosto : new FormControl(null, [Validators.required , Validators.pattern(/^([0-9])*$/)]),
       Codigo: new FormControl(null, [Validators.required , Validators.maxLength(20)]),
       Nombre: new FormControl(null, [Validators.required , Validators.maxLength(100)]),
-      CaracteristicasData: new FormControl(null, [Validators.required , Validators.maxLength(500)]),
+      CaracteristicaData: new FormControl(null, [Validators.required , Validators.maxLength(500)]),
+      ProductoTerminado: new FormControl(null),
       Estado: new FormControl(true, Validators.required),
-      MarcaId: new FormControl(null, Validators.required),
-      CategoriaId: new FormControl(null, Validators.required),
-      UnidadMedidaId: new FormControl(null, Validators.required),
+      Marca_Id: new FormControl(null, Validators.required),
+      Categoria_Id: new FormControl(null, Validators.required),
+      UnidadMedida_Id: new FormControl(null, Validators.required),
       ImagenProductoId: new FormControl(null)
     });
     this.routerActive.params.subscribe(l => this.id = l.id);
@@ -50,14 +50,14 @@ export class ProductosFormComponent implements OnInit {
       this.service.getById(this.id).subscribe(l => {
         this.frmProductos.controls.Minimo.setValue(l.data.minimo);
         this.frmProductos.controls.Maximo.setValue(l.data.maximo);
-        this.frmProductos.controls.Precio.setValue(l.data.precio);
+        this.frmProductos.controls.PrecioCosto.setValue(l.data.precioCosto);
         this.frmProductos.controls.Codigo.setValue(l.data.codigo);
         this.frmProductos.controls.Nombre.setValue(l.data.nombre);
-        this.frmProductos.controls.CaracteristicasData.setValue(l.data.caracteristicasData);
+        this.frmProductos.controls.CaracteristicaData.setValue(l.data.caracteristicaData);
+        this.frmProductos.controls.ProductoTerminado.setValue(l.data.productoTerminado);
         this.frmProductos.controls.Estado.setValue(l.data.estado);
-        this.frmProductos.controls.CategoriaId.setValue(l.data.categoriaId);
-        this.frmProductos.controls.MarcaId.setValue(l.data.marcaId);
-        this.frmProductos.controls.UnidadMedidaId.setValue(l.data.unidadMedidaId);
+        this.frmProductos.controls.Categoria_Id.setValue(l.data.categoria_Id);
+        this.frmProductos.controls.UnidadMedida_Id.setValue(l.data.unidadMedida_Id);
         
         if(l.data.imagenProductoId && l.data.imagenProductoId > 0) {
           this.ArchivoService.getArchivoById(l.data.imagenProductoId).subscribe((res) => {
@@ -139,8 +139,8 @@ export class ProductosFormComponent implements OnInit {
       if (!l.status) {
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
       } else {
-        this.helperService.redirectApp(`inventario/productos/editar/${l.data.id}`);
         this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+        this.helperService.redirectApp(`inventario/productos`);
       }
     })
   }
