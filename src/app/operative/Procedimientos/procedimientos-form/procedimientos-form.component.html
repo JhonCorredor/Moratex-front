@@ -1,0 +1,83 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+  <div class="container-fluid">
+    <div class="card card-outline card-primary elevation-2">
+      <div class="card-body">
+        <form [formGroup]="frmProcedimientos" class="mb-4">
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Estado</label>
+              <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                <ui-switch formControlName="Estado"></ui-switch>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="input-group">
+              <label class="col-lg-1 col-md-4 col-sm-12">Código</label>
+              <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  formControlName="Codigo"
+                />
+                <app-forms-messages
+                  [error]="frmProcedimientos.get('Codigo')"
+                  [statusForm]="statusForm"
+                ></app-forms-messages>
+              </div>
+              <label class="col-lg-1 col-md-4 col-sm-12">Nombre</label>
+              <div class="form-group col-lg-3 col-md-4 col-sm-12">
+                <input
+                  type="text"
+                  class="form-control form-control-sm"
+                  formControlName="Nombre"
+                />
+                <app-forms-messages
+                  [error]="frmProcedimientos.get('Nombre')"
+                  [statusForm]="statusForm"
+                ></app-forms-messages>
+              </div>
+              <label class="col-lg-2 col-md-4 col-sm-12"
+                >Afecta Inventario</label
+              >
+
+              <div class="form-group col-lg-2 col-md-4 col-sm-12">
+                <ui-switch formControlName="AlimentaInventario"></ui-switch>
+              </div>
+            </div>
+          </div>
+
+          <div class="row float-right">
+            <div class="col-md-12">
+              <app-botones
+                [botones]="botones"
+                (eventSave)="save()"
+                (eventCancel)="cancel()"
+              ></app-botones>
+            </div>
+          </div>
+        </form>
+        <br />
+        <!-- <div class="card-footer" *ngIf="id">
+          <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+            <li ngbNavItem>
+              <a ngbNavLink
+                >Formularios
+                <span
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="left"
+                  title="En este formulario se asocian los formularios pertenecientes al Rol"
+                >
+                  <i class="fa-solid fa-circle-question"></i>
+                </span>
+              </a>
+            </li>
+          </ul>
+          <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        </div> -->
+      </div>
+    </div>
+  </div>
+</section>
