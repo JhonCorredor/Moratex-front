@@ -36,8 +36,8 @@ export class ProveedoresFormComponent implements OnInit {
       this.service.getProveedoresById(this.id).subscribe(({data}) => {
         this.frmProveedores.controls.Codigo.setValue(data.codigo);
         this.frmProveedores.controls.NumeroCuenta.setValue(data.numeroCuenta);
-        this.frmProveedores.controls.EmpresaId.setValue(data.empresaId);
-        this.frmProveedores.controls.BancoId.setValue(data.bancoId);
+        this.frmProveedores.controls.Empresa_Id.setValue(data.empresa_Id);
+        this.frmProveedores.controls.Banco_Id.setValue(data.banco_Id);
         this.frmProveedores.controls.Estado.setValue(data.estado);
       })
     }else {
@@ -49,8 +49,8 @@ export class ProveedoresFormComponent implements OnInit {
     this.frmProveedores = this.fb.group({
       Codigo: [null, [Validators.required , Validators.maxLength(50)]],
       NumeroCuenta: [null, [Validators.required , Validators.maxLength(50)]],
-      EmpresaId: [null, [Validators.required]],
-      BancoId: [null, [Validators.required]],
+      Empresa_Id: [null, [Validators.required]],
+      Banco_Id: [null, [Validators.required]],
       Estado : [true, [Validators.required]]
     });
 
@@ -76,11 +76,10 @@ export class ProveedoresFormComponent implements OnInit {
     };
     this.service.save(this.id, data).subscribe(l => {
       if (l.status == "Error") {
-        // this.modalActive.close();
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
       } else {
-        // this.modalActive.close(true);
         this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+        this.helperService.redirectApp(`parametros/proveedores`);
       }
     })
   }

@@ -30,11 +30,6 @@
                                 <input type="text" class="form-control form-control-sm" formControlName="RazonSocial">
                                 <app-forms-messages [error]="frmEmpresas.get('RazonSocial')"  [statusForm]=statusForm ></app-forms-messages>
                             </div>
-                            <label class="col-lg-1 col-md-4 col-sm-12">Marquilla</label>
-                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
-                                <input type="text" class="form-control form-control-sm" formControlName="Marquilla">
-                                <app-forms-messages [error]="frmEmpresas.get('Marquilla')"  [statusForm]=statusForm ></app-forms-messages>
-                            </div>
                             <label class="col-lg-1 col-md-4 col-sm-12">Telefono</label>
                             <div class="form-group col-lg-3 col-md-6 col-sm-12">
                                 <input type="text" class="form-control form-control-sm" formControlName="Telefono">
@@ -52,8 +47,8 @@
                             </div>
                             <label class="col-lg-1 col-md-4 col-sm-12">Ciudad</label>
                             <div class="form-group col-lg-3 col-md-6 col-sm-12">
-                                <ng-select [items]="listCiudades" bindLabel="textoMostrar" bindValue="id"  formControlName="CiudadId" > </ng-select>
-                                <app-forms-messages [error]="frmEmpresas.get('CiudadId')"    [statusForm]=statusForm ></app-forms-messages>
+                                <ng-select [items]="listCiudades" bindLabel="textoMostrar" bindValue="id"  formControlName="Ciudad_Id" > </ng-select>
+                                <app-forms-messages [error]="frmEmpresas.get('Ciudad_Id')"    [statusForm]=statusForm ></app-forms-messages>
 
                             </div>
                             <label class="col-lg-1 col-md-4 col-sm-12">Direccion</label>
@@ -64,6 +59,7 @@
                             <label class="col-lg-1 col-md-4 col-sm-12">Logo</label>
                             <div class="form-group col-lg-3 col-md-6 col-sm-12">
                                 <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
+                                <br>
                                 <img [src]="img" alt="" width="200" height="150">
                             </div>
                         </div>
@@ -77,7 +73,7 @@
             </div>
             <div class="card-footer" *ngIf="id">
                 <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
-                    <li ngbNavItem>
+                    <!-- <li ngbNavItem>
                       <a ngbNavLink>Modelos por Cargos
                         <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se asocian los modelos por cargos pertenecientes a la Empresa">
                           <i class="fa-solid fa-circle-question"></i>
@@ -86,11 +82,11 @@
                       <ng-template ngbNavContent>
                         <div class="row">
                           <div class="col-lg-12 col-md-12 col-sm-12">
-                            <app-empresas-modelos-cargos [empresaId]="id"></app-empresas-modelos-cargos>
+                            <app-empresas-modelos-cargos [empresa_Id]="id"></app-empresas-modelos-cargos>
                           </div>
                         </div>
                       </ng-template>
-                    </li>
+                    </li> -->
 
                     <li ngbNavItem>
                         <a ngbNavLink>Archivos

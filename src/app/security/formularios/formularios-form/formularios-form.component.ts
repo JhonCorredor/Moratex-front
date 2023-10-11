@@ -63,9 +63,24 @@ export class FormulariosFormComponent implements OnInit {
       { textoMostrar :"fa-solid fa-window-maximize" ,   name : "window"},
       { textoMostrar :"fa-solid fa-folder-tree" ,   name : "folder-tree"},
       { textoMostrar :"fa-solid fa-user-tag" ,   name : "user-tag"},
-      { textoMostrar :"fa-solid fa-file" ,   name : "file"},
+      { textoMostrar :"fa-regular fa-folder-open" ,   name : "folder-open"},
       { textoMostrar :"fa-solid fa-building-columns" ,   name : "bank"},
-      { textoMostrar :"fa-solid fa-users-gear" ,   name : "users-gear"}
+      { textoMostrar :"fa-solid fa-users-gear" ,   name : "users-gear"},
+      { textoMostrar :"fa-solid fa-vest" ,   name : "vest"},
+      { textoMostrar :"fa-solid fa-shirt" ,   name : "shirt"},
+      { textoMostrar :"fa-solid fa-scissors" ,   name : "scissors"},
+      { textoMostrar :"fa-solid fa-city" ,   name : "city"},
+      { textoMostrar :"fa-solid fa-map-location-dot" ,   name : "map-location-dot"},
+      { textoMostrar :"fa-solid fa-sliders" ,   name : "sliders"},
+      { textoMostrar :"fa-solid fa-bars" ,   name : "bars"},
+      { textoMostrar :"fa-solid fa-money-bills" ,   name : "money-bills"},
+      { textoMostrar :"fa-solid fa-earth-americas" ,   name : "country"},
+      { textoMostrar :"fa-solid fa-pen-ruler" ,   name : "pen-ruler"},
+      { textoMostrar :"fa-solid fa-briefcase" ,   name : "briefcase"},
+      { textoMostrar :"fa-solid fa-user-gear" ,   name : "user-gear"},
+      { textoMostrar :"fa-solid fa-people-carry-box" ,   name : "carry-box"},
+      { textoMostrar :"fa-solid fa-user-tie" ,   name : "user-tie"},
+      { textoMostrar :"fa-solid fa-warehouse" ,   name : "warehouse"}
     ]
   }
 

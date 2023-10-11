@@ -22,7 +22,7 @@ export class EmpresasModelosCargosComponent implements OnInit {
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
   public botones = ['btn-guardar'];
 
-  @Input() empresaId: number = 0;
+  @Input() empresa_Id: number = 0;
   public frmModeloCargo: FormGroup;
   public statusForm : boolean = true
   public listCargo: [] = [];
@@ -31,16 +31,16 @@ export class EmpresasModelosCargosComponent implements OnInit {
   constructor(private generalService: GeneralParameterService, private helperService: HelperService, private service: ModelosCargosService) { 
     this.frmModeloCargo = new FormGroup({
       Id: new FormControl(0, Validators.required),
-      EmpresaId: new FormControl(null, Validators.required),
-      CargoId: new FormControl(null, Validators.required),
-      ModeloId: new FormControl(null, Validators.required),
+      Empresa_Id: new FormControl(null, Validators.required),
+      Cargo_Id: new FormControl(null, Validators.required),
+      Modelo_Id: new FormControl(null, Validators.required),
       NumeroDotacion: new FormControl(null, Validators.required),
       Estado: new FormControl(true, Validators.required)
     });
   }
 
   ngOnInit(): void {
-    this.frmModeloCargo.controls.EmpresaId.setValue(this.empresaId);
+    this.frmModeloCargo.controls.Empresa_Id.setValue(this.empresa_Id);
     this.cargarDatatable();
     this.cargarListas();
   }
@@ -59,7 +59,7 @@ export class EmpresasModelosCargosComponent implements OnInit {
   }
 
   save() {
-    this.frmModeloCargo.controls.EmpresaId.setValue(this.empresaId)
+    this.frmModeloCargo.controls.Empresa_Id.setValue(this.empresa_Id)
     if (this.frmModeloCargo.invalid) {
       this.statusForm  = false
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
@@ -104,7 +104,7 @@ export class EmpresasModelosCargosComponent implements OnInit {
           data.filter = dataTablesParameters.search.value;
           data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());;
           data.directionOrder = dataTablesParameters.order[0].dir;
-          data.foreignKey = this.empresaId.toString();
+          data.foreignKey = this.empresa_Id.toString();
           this.service.getDatatable(data).subscribe(res => {
             callback({
               recordsTotal: res.meta.totalCount,
@@ -163,9 +163,9 @@ export class EmpresasModelosCargosComponent implements OnInit {
           $('.btn-dropdown-modificar').off().on('click', (event : any) => {
             this.service.getById(event.target.dataset.id).subscribe(res => {
               this.frmModeloCargo.controls.Id.setValue(res.data.id);
-              this.frmModeloCargo.controls.ModeloId.setValue(res.data.modeloId);
-              this.frmModeloCargo.controls.EmpresaId.setValue(res.data.empresaId);
-              this.frmModeloCargo.controls.CargoId.setValue(res.data.cargoId);
+              this.frmModeloCargo.controls.Modelo_Id.setValue(res.data.modelo_Id);
+              this.frmModeloCargo.controls.Empresa_Id.setValue(res.data.empresa_Id);
+              this.frmModeloCargo.controls.Cargo_Id.setValue(res.data.cargo_Id);
               this.frmModeloCargo.controls.NumeroDotacion.setValue(res.data.numeroDotacion);
               this.frmModeloCargo.controls.Estado.setValue(res.data.estado);
             })

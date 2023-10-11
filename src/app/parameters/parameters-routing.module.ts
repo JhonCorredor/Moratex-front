@@ -208,6 +208,11 @@ const routes: Routes = [
       import('./empleados/empleados.module').then((m) => m.EmpleadosModule),
   },
   {
+    path: 'clientes',
+    loadChildren: () =>
+      import('./clientes/clientes.module').then((m) => m.ClientesModule),
+  },
+  {
     path: 'factura-compra',
     loadChildren: () =>
       import('./factura-compra/factura-compra.module').then(

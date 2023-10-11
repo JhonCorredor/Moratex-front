@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { ArchivoService } from 'src/app/parameters/archivo/archivo.service';
-// import { CiudadesService } from '../../ciudades/ciudades.service';
 import { PersonasService } from '../personas.service';
 
 @Component({
@@ -28,7 +28,7 @@ export class PersonasFormComponent implements OnInit {
 
   constructor(public routerActive: ActivatedRoute, private service: PersonasService, 
     private helperService: HelperService, private modalActive: NgbActiveModal, 
-    private ArchivoService: ArchivoService
+    private ArchivoService: ArchivoService, private router: Router
     ) { 
     this.frmPersonas = new FormGroup({
       Documento: new FormControl(null, [Validators.required , Validators.maxLength(20)]),
@@ -42,7 +42,7 @@ export class PersonasFormComponent implements OnInit {
       Telefono: new FormControl(null, [Validators.required , Validators.maxLength(50)]),
       Estado: new FormControl(true, Validators.required),
       Ciudad_Id: new FormControl(null, Validators.required),
-      Genero: new FormControl(1, Validators.required),
+      Genero: new FormControl(null, [Validators.required]),
       imagenPersonaId_Id: new FormControl(null),
     });
   }
@@ -102,9 +102,12 @@ export class PersonasFormComponent implements OnInit {
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
       return;
     }
+    
     if (this.id != undefined && this.id != null) {
-      if (this.dataArchivo != undefined) {
-        this.ArchivoService.delete(this.frmPersonas.controls.imagenPersonaId_Id.value).subscribe(() => {})
+      if(this.dataArchivo != undefined){
+        if (this.frmPersonas.controls.imagenPersonaId_Id.value) {
+          this.ArchivoService.delete(this.frmPersonas.controls.imagenPersonaId_Id.value).subscribe(() => {})
+        }
         this.ArchivoService.save(this.dataArchivo).subscribe(l => {
           if (l.status != "Error") {
             this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
@@ -114,14 +117,14 @@ export class PersonasFormComponent implements OnInit {
             this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
           }
         })
-      } else {
+      }else{
         this.guardarPersona()
       }
-    } else {
+    }else{
       this.ArchivoService.save(this.dataArchivo).subscribe(l => {
         if (l.status != "Error") {
           this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-          this.frmPersonas.controls.imagenPersonaId_Id.value.setValue(l.data.id);
+          this.frmPersonas.controls.imagenPersonaId_Id.setValue(l.data.id);
           this.guardarPersona()
         } else {
           this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
@@ -130,29 +133,27 @@ export class PersonasFormComponent implements OnInit {
     }
   }
 
-  guardarPersona(){
+  guardarPersona() {
     let data  = { 
       id: this.id ?? 0,
       ...this.frmPersonas.value
     };
-   
+    
     this.service.save(this.id, data).subscribe(l => {
       if (!l.status) {
-        this.modalActive.close(null);
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
       } else {
-        if(this.id != undefined && this.id != null) {
-          this.modalActive.close(true);
-          this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-          return;
-        }
         this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-        this.modalActive.close({id: l.data.id});
+        this.cancel();
       }
     })
   }
 
-  public fileEvent(event: any) {
+  cancel() {
+    this.modalActive.close(null);
+  }
+
+  fileEvent(event: any) {
     let archivo: any
     let type = event.target.files[0].type.split('/')[1];
     let { name } = event.target.files[0];
@@ -173,12 +174,4 @@ export class PersonasFormComponent implements OnInit {
       };
     }
   }
-
-
-
-
-  cancel() {
-    this.modalActive.close(null);
-  }
-
 }

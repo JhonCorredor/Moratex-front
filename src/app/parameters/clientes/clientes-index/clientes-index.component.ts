@@ -7,30 +7,24 @@ import { LANGUAGE_DATATABLE } from 'src/app/admin/datatable.language';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
-import { EmpleadosCargeMasivoFormComponent } from '../empleados-carge-masivo-form/empleados-carge-masivo-form.component';
-import { EmpleadosMedidasComponent } from '../empleados-medidas/empleados-medidas.component';
-import { EmpleadosService } from '../empleados.service';
+import { ClientesService } from '../clientes.service';
 
 @Component({
-  selector: 'app-empleados-index',
-  templateUrl: './empleados-index.component.html',
-  styleUrls: ['./empleados-index.component.css']
+  selector: 'app-clientes-index',
+  templateUrl: './clientes-index.component.html',
+  styleUrls: ['./clientes-index.component.css']
 })
-export class EmpleadosIndexComponent implements OnInit { 
+export class ClientesIndexComponent implements OnInit { 
   @ViewChild('botonesDatatable') botonesDatatable!: BotonesComponent;
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   public dtTrigger: Subject<any> = new Subject();
   public opcionesDataTable: any = {};
-  public url: string = "src/assets/excel/plantilla_empleados.xlsx";
   public API_URL : any;
-  public title = "Listado de Empleados";
-  public breadcrumb = [{name: `inicio` , icon: `fa-solid fa-house`}, {name: "Parametros" , icon: "fas fa-cogs"}, {name: "Empleados" , icon: "fa-solid fa-people-group"}];
-  // <i class="fa-solid fa-people-group"></i>
-  // public botones: String[] = ['btn-nuevo' , 'btn-excel-empleado' , 'btn-carge-masivo'];
+  public title = "Listado de Clientes";
+  public breadcrumb = [{name: `inicio` , icon: `fa-solid fa-house`}, {name: "Parametros" , icon: "fas fa-cogs"}, {name: "Clientes" , icon: "fa-solid fa-people-group"}];
   public botones: String[] = ['btn-nuevo'];
-  // public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar', 'btn-ver-talla'];
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
-  constructor(private service: EmpleadosService, private helperService: HelperService, 
+  constructor(private service: ClientesService, private helperService: HelperService, 
     private route: Router, private modalService: NgbModal,
     // private datePipe: DatePipe
     ) { }
@@ -75,7 +69,7 @@ export class EmpleadosIndexComponent implements OnInit {
           data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());;
           data.directionOrder = dataTablesParameters.order[0].dir;
           data.foreignKey = "0";
-          this.service.getAllEmpleados(data).subscribe(res => {
+          this.service.getAllClientes(data).subscribe(res => {
             callback({
               recordsTotal: res.meta.totalCount,
               recordsFiltered: res.meta.totalCount,
@@ -93,21 +87,6 @@ export class EmpleadosIndexComponent implements OnInit {
             {
               title: "Persona",
               data: 'persona'
-            },
-            {
-              title: "Cargo",
-              data: 'cargo'
-            },
-            {
-              title: "Empresa",
-              data: 'empresa'
-            },
-            {
-              title: "Fecha de ingreso",
-              data: 'fechaIngreso',
-              render: (item : any) => {
-                return this.helperService.convertDateUTCToDMA(item);
-              }
             },
             {
               title: "Estado",
@@ -137,14 +116,13 @@ export class EmpleadosIndexComponent implements OnInit {
         // responsive: true,
         drawCallback: (settings : any) => {
           $('.btn-dropdown-modificar').off().on('click', (event : any) => {
-            this.helperService.redirectApp(`/parametros/empleados/editar/${event.target.dataset.id}`);
+            this.helperService.redirectApp(`/parametros/clientes/editar/${event.target.dataset.id}`);
           });
           $('.btn-dropdown-eliminar').off().on('click', (event : any) => {
             this.helperService.confirmDelete(() => {
               this.service.delete(event.target.dataset.id).subscribe(l => {
                 if (l.status == "Success") {
                   this.helperService.showMessage(MessageType.SUCCESS, Messages.DELETESUCCESS);
-                  
                   this.refrescarTabla();
                 } else {
                   this.helperService.showMessage(MessageType.ERROR, Messages.DELETEERROR);
@@ -152,30 +130,11 @@ export class EmpleadosIndexComponent implements OnInit {
               })
             });
           });
-          $('.btn-dropdown-ver-talla').off().on('click', (event : any) => {
-            let modal = this.modalService.open(EmpleadosMedidasComponent, {size: 'lg'});
-            modal.componentInstance.empleadoId = event.target.dataset.id;
-            modal.componentInstance.ver = true
-          });
         }
     };
   }
 
   public nuevo() {
-    this.helperService.redirectApp(`parametros/empleados/crear`);
+    this.helperService.redirectApp(`parametros/clientes/crear`);
   }
-
-  cargeMasivo(){
-    let modal = this.modalService.open(EmpleadosCargeMasivoFormComponent, {size: 'lg'});
-  }
-
-  downloadFile(){
-    let link = document.createElement("a");
-    link.download = "Plantilla Empleados.xlsx";
-    link.href = "/assets/excel/plantilla_empleados.xlsx";
-    link.click();
-    link.remove();
-  }
-
-
 }

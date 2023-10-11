@@ -1,0 +1,61 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-body">
+                <form [formGroup]="frmClientes" class="mb-4">
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Estado</label>
+                            <div class="form-group col-lg-1 col-md-6 col-sm-12">
+                                <ui-switch formControlName="Estado"></ui-switch>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Identificación</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Documento"
+                                    (blur)="searchByDocument()">
+                                <app-forms-messages [error]="frmClientes.get('Documento')"
+                                    [statusForm]=statusForm></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Nombres</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Nombres"
+                                    readonly>
+                                <app-forms-messages [error]="frmClientes.get('Nombres')"
+                                    [statusForm]=statusForm></app-forms-messages>
+                            </div>
+                            <label class="col-lg-1 col-md-4 col-sm-12">Apellidos</label>
+                            <div class="form-group col-lg-3 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Apellidos"
+                                    readonly>
+                                <app-forms-messages [error]="frmClientes.get('Apellidos')"
+                                    [statusForm]=statusForm></app-forms-messages>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-group">
+                            <label class="col-lg-1 col-md-4 col-sm-12">Codigo</label>
+                            <div class="form-group col-lg-5 col-md-6 col-sm-12">
+                                <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+                                <app-forms-messages [error]="frmClientes.get('Codigo')"
+                                    [statusForm]=statusForm></app-forms-messages>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row float-right">
+                        <div class="col-md-12">
+                            <app-botones [botones]="botones" (eventSave)="save()"
+                                (eventCancel)="cancel()"></app-botones>
+                        </div>
+                    </div>
+                </form>
+                <br>
+            </div>
+        </div>
+    </div>
+</section>
