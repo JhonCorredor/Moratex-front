@@ -63,6 +63,7 @@ export class LoginComponent implements OnInit {
         localStorage.setItem("token", res.data.token)
         localStorage.setItem("menu", JSON.stringify(res.data.menus))
         localStorage.setItem("userId", JSON.stringify(res.data.user.id))
+        localStorage.setItem("userName", res.data.user.persona)
         this.router.navigateByUrl('/dashboard', { skipLocationChange: true });
         setTimeout(() => {
             return location.reload()

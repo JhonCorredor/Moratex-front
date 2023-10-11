@@ -84,10 +84,7 @@ export class AppComponent implements OnInit {
   }
 
   public getUserLogin(){
-    var userId = localStorage.getItem("userId")
-    this.usuariosService.getById(userId).subscribe(res => {
-      this.user = res.data.usuario;
-    })
+    this.user = localStorage.getItem("userName");
   }
   
   cargarFormulario() {
