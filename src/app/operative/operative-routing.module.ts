@@ -66,6 +66,13 @@ const routes: Routes = [
         (m) => m.OrdenesProduccionModule
       ),
   },
+  {
+    path: 'ordenesPedidos',
+    loadChildren: () =>
+      import('./ordenes-pedidos/ordenes-pedidos.module').then(
+        (m) => m.OrdenesPedidosModule
+      ),
+  },
 ];
 
 @NgModule({
