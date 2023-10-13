@@ -1,5 +1,6 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { LANGUAGE_DATATABLE } from 'src/app/admin/datatable.language';
@@ -10,44 +11,38 @@ import {
   MessageType,
 } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
-import { GeneralParameterService } from 'src/app/parameters/general-parameter/general-parameter.service';
-import { UsuariosRolesService } from '../usuarios-roles.service';
+import { CostosFormComponent } from '../costos-form/costos-form.component';
+import { CostosService } from '../costos.service';
 
 @Component({
-  selector: 'app-usuarios-roles',
-  templateUrl: './usuarios-roles.component.html',
-  styleUrls: ['./usuarios-roles.component.css'],
+  selector: 'app-costos-index',
+  templateUrl: './costos-index.component.html',
+  styleUrls: ['./costos-index.component.css'],
 })
-export class UsuariosRolesComponent implements OnInit {
+export class CostosIndexComponent implements OnInit {
   @ViewChild('botonesDatatable') botonesDatatable!: BotonesComponent;
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   public dtTrigger: Subject<any> = new Subject();
   public opcionesDataTable: any = {};
+
+  public API_URL: any;
+  public title = 'Listado de  Costos';
+  public breadcrumb = [
+    { name: `Inicio`, icon: `fa-solid fa-house` },
+    { name: 'Operativo', icon: 'fas fa-cogs' },
+    { name: 'Costos' },
+  ];
+  public botones: String[] = ['btn-nuevo'];
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
-  public botones = ['btn-guardar'];
-
-  @Input() Usuario_Id: any = null;
-
-  public frmUsuariosRol: FormGroup;
-  public statusForm: boolean = true;
-  public listRoles: any = [];
-
   constructor(
-    private generalService: GeneralParameterService,
+    private service: CostosService,
     private helperService: HelperService,
-    private service: UsuariosRolesService
-  ) {
-    this.frmUsuariosRol = new FormGroup({
-      Id: new FormControl(0, Validators.required),
-      Usuario_Id: new FormControl(this.Usuario_Id, Validators.required),
-      Rol_Id: new FormControl(null, Validators.required),
-      Estado: new FormControl(true, Validators.required),
-    });
-  }
+    private route: Router,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.cargarDatatable();
-    this.cargarListas();
   }
 
   ngAfterViewInit() {
@@ -56,41 +51,6 @@ export class UsuariosRolesComponent implements OnInit {
 
   ngOnDestroy(): void {
     this.dtTrigger.unsubscribe();
-  }
-
-  cargarListas() {
-    this.generalService.getAll('Roles').subscribe((r) => {
-      this.listRoles = r.data;
-    });
-  }
-
-  save() {
-    this.frmUsuariosRol.controls.Usuario_Id.setValue(this.Usuario_Id);
-    if (this.frmUsuariosRol.invalid) {
-      this.statusForm = false;
-      this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
-      return;
-    }
-    let data = this.frmUsuariosRol.value;
-    this.service.save(this.frmUsuariosRol.controls.Id.value, data).subscribe(
-      (response) => {
-        if (response.status) {
-          this.refrescarTabla();
-          this.frmUsuariosRol.reset();
-          this.frmUsuariosRol.controls.Id.setValue(0);
-          this.helperService.showMessage(
-            MessageType.SUCCESS,
-            Messages.SAVESUCCESS
-          );
-        }
-      },
-      (error) => {
-        this.helperService.showMessage(
-          MessageType.WARNING,
-          error.error.message
-        );
-      }
-    );
   }
 
   refrescarTabla() {
@@ -116,14 +76,18 @@ export class UsuariosRolesComponent implements OnInit {
         var data = new DatatableParameter();
         data.pageNumber = pageNumber.toString();
         data.pageSize = dataTablesParameters.length.toString();
-        data.filter = dataTablesParameters.search.value;
+        data.filter = dataTablesParameters.search.value
+          ? dataTablesParameters.search.value
+              .replaceAll('$', '')
+              .replaceAll('.', '')
+              .replaceAll(',', '')
+          : '';
         data.columnOrder = that.helperService.capitalizeFirstLetter(
           dataTablesParameters.columns[
             dataTablesParameters.order[0].column
           ].data.toString()
         );
         data.directionOrder = dataTablesParameters.order[0].dir;
-        data.foreignKey = this.Usuario_Id;
         this.service.datatable(data).subscribe((res) => {
           callback({
             recordsTotal: res.meta.totalCount,
@@ -136,17 +100,45 @@ export class UsuariosRolesComponent implements OnInit {
       language: LANGUAGE_DATATABLE,
       columns: [
         {
-          title: 'Rol',
-          data: 'rol',
+          title: 'Descripción',
+          data: 'descripcion',
         },
         {
-          title: 'Estado',
-          data: 'estado',
+          title: 'Fecha',
+          data: 'fechaCosto',
+          render: (item: any) => {
+            return this.helperService.convertDateUTCToDMA(item);
+          },
+        },
+        {
+          title: 'Valor',
+          data: 'valor',
+          className: 'text-right',
+          render: function (data: any) {
+            return '$' + that.helperService.formaterNumber(data);
+          },
+        },
+        {
+          title: 'Tipo Costo',
+          data: 'tipoCosto',
+        },
+        {
+          title: 'Proveedor',
+          data: 'proveedor',
+        },
+        {
+          title: 'Número de Factura',
+          data: 'numeroFactura',
+          className: 'text-right',
+        },
+        {
+          title: 'Pago de Caja ?',
+          data: 'pagoCaja',
           render: function (item: any) {
             if (item) {
-              return "<label class='text-center badge badge-success'>Activo</label>";
+              return "<label class='text-center badge badge-success'>Si</label>";
             } else {
-              return "<label class='text-center badge badge-danger'>Inactivo</label>";
+              return "<label class='text-center badge badge-danger'>No</label>";
             }
           },
         },
@@ -169,11 +161,9 @@ export class UsuariosRolesComponent implements OnInit {
         $('.btn-dropdown-modificar')
           .off()
           .on('click', (event: any) => {
-            this.service.getById(event.target.dataset.id).subscribe((res) => {
-              this.frmUsuariosRol.controls.Id.setValue(res.data.id);
-              this.frmUsuariosRol.controls.Rol_Id.setValue(res.data.prendaId);
-              this.frmUsuariosRol.controls.Estado.setValue(res.data.estado);
-            });
+            this.helperService.redirectApp(
+              `operativo/costos/editar/${event.target.dataset.id}`
+            );
           });
         $('.btn-dropdown-eliminar')
           .off()
@@ -185,6 +175,7 @@ export class UsuariosRolesComponent implements OnInit {
                     MessageType.SUCCESS,
                     Messages.DELETESUCCESS
                   );
+
                   this.refrescarTabla();
                 } else {
                   this.helperService.showMessage(
@@ -197,5 +188,9 @@ export class UsuariosRolesComponent implements OnInit {
           });
       },
     };
+  }
+
+  public nuevo() {
+    this.helperService.redirectApp('operativo/costos/crear');
   }
 }

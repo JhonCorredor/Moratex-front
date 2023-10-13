@@ -105,6 +105,18 @@ const routes: Routes = [
       modulo: 'Parametros',
     },
   },
+  {
+    path: 'tiposCostos',
+    loadChildren: () =>
+      import('./general-parameter/general-parameter.module').then(
+        (m) => m.GeneralParameterModule
+      ),
+    data: {
+      ruta: 'TiposCostos',
+      titulo: 'TiposCostos',
+      modulo: 'Parametros',
+    },
+  },
 
   {
     path: 'estados',

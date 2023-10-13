@@ -5,11 +5,15 @@ const routes: Routes = [
   {
     path: 'procedimientos',
     loadChildren: () =>
-      import('./procedimientos/procedimientos.module').then(
+      import('./Procedimientos/procedimientos.module').then(
         (m) => m.ProcedimientosModule
       ),
   },
-
+  {
+    path: 'costos',
+    loadChildren: () =>
+      import('./costos/costos.module').then((m) => m.CostosModule),
+  },
   {
     path: 'generar-cotizaciones',
     loadChildren: () =>
