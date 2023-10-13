@@ -5,7 +5,7 @@ const routes: Routes = [
   {
     path: 'procedimientos',
     loadChildren: () =>
-      import('./procedimientos/procedimientos.module').then(
+      import('./Procedimientos/procedimientos.module').then(
         (m) => m.ProcedimientosModule
       ),
   },
@@ -60,6 +60,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./ordenes-produccion/ordenes-produccion.module').then(
         (m) => m.OrdenesProduccionModule
+      ),
+  },
+  {
+    path: 'ordenesPedidos',
+    loadChildren: () =>
+      import('./ordenes-pedidos/ordenes-pedidos.module').then(
+        (m) => m.OrdenesPedidosModule
       ),
   },
 ];
