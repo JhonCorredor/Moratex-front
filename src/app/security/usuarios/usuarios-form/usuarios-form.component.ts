@@ -22,9 +22,9 @@ export class UsuariosFormComponent implements OnInit {
   public titulo = '';
   public listPersonas = [];
   public breadcrumb = [
-    { name: `Inicio`, icon: `fa-solid fa-house` },
-    { name: 'Seguridad', icon: 'fas fa-cogs' },
-    { name: 'Usuario' },
+    { name: `Inicio`, icon: `fa-duotone fa-house` },
+    { name: 'Seguridad', icon: 'fa-duotone fa-lock' },
+    { name: 'Usuario', icon: "fa-duotone fa-users-gear"},
     { name: 'Crear' },
   ];
 

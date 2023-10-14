@@ -16,7 +16,7 @@ export class RolesFormComponent implements OnInit {
   public id! : number;
   public botones = ['btn-guardar', 'btn-cancelar'];
   public titulo = "";
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},  {name: `Inicio` , icon: `fa-solid fa-house`}, {name: "Roles"} ,  {name: "Crear"}];
+  public breadcrumb = [{name: `Inicio` , icon: `fa-duotone fa-house`},  {name: `Inicio` , icon: `fa-duotone fa-lock`}, {name: "Roles", icon: "fa-duotone fa-user-tag"} ,  {name: "Crear"}];
 
 
   constructor(public routerActive: ActivatedRoute, private service: RolesService, 

@@ -27,7 +27,7 @@ export class ProveedoresIndexComponent implements OnInit {
 
   public API_URL : any;
   public title = "Listado de Proveedores";
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},  {name: "Parametros" , icon: "fas fa-cogs"}, {name: "Proveedores"}];
+  public breadcrumb = [{name: `Inicio` , icon: `fa-duotone fa-house`},  {name: "Parametros" , icon: "fa-duotone fa-gears"}, {name: "Proveedores", icon: "fa-duotone fa-people-carry-box"}];
   public botones: String[] = ['btn-nuevo'];
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
   constructor(private service: ProveedoresService, private helperService: HelperService, private route: Router, private modalService: NgbModal) { }

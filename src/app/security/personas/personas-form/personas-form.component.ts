@@ -156,18 +156,20 @@ export class PersonasFormComponent implements OnInit {
         this.guardarPersona();
       }
     } else {
-      this.ArchivoService.save(this.dataArchivo).subscribe((l) => {
-        if (l.status != 'Error') {
-          this.helperService.showMessage(
-            MessageType.SUCCESS,
-            Messages.SAVESUCCESS
-          );
-          this.frmPersonas.controls.imagenPersonaId_Id.setValue(l.data.id);
-          this.guardarPersona();
-        } else {
-          this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR);
-        }
-      });
+      if (this.dataArchivo != undefined) {
+        this.ArchivoService.save(this.dataArchivo).subscribe((l) => {
+          if (l.status != 'Error') {
+            this.helperService.showMessage(
+              MessageType.SUCCESS,
+              Messages.SAVESUCCESS
+            );
+            this.frmPersonas.controls.imagenPersonaId_Id.setValue(l.data.id);
+          } else {
+            this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR);
+          }
+        });
+      }
+      this.guardarPersona();
     }
   }
 

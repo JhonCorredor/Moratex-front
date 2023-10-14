@@ -30,7 +30,7 @@ export class RolesIndexComponent implements OnInit {
   constructor(private service: RolesService, private helperService: HelperService,
      private route: Router, private modalService: NgbModal) { 
     this.title = `Listado de Roles`;
-    this.breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},  {name: "Seguridad" , icon: "fas fa-cogs"}, {name: "Roles" }];
+    this.breadcrumb = [{name: `Inicio` , icon: `fa-duotone fa-house`},  {name: "Seguridad" , icon: "fa-duotone fa-lock"}, {name: "Roles", icon: "fa-duotone fa-user-tag"}];
   }
 
   ngOnInit(): void {

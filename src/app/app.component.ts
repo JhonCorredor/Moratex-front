@@ -13,7 +13,7 @@ import { UsuariosService } from './security/usuarios/usuarios.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'viannel-frontend';
+  title = 'Moratex-frontend';
   
   public listSegurity: any[] = []
   public listParameter: any[] = []

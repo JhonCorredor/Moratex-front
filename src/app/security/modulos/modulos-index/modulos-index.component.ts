@@ -23,7 +23,7 @@ export class ModulosIndexComponent implements OnInit {
 
   public API_URL : any;
   public title = "Listado de modulos";
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},  {name: "Seguridad"}, {name: "Modulo"}];
+  public breadcrumb = [{name: `Inicio` , icon: `fa-duotone fa-house`},  {name: "Seguridad", icon: "fa-duotone fa-lock"}, {name: "Modulo", icon: "fa-duotone fa-folder-tree"}];
   public botones: String[] = ['btn-nuevo'];
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
 

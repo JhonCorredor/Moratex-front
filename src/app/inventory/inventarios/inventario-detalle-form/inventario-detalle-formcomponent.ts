@@ -20,23 +20,22 @@ export class InventarioDetalleFormComponent implements OnInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   public dtTrigger: Subject<any> = new Subject();
   public opcionesDataTable: any = {};
-  public arrayBotonesDatatable: String[] = ['btn-eliminar'];
+  public arrayBotonesDatatable: String[] = ['btn-modificar'];
   public botones = ['btn-guardar'];
   public Id = null;
 
-  @Input() InventarioId: any = null;
+  @Input() Inventario_Id: any = null;
 
-  public frmInventarioDetalle! : FormGroup;
-  public statusForm : boolean = true
-  public listProductos : any[] = [];
-  public listEstados : any[] = [];
+  public frmInventarioDetalle!: FormGroup;
+  public statusForm: boolean = true
+  public listProductos: any[] = [];
 
-  constructor(public routerActive: ActivatedRoute, 
-    private service : InventarioDetalleService , 
-    private helperService: HelperService,  
-    private fb: FormBuilder) { 
-      
-    }
+  constructor(public routerActive: ActivatedRoute,
+    private service: InventarioDetalleService,
+    private helperService: HelperService,
+    private fb: FormBuilder) {
+
+  }
 
   ngOnInit(): void {
     this.buildForm()
@@ -45,11 +44,10 @@ export class InventarioDetalleFormComponent implements OnInit {
 
   buildForm(): void {
     this.frmInventarioDetalle = this.fb.group({
-      CantidadTotal: new FormControl(null, [Validators.required , Validators.pattern(/^-?\d*[.,]?\d{2,18}$/ )]),
-      CantidadUsada: new FormControl(null, [Validators.required , Validators.pattern(/^-?\d*[.,]?\d{2,18}$/ )]),
-      CantidadIngresada: new FormControl(null, [Validators.required  , Validators.pattern(/^-?\d*[.,]?\d{2,18}$/ )]),
-      ProductoId: new FormControl(null, Validators.required),
-      EstadoId: new FormControl(null, Validators.required)
+      CantidadTotal: new FormControl(null, [Validators.required]),
+      CantidadUsada: new FormControl(null, [Validators.required]),
+      CantidadIngresada: new FormControl(null, [Validators.required]),
+      Producto_Id: new FormControl(null, Validators.required),
     });
     this.buildSelect()
   }
@@ -62,45 +60,41 @@ export class InventarioDetalleFormComponent implements OnInit {
     this.dtTrigger.unsubscribe();
   }
 
-  buildSelect(){
-    this.service.getAll("Productos").subscribe(({data}) => {
+  buildSelect() {
+    this.service.getAll("Productos").subscribe(({ data }) => {
       this.listProductos = data;
     });
-
-    this.service.getAll("Estados").subscribe(({data}) => {
-      this.listEstados = data;
-    });
   }
 
 
-  changeCantidadTotal(){
-    let ingresada = this.frmInventarioDetalle.controls.CantidadIngresada.value;
-    let usada = this.frmInventarioDetalle.controls.CantidadUsada.value;
+  // changeCantidadTotal(){
+  //   let ingresada = this.frmInventarioDetalle.controls.CantidadIngresada.value;
+  //   let usada = this.frmInventarioDetalle.controls.CantidadUsada.value;
 
-    if(ingresada != null  && ingresada != undefined && usada != undefined && usada != null){
-      if(ingresada > usada){
-        let total = ingresada - usada;
-        this.frmInventarioDetalle.controls.CantidadTotal.setValue(total);
-      }
-      if(ingresada < usada){
-        this.helperService.showMessage(MessageType.WARNING, Messages.INVALIDOPERATION);
-        this.frmInventarioDetalle.controls.CantidadTotal.setValue(null);
-      }
-    }
+  //   if(ingresada != null  && ingresada != undefined && usada != undefined && usada != null){
+  //     if(ingresada > usada){
+  //       let total = ingresada - usada;
+  //       this.frmInventarioDetalle.controls.CantidadTotal.setValue(total);
+  //     }
+  //     if(ingresada < usada){
+  //       this.helperService.showMessage(MessageType.WARNING, Messages.INVALIDOPERATION);
+  //       this.frmInventarioDetalle.controls.CantidadTotal.setValue(null);
+  //     }
+  //   }
 
-  }
+  // }
 
 
   save() {
     if (this.frmInventarioDetalle.invalid) {
-      this.statusForm  = false
+      this.statusForm = false
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
       return;
     }
-    let data  = { 
+    let data = {
       id: this.Id ?? 0,
       ...this.frmInventarioDetalle.value,
-     inventarioId : this.InventarioId,
+      inventario_Id: this.Inventario_Id,
     };
     this.service.save(this.Id, data).subscribe(l => {
       if (!l.status) {
@@ -115,7 +109,7 @@ export class InventarioDetalleFormComponent implements OnInit {
   }
 
   refrescarTabla() {
-    if(typeof this.dtElement.dtInstance != 'undefined'){
+    if (typeof this.dtElement.dtInstance != 'undefined') {
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.ajax.reload()
       });
@@ -125,88 +119,98 @@ export class InventarioDetalleFormComponent implements OnInit {
   cargarDatatable() {
     const that = this;
     that.opcionesDataTable = {
-        serverSide: true,
-        processing: true,
-        ordering: true,
-        responsive: true,
-        paging: true,
-        order: [0, 'desc'],
-        ajax: (dataTablesParameters: any, callback : any) => {
-          let pageNumber = (dataTablesParameters.start / dataTablesParameters.length) + 1
-          var data = new DatatableParameter();
-          data.pageNumber = pageNumber.toString();
-          data.pageSize = dataTablesParameters.length.toString();
-          data.filter = dataTablesParameters.search.value;
-          data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());;
-          data.directionOrder = dataTablesParameters.order[0].dir;
-          data.foreignKey = this.InventarioId;
-          this.service.getAllInventarioDetalle(data).subscribe((res: any) => {
-            callback({
-              recordsTotal: res.meta.totalCount,
-              recordsFiltered: res.meta.totalCount,
-              draw: dataTablesParameters.draw,
-              data: res.data
-            });
+      serverSide: true,
+      processing: true,
+      ordering: true,
+      responsive: true,
+      paging: true,
+      order: [0, 'desc'],
+      ajax: (dataTablesParameters: any, callback: any) => {
+        let pageNumber =
+          dataTablesParameters.start / dataTablesParameters.length + 1;
+        var data = new DatatableParameter();
+        data.pageNumber = pageNumber.toString();
+        data.pageSize = dataTablesParameters.length.toString();
+        data.filter = dataTablesParameters.search.value;
+        data.columnOrder = that.helperService.capitalizeFirstLetter(
+          dataTablesParameters.columns[
+            dataTablesParameters.order[0].column
+          ].data.toString()
+        );
+        data.directionOrder = dataTablesParameters.order[0].dir;
+        data.foreignKey = this.Inventario_Id;
+        this.service.getAllInventarioDetalle(data).subscribe((res: any) => {
+          callback({
+            recordsTotal: res.meta.totalCount,
+            recordsFiltered: res.meta.totalCount,
+            draw: dataTablesParameters.draw,
+            data: res.data,
           });
+        });
+      },
+      language: LANGUAGE_DATATABLE,
+      columns: [
+        {
+          title: "Producto",
+          data: "producto"
         },
-        language: LANGUAGE_DATATABLE,
-        columns: [
-             {
-              title: "Insumo",
-              data: "producto"
-            },
-            {
-              title: "Cantidad Ingresada",
-              data: "cantidadIngresada",
-              render : function(data : any,) {
-                return that.helperService.formaterNumber(data);
-              }
-            },
-            {
-              title: "Cantidad Usada",
-              data: 'cantidadUsada',
-              render : function(data : any,) {
-                return that.helperService.formaterNumber(data);
-              }
-            },
-            {
-              title: "Cantidad Total",
-              data: 'cantidadTotal',
-              render : function(data : any,) {
-                return that.helperService.formaterNumber(data);
-              }
-            },
-            {
-              title: "Estado",
-              data: "estado"
-            },
-            {
-              title: "Acciones",
-              orderable: false,
-              width: '300px',
-              data: "id",
-              render: function(id : any, type : any, row : any) {
-                const boton = that.botonesDatatable;
-                return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(id);
-              },
-              className: "pl-1 pr-0 text-center",
-              responsivePriority: 7
-            }
-        ],
-        drawCallback: (settings : any) => {
-          $('.btn-dropdown-eliminar').off().on('click', (event : any) => {
-            this.helperService.confirmDelete(() => {
-              this.service.delete(event.target.dataset.id).subscribe(l => {
-                if (l.status) {
-                  this.helperService.showMessage(MessageType.SUCCESS, Messages.DELETESUCCESS);
-                  this.refrescarTabla();
-                } else {
-                  this.helperService.showMessage(MessageType.ERROR, Messages.DELETEERROR);
-                }
-              })
-            });
-          });
+        {
+          title: "Cantidad Ingresada",
+          data: "cantidadIngresada",
+          render: function (data: any,) {
+            return that.helperService.formaterNumber(data);
+          }
+        },
+        {
+          title: "Cantidad Usada",
+          data: 'cantidadUsada',
+          render: function (data: any,) {
+            return that.helperService.formaterNumber(data);
+          }
+        },
+        {
+          title: "Cantidad Total",
+          data: 'cantidadTotal',
+          render: function (data: any,) {
+            return that.helperService.formaterNumber(data);
+          }
+        },
+        {
+          title: "Acciones",
+          orderable: false,
+          width: '300px',
+          data: "id",
+          render: function (id: any, type: any, row: any) {
+            const boton = that.botonesDatatable;
+            return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(id);
+          },
+          className: "pl-1 pr-0 text-center",
+          responsivePriority: 7
         }
+      ],
+      drawCallback: (settings: any) => {
+        $('.btn-dropdown-modificar')
+          .off()
+          .on('click', (event: any) => {
+            this.service
+              .getInventarioDetalleById(event.target.dataset.id)
+              .subscribe(({ data }) => {
+                this.Id = data.id;
+                this.frmInventarioDetalle.controls.Producto_Id.setValue(
+                  data.producto_Id
+                );
+                this.frmInventarioDetalle.controls.CantidadIngresada.setValue(
+                  data.cantidadIngresada
+                );
+                this.frmInventarioDetalle.controls.CantidadUsada.setValue(
+                  data.cantidadUsada
+                );
+                this.frmInventarioDetalle.controls.CantidadTotal.setValue(
+                  data.cantidadTotal
+                );
+              });
+          });
+      },
     };
   }
 

@@ -11,12 +11,10 @@ export class SeguimientosService {
 
   private url = environment.url;
   private ruta =  "Seguimientos";
-  // private BASE_URL : any;
   private header = new HttpHeaders();
 
   constructor(private http: HttpClient) { 
     this.header.set("Content-Type", "application/json");
-    // this.header.set("allow-origin", "*");
   }
 
   public getAllSeguimientos( data : DatatableParameter) : Observable<any> {

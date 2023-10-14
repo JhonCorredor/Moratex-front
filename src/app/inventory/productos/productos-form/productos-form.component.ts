@@ -15,7 +15,9 @@ export class ProductosFormComponent implements OnInit {
   
   public frmProductos: FormGroup;
   public statusForm : boolean = true
-  public id! : number;
+  public id!: number;
+  public dataArchivo: any = undefined;
+
   public botones = ['btn-guardar', 'btn-cancelar'];
   public titulo = ""; 
   public listMarcas = [];
@@ -24,7 +26,6 @@ export class ProductosFormComponent implements OnInit {
   public checkMax : boolean = false;
   
   public img = "../../../../assets/imagen-producto.png";
-  public dataArchivo : any = undefined;
   
   constructor(public routerActive: ActivatedRoute, private service: ProductosService, private helperService: HelperService, private marcasservice: GeneralParameterService,private categoriasservice: GeneralParameterService,private unidadesMedidasservice: GeneralParameterService,private ArchivoService: ArchivoService) { 
     this.frmProductos = new FormGroup({
@@ -40,12 +41,11 @@ export class ProductosFormComponent implements OnInit {
       UnidadMedida_Id: new FormControl(null, Validators.required),
       ImagenProductoId: new FormControl(null)
     });
-    this.routerActive.params.subscribe(l => this.id = l.id);
   }
   
   ngOnInit(): void {
     if (this.id != undefined && this.id != null) {
-      this.titulo = "Editar insumo";
+      this.titulo = "Editar producto";
       this.service.getById(this.id).subscribe(l => {
         this.frmProductos.controls.Minimo.setValue(l.data.minimo);
         this.frmProductos.controls.Maximo.setValue(l.data.maximo);
@@ -58,25 +58,20 @@ export class ProductosFormComponent implements OnInit {
         this.frmProductos.controls.Categoria_Id.setValue(l.data.categoria_Id);
         this.frmProductos.controls.UnidadMedida_Id.setValue(l.data.unidadMedida_Id);
         
-        if(l.data.imagenProductoId && l.data.imagenProductoId > 0) {
-          this.ArchivoService.getArchivoById(l.data.imagenProductoId).subscribe((res) => {
-            this.img = res.data.archivo;
-            this.frmProductos.controls.ImagenProductoId.setValue(res.data.id);
-          })
+        if (l.data.ImagenProductoId > 0) {
+          this.ArchivoService.getArchivoById(l.data.ImagenProductoId).subscribe(
+            ({ data }) => {
+              this.img = data.archivo;
+              this.frmProductos.controls.ImagenProductoId.setValue(data.id);
+            }
+          );
         }
       })
     }else {
-      this.titulo = "Crear insumo";
+      this.titulo = "Crear producto";
     }
-    this.cargarMarcas();
     this.cargarCategorias();
     this.cargarUnidadesMedidas();
-  }
-  
-  cargarMarcas() {
-    this.marcasservice.getAll("Marcas").subscribe(res => {
-      this.listMarcas = res.data;
-    })
   }
   
   cargarCategorias() {
@@ -93,55 +88,71 @@ export class ProductosFormComponent implements OnInit {
   
   save() {
     if (this.frmProductos.invalid) {
-      this.statusForm  = false
+      this.statusForm = false;
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
       return;
     }
-    
+
     if (this.id != undefined && this.id != null) {
-      if(this.dataArchivo != undefined){
+      if (this.dataArchivo != undefined) {
         if (this.frmProductos.controls.ImagenProductoId.value) {
-          this.ArchivoService.delete(this.frmProductos.controls.ImagenProductoId.value).subscribe(() => {})
+          this.ArchivoService.delete(
+            this.frmProductos.controls.ImagenProductoId.value
+          ).subscribe(() => {});
         }
-        this.ArchivoService.save(this.dataArchivo).subscribe(l => {
-          if (l.status != "Error") {
-            this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+        this.ArchivoService.save(this.dataArchivo).subscribe((l) => {
+          if (l.status != 'Error') {
+            this.helperService.showMessage(
+              MessageType.SUCCESS,
+              Messages.SAVESUCCESS
+            );
             this.frmProductos.controls.ImagenProductoId.setValue(l.data.id);
-            this.guardarProducto()
+            this.guardarProducto();
           } else {
-            this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
+            this.helperService.showMessage(
+              MessageType.ERROR,
+              Messages.SAVEERROR
+            );
           }
-        })
-      }else{
-        this.guardarProducto()
+        });
+      } else {
+        this.guardarProducto();
       }
-    }else{
-      this.ArchivoService.save(this.dataArchivo).subscribe(l => {
-        if (l.status != "Error") {
-          this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-          this.frmProductos.controls.ImagenProductoId.setValue(l.data.id);
-          this.guardarProducto()
-        } else {
-          this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
-        }
-      })
+    } else {
+      if (this.dataArchivo != undefined) {
+        this.ArchivoService.save(this.dataArchivo).subscribe((l) => {
+          if (l.status != 'Error') {
+            this.helperService.showMessage(
+              MessageType.SUCCESS,
+              Messages.SAVESUCCESS
+            );
+            this.frmProductos.controls.ImagenProductoId.setValue(l.data.id);
+          } else {
+            this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR);
+          }
+        });
+      }
+      this.guardarProducto();
     }
   }
   
   guardarProducto() {
-    let data  = { 
+    let data = {
       id: this.id ?? 0,
-      ...this.frmProductos.value
+      ...this.frmProductos.value,
     };
-    
-    this.service.save(this.id, data).subscribe(l => {
+
+    this.service.save(this.id, data).subscribe((l) => {
       if (!l.status) {
-        this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
+        this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR);
       } else {
-        this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-        this.helperService.redirectApp(`inventario/productos`);
+        this.helperService.showMessage(
+          MessageType.SUCCESS,
+          Messages.SAVESUCCESS
+        );
+        this.cancel();
       }
-    })
+    });
   }
   
   cancel() {

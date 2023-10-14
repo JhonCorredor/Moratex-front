@@ -31,6 +31,7 @@
         <!-- btn-cambiar-contraseña -->
         <a class="btn btn-sm btn-danger btn-dropdown-eliminar" data-id="$id" (click)="eventDelete.emit()" *ngIf="validateIfExists('btn-eliminar')"><i class="fas fa-trash" data-id="$id"></i> Eliminar</a>
         <a class="btn btn-sm btn-warning btn-dropdown-modificar" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificar')"><i class="far fa-edit" data-id="$id"></i> Editar</a>
+        <a class="btn btn-sm btn-warning btn-dropdown-modificarOP" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificarOP')"><i class="far fa-edit" data-id="$id"></i> Editar</a>
         <a class="btn btn-sm btn-info btn-dropdown-ver" data-id="$id" (click)="eventSee.emit()" *ngIf="validateIfExists('btn-ver')"><i class="fa-solid fa-eye" data-id="$id"></i> Ver </a>
         <a class="btn btn-sm btn-primary btn-dropdown-contraseña" data-id="$id" (click)="eventChangePassword.emit()" *ngIf="validateIfExists('btn-cambiar-contraseña')" ><i class="fa-solid fa-user" data-id="$id"></i> Cambiar Contraseña</a> 
         <a class="btn btn-sm btn-success btn-dropdown-descargar" data-id="$id" (click)="eventDowloand.emit()" *ngIf="validateIfExists('btn-descargar')" ><i class="fa-solid fa-download" data-id="$id"></i> Descargar</a>

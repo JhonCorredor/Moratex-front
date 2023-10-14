@@ -7,8 +7,6 @@
 :root {
     --main-color: rgba(72, 72, 127, 255);
     --color-acent: rgba(80, 67, 127, 255);
-    /* --main-color: rgba(169, 41, 38, 255);
-    --color-acent: rgba(161, 36, 34, 255); */
     --font-normal: 13px;
 }
 
@@ -424,4 +422,13 @@ table.dataTable.dtr-inline.collapsed>tbody>tr>td.dtr-control:before {
 
 .input-right {
     text-align: right;
+}
+
+.switch.checked{
+    background-color: #64bd63!important;
+    border-color: #64bd63!important;
+}
+
+.switch.checked>small{
+    background: #64bd63!important;
 }

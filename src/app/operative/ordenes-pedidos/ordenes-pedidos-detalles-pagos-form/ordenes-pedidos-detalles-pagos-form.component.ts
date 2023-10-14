@@ -5,13 +5,11 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { LANGUAGE_DATATABLE } from 'src/app/admin/datatable.language';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
-import {
-    HelperService,
-    Messages,
-    MessageType,
-} from 'src/app/admin/helper.service';
+import { HelperService, Messages, MessageType, } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { OrdenesPedidosDetallesPagosService } from '../ordenes-pedidos-detalles-pagos.service';
+import { EmpleadosService } from '../../../parameters/empleados/empleados.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
     selector: 'app-ordenes-pedidos-detalles-form',
@@ -23,9 +21,10 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
     public dtTrigger: Subject<any> = new Subject();
     public opcionesDataTable: any = {};
-    public arrayBotonesDatatable: String[] = ['btn-modificar'];
+    public arrayBotonesDatatable: String[] = ['btn-modificarOP'];
     public botones = ['btn-guardar'];
     public Id = null;
+    public persona_Id!: string | number;
 
     @Input() OrdenPedido_Id: any = null;
 
@@ -37,8 +36,11 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     constructor(
         public routerActive: ActivatedRoute,
         private service: OrdenesPedidosDetallesPagosService,
+        private empleadoService: EmpleadosService,
         private helperService: HelperService,
-        private fb: FormBuilder
+        private fb: FormBuilder,
+        private datePipe: DatePipe
+
     ) { }
 
     ngOnInit(): void {
@@ -65,12 +67,33 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     }
 
     buildSelect() {
-        this.service.getAll('Empleados').subscribe(({ data }) => {
-            this.listEmpleados = data;
-        });
-
+        this.cargarEmpleado();
         this.service.getAll('MediosPagos').subscribe(({ data }) => {
             this.listMediosPagos = data;
+        });
+    }
+
+    cargarEmpleado() {
+        var persona_Id = localStorage.getItem("persona_Id");
+
+        var data = new DatatableParameter();
+        data.pageNumber = "1";
+        data.pageSize = "10";
+        data.filter = "";
+        data.columnOrder = "";
+        data.directionOrder = "";
+        data.foreignKey = Number(persona_Id);
+
+        this.empleadoService.getAllEmpleados(data).subscribe(res => {
+            console.log(res.data[0]);
+            this.listEmpleados = [
+                {
+                    id: res.data[0].id,
+                    textoMostrar: res.data[0].codigo + " - " + res.data[0].persona
+                }
+            ];
+            this.frmOrdenesPedidosDetallesPagos.controls.Empleado_Id.setValue(res.data[0].id);
+
         });
     }
 
@@ -155,6 +178,10 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
                 {
                     title: 'Valor',
                     data: 'valor',
+                    className: 'text-right',
+                    render: function (data: any) {
+                        return '$' + that.helperService.formaterNumber(data);
+                    },
                 },
                 {
                     title: 'Empleado',
@@ -183,17 +210,20 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
                 },
             ],
             drawCallback: (settings: any) => {
-                $('.btn-dropdown-modificar')
+                $('.btn-dropdown-modificarOP')
                     .off()
                     .on('click', (event: any) => {
                         this.service
                             .getOrdenesPedidosDetallesPagosById(event.target.dataset.id)
                             .subscribe(({ data }) => {
+                                const formattedDate = this.datePipe.transform(data.fecha, 'yyyy-MM-dd');
+
                                 this.Id = data.id;
-                                this.frmOrdenesPedidosDetallesPagos.controls.ProductoId.setValue(
-                                    data.productoId
+                                this.frmOrdenesPedidosDetallesPagos.controls.Fecha.setValue(
+                                    formattedDate
                                 );
-                                this.frmOrdenesPedidosDetallesPagos.controls.Estado.setValue(data.estado);
+                                this.frmOrdenesPedidosDetallesPagos.controls.Valor.setValue(data.valor);
+                                this.frmOrdenesPedidosDetallesPagos.controls.MedioPago_Id.setValue(data.medioPago_Id);
                             });
                     });
             },

@@ -25,7 +25,7 @@ export class UsuariosIndexComponent implements OnInit {
 
   public API_URL : any;
   public title = "Listado de Usuarios";
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},  {name: "Seguridad" , icon: "fas fa-cogs"}, {name: "Usuarios"}];
+  public breadcrumb = [{name: `Inicio` , icon: `fa-duotone fa-house`},  {name: "Seguridad" , icon: "fa-duotone fa-lock"}, {name: "Usuarios", icon: "fa-duotone fa-users-gear"}];
   public botones: String[] = ['btn-nuevo'];
   public arrayBotonesDatatable: String[] = ['btn-cambiar-contraseña', 'btn-eliminar' , 'btn-modificar'];
   constructor(private service: UsuariosService, private helperService: HelperService, private route: Router, private modalService: NgbModal) { }

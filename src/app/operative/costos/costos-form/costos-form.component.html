@@ -1,187 +1,67 @@
-<!-- <app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb> -->
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
 <section class="content">
   <div class="container-fluid">
     <div class="card card-outline card-primary elevation-2">
       <div class="card-body">
         <form [formGroup]="frmCostos" class="mb-4">
           <div class="row">
-            <div class="input-group">
-              <label class="col-lg-1 col-md-3 col-sm-12">v</label>
-              <div class="form-group col-lg-3 col-md-3 col-sm-12">
-                <input
-                  type="date"
-                  formControlName="FechaCosto"
-                  class="form-control form-control-sm"
-                />
-                <app-forms-messages
-                  [error]="frmCostos.get('FechaCosto')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Descripción</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="Descripción"
-                />
-                <app-forms-messages
-                  [error]="frmCostos.get('Descripción')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Nombre</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="Nombre"
-                />
-                <app-forms-messages
-                  [error]="frmCostos.get('Nombre')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Categoria</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <ng-select
-                  [items]="listCategorias"
-                  bindLabel="textoMostrar"
-                  bindValue="id"
-                  formControlName="Categoria_Id"
-                >
-                </ng-select>
-                <app-forms-messages
-                  [error]="frmCostos.get('Categoria_Id')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Unidad Medida</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <ng-select
-                  [items]="listUnidadesMedidas"
-                  bindLabel="textoMostrar"
-                  bindValue="id"
-                  formControlName="UnidadMedida_Id"
-                ></ng-select>
-                <app-forms-messages
-                  [error]="frmCostos.get('UnidadMedida_Id')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Minimo</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input
-                  type="number"
-                  class="form-control form-control-sm"
-                  formControlName="Minimo"
-                  (change)="chececkMaxAndMin()"
-                />
-                <app-forms-messages
-                  [error]="frmCostos.get('Minimo')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Maximo</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input
-                  type="number"
-                  class="form-control form-control-sm"
-                  formControlName="Maximo"
-                  (change)="chececkMaxAndMin()"
-                />
-                <div *ngIf="checkMax" class="error">
-                  Maximo debe ser mayor a Minimo
-                </div>
-                <app-forms-messages
-                  [error]="frmCostos.get('Maximo')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Precio Costo</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input
-                  type="number"
-                  class="form-control form-control-sm"
-                  formControlName="PrecioCosto"
-                />
-                <app-forms-messages
-                  [error]="frmCostos.get('PrecioCosto')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12"
-                >Producto Terminado</label
-              >
-              <div class="form-group col-lg-2 col-md-6 col-sm-12">
-                <ui-switch formControlName="ProductoTerminado"></ui-switch>
-              </div>
+            <div class="col-md-3">
+              <label>Descripción</label>
+              <input type="text" class="form-control form-control-sm" formControlName="Descripcion">
+              <app-forms-messages [error]="frmCostos.get('Descripcion')" [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-md-3">
+              <label>Fecha</label>
+              <input type="date" class="form-control form-control-sm" formControlName="FechaCosto">
+              <app-forms-messages [error]="frmCostos.get('FechaCosto')" [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-md-3">
+              <label>Valor</label>
+              <input type="number" class="form-control form-control-sm" formControlName="Valor">
+              <app-forms-messages [error]="frmCostos.get('Valor')" [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-md-3">
+              <label>Numero de Factura</label>
+              <input type="text" class="form-control form-control-sm" formControlName="NumeroFactura">
+              <app-forms-messages [error]="frmCostos.get('NumeroFactura')" [statusForm]=statusForm></app-forms-messages>
             </div>
           </div>
+          <br>
           <div class="row">
-            <div class="input-group">
-              <label class="col-lg-2 col-md-4 col-sm-12">Caracteristica</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <textarea
-                  type="text"
-                  class="form-control"
-                  formControlName="CaracteristicaData"
-                >
-                </textarea>
-                <app-forms-messages
-                  [error]="frmCostos.get('CaracteristicaData')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Imagen</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input
-                  type="file"
-                  class="form-control form-control-sm"
-                  (change)="fileEvent($event)"
-                />
-                <br />
-                <img [src]="img" alt="" width="200" height="150" />
-              </div>
+            <div class="col-md-3">
+              <label>Tipo de Costo</label>
+              <ng-select [items]="listTiposCostos" bindLabel="textoMostrar" bindValue="id"
+                formControlName="TipoCosto_Id"> </ng-select>
+              <app-forms-messages [error]="frmCostos.get('TipoCosto_Id')"
+                [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-md-3">
+              <label>Proveedor</label>
+              <ng-select [items]="listProveedores" bindLabel="textoMostrar" bindValue="id"
+                formControlName="Proveedor_Id"> </ng-select>
+              <app-forms-messages [error]="frmCostos.get('Proveedor_Id')"
+                [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-md-2">
+              <label>Pago de Caja</label><br>
+              <ui-switch formControlName="PagoCaja"></ui-switch>
+            </div>
+            <div class="col-md-3 d-none">
+              <label>Empleado</label>
+              <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id" formControlName="Empleado_Id">
+              </ng-select>
+              <app-forms-messages [error]="frmCostos.get('Empleado_Id')" [statusForm]=statusForm></app-forms-messages>
             </div>
           </div>
+          <br>
           <div class="row float-right">
             <div class="col-md-12">
-              <app-botones
-                [botones]="botones"
-                (eventSave)="save()"
-                (eventCancel)="cancel()"
-              ></app-botones>
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
             </div>
           </div>
+          <br>
         </form>
-      </div>
-      <div class="card-footer" *ngIf="id">
-        <ul ngbNav #nav="ngbNav" [destroyOnHide]="true" class="nav-tabs">
-          <li ngbNavItem>
-            <a ngbNavLink
-              >Archivos
-              <span
-                data-bs-toggle="tooltip"
-                data-bs-placement="left"
-                title="En este formulario se asocian los archivos pertenecientes a la Prenda"
-              >
-                <i class="fa-solid fa-circle-question"></i>
-              </span>
-            </a>
-            <ng-template ngbNavContent>
-              <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12">
-                  <app-archivo-form
-                    [TablaId]="id"
-                    Tabla="costos"
-                  ></app-archivo-form>
-                </div>
-              </div>
-            </ng-template>
-          </li>
-        </ul>
-        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+        <br>
       </div>
     </div>
   </div>

@@ -48,11 +48,8 @@
                                 [statusForm]=statusForm></app-forms-messages>
                         </div>
                         <div class="col-md-3">
-                            <label>Empleado</label>
-                            <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id"
-                                formControlName="Empleado_Id"> </ng-select>
-                            <app-forms-messages [error]="frmOrdenesPedidos.get('Empleado_Id')"
-                                [statusForm]=statusForm></app-forms-messages>
+                            <label>Archivo</label><br>
+                            <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
                         </div>
                         <div class="col-md-1">
                             <label>Trae Prenda</label><br>
@@ -61,6 +58,14 @@
                     </div>
                     <br>
                     <div class="row">
+
+                        <div class="col-md-3 d-none">
+                            <label>Empleado</label>
+                            <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id"
+                                formControlName="Empleado_Id"> </ng-select>
+                            <app-forms-messages [error]="frmOrdenesPedidos.get('Empleado_Id')"
+                                [statusForm]=statusForm></app-forms-messages>
+                        </div>
                         <div class="col-md-3 d-none">
                             <label>Estado</label>
                             <ng-select [items]="listEstados" bindLabel="textoMostrar" bindValue="id"
@@ -70,6 +75,13 @@
                                 [statusForm]=statusForm></app-forms-messages>
                         </div>
                         
+                        
+                        <div class="col-md-9">
+                            <label>Observación</label>
+                            <textarea class="form-control" formControlName="Observacion" rows="4"></textarea>
+                            <app-forms-messages [error]="frmOrdenesPedidos.get('Observacion')"
+                                [statusForm]=statusForm></app-forms-messages>
+                        </div>
                         <div class="col-md-3">
                             <label>Colores</label>
                             <select formControlName="Colores" [(ngModel)]="selectedColors" multiple
@@ -78,16 +90,6 @@
                             </select>
                             <app-forms-messages [error]="frmOrdenesPedidos.get('Colores')"
                                 [statusForm]=statusForm></app-forms-messages>
-                        </div>
-                        <div class="col-md-6">
-                            <label>Observación</label>
-                            <textarea class="form-control" formControlName="Observacion" rows="4"></textarea>
-                            <app-forms-messages [error]="frmOrdenesPedidos.get('Observacion')"
-                                [statusForm]=statusForm></app-forms-messages>
-                        </div>
-                        <div class="col-md-3">
-                            <label>Archivo</label><br>
-                            <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
                         </div>
                     </div>
                     <br>

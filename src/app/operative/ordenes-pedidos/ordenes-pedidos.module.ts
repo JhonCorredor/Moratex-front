@@ -16,8 +16,8 @@ import { GeneralModule } from 'src/app/general/general.module';
   declarations: [
     OrdenesPedidosFormComponent,
     OrdenesPedidosIndexComponent,
+    SeguimientosFormComponent,
     OrdenesPedidosDetallesPagosFormComponent,
-    SeguimientosFormComponent
   ],
   imports: [
     CommonModule,

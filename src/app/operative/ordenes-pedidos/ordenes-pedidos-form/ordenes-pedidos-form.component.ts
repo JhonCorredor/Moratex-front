@@ -153,13 +153,33 @@ export class OrdenesPedidosFormComponent implements OnInit {
         this.generalParameterService.getAll("Clientes").subscribe(r => {
             this.listClientes = r.data;
         })
-        this.generalParameterService.getAll("Empleados").subscribe(r => {
-            this.listEmpleados = r.data;
-        })
         this.generalParameterService.getAll("Procedimientos").subscribe(r => {
             this.listProcedimientos = r.data;
         })
+        this.cargarEmpleado();
         this.cargarEstados();
+    }
+    
+    cargarEmpleado() {
+        var persona_Id = localStorage.getItem("persona_Id");
+
+        var data = new DatatableParameter();
+        data.pageNumber = "1";
+        data.pageSize = "10";
+        data.filter = "";
+        data.columnOrder = "";
+        data.directionOrder = "";
+        data.foreignKey = Number(persona_Id);
+
+        this.empleadoService.getAllEmpleados(data).subscribe(res => {
+            this.listEmpleados = [
+                {
+                    id: res.data[0].id,
+                    textoMostrar: res.data[0].codigo + " - " + res.data[0].persona
+                }
+            ];
+            this.frmOrdenesPedidos.controls.Empleado_Id.setValue(res.data[0].id);
+        });
     }
 
     cargarEstados() {

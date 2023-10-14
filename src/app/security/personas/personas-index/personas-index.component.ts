@@ -24,7 +24,7 @@ export class PersonasIndexComponent implements OnInit {
 
   public API_URL : any;
   public title = "Listado de  Personas";
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},  {name: "Seguridad" , icon: "fas fa-cogs"}, {name: "Personas"}];
+  public breadcrumb = [{name: `Inicio` , icon: `fa-duotone fa-house`},  {name: "Seguridad" , icon: "fa-duotone fa-lock"}, {name: "Personas", icon: "fa-duotone fa-user"}];
   public botones: String[] = ['btn-nuevo'];
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
   constructor(private service: PersonasService, private helperService: HelperService, private route: Router, private modalService: NgbModal) { }

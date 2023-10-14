@@ -17,7 +17,7 @@ export class ProveedoresFormComponent implements OnInit {
   public id! : number;
   public botones = ['btn-guardar', 'btn-cancelar'];
  
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},  {name: "Parametros" , icon: "fas fa-cogs"}, {name: "Proveedores"} ,  {name: "Crear"}];
+  public breadcrumb = [{name: `Inicio` , icon: `fa-duotone fa-house`},  {name: "Parametros" , icon: "fa-duotone fa-gears"}, {name: "Proveedores", icon: "fa-duotone fa-people-carry-box"} ,  {name: "Crear"}];
   public titulo = "";
   public listEmpresas: any[] = [];
   public listBancos: any[] = [];

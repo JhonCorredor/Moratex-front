@@ -104,11 +104,8 @@ export class CostosIndexComponent implements OnInit {
           data: 'descripcion',
         },
         {
-          title: 'Fecha',
-          data: 'fechaCosto',
-          render: (item: any) => {
-            return this.helperService.convertDateUTCToDMA(item);
-          },
+          title: 'Tipo Costo',
+          data: 'tipoCosto',
         },
         {
           title: 'Valor',
@@ -119,20 +116,15 @@ export class CostosIndexComponent implements OnInit {
           },
         },
         {
-          title: 'Tipo Costo',
-          data: 'tipoCosto',
-        },
-        {
           title: 'Proveedor',
           data: 'proveedor',
         },
         {
-          title: 'Número de Factura',
+          title: 'Número Factura',
           data: 'numeroFactura',
-          className: 'text-right',
         },
         {
-          title: 'Pago de Caja ?',
+          title: 'Pago de Caja',
           data: 'pagoCaja',
           render: function (item: any) {
             if (item) {
@@ -143,9 +135,15 @@ export class CostosIndexComponent implements OnInit {
           },
         },
         {
+          title: 'Fecha',
+          data: 'fechaCosto',
+          render: (item: any) => {
+            return this.helperService.convertDateUTCToDMA(item);
+          },
+        },
+        {
           title: 'Acciones',
           orderable: false,
-          width: '300px',
           data: 'id',
           render: function (id: any, type: any, row: any) {
             const boton = that.botonesDatatable;

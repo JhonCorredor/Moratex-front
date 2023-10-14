@@ -23,7 +23,7 @@ export class FormulariosIndexComponent implements OnInit {
 
   public API_URL : any;
   public title = "Listado de Formularios";
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},  {name: "Seguridad" , icon: "fas fa-cogs"}, {name: "Formularios"}];
+  public breadcrumb = [{name: `Inicio` , icon: `fa-duotone fa-house`},  {name: "Seguridad" , icon: "fa-duotone fa-lock"}, {name: "Formularios", icon: "fa-duotone fa-window-maximize"}];
   public botones: String[] = ['btn-nuevo'];
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
   constructor(private service : FormulariosService, private helperService: HelperService, private route: Router, private modalService: NgbModal) { }
