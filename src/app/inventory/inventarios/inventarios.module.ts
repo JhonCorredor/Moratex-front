@@ -6,6 +6,7 @@ import { InventariosIndexComponent } from './inventarios-index/inventarios-index
 import { InventariosFormComponent } from './inventarios-form/inventarios-form.component';
 import { InventarioDetalleFormComponent } from './inventario-detalle-form/inventario-detalle-form.component';
 import { InventarioDetalleBodegaFormComponent } from './inventario-detalle-bodega-form/inventario-detalle-bodega-form.component';
+import { BitacorasInventariosIndexComponent } from './bitacora-inventario-index/bitacora-inventario-index.component';
 import { GeneralModule } from 'src/app/general/general.module';
 import { DataTablesModule } from 'angular-datatables';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -21,7 +22,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     InventariosIndexComponent,
     InventariosFormComponent,
     InventarioDetalleFormComponent,
-    InventarioDetalleBodegaFormComponent
+    InventarioDetalleBodegaFormComponent,
+    BitacorasInventariosIndexComponent
   ],
   imports: [
     CommonModule,

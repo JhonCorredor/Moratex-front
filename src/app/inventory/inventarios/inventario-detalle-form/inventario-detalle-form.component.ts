@@ -1,4 +1,5 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { DataTableDirective } from 'angular-datatables';
@@ -8,6 +9,7 @@ import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { InventarioDetalleService } from '../inventario-detalle.service';
+import { BitacorasInventariosIndexComponent } from '../bitacora-inventario-index/bitacora-inventario-index.component';
 
 @Component({
   selector: 'app-inventario-detalle-form',
@@ -20,7 +22,7 @@ export class InventarioDetalleFormComponent implements OnInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   public dtTrigger: Subject<any> = new Subject();
   public opcionesDataTable: any = {};
-  public arrayBotonesDatatable: String[] = ['btn-modificar'];
+  public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-movimiento'];
   public botones = ['btn-guardar'];
   public Id = null;
 
@@ -33,6 +35,7 @@ export class InventarioDetalleFormComponent implements OnInit {
   constructor(public routerActive: ActivatedRoute,
     private service: InventarioDetalleService,
     private helperService: HelperService,
+    private modalService: NgbModal,
     private fb: FormBuilder) {
 
   }
@@ -217,9 +220,26 @@ export class InventarioDetalleFormComponent implements OnInit {
                 );
               });
           });
+        $('.btn-dropdown-movimiento')
+          .off()
+          .on('click', (event: any) => {
+            this.service.getInventarioDetalleById(event.target.dataset.id).subscribe(({ data }) => {
+              this.abrirModalMovimientos(data.producto_Id);
+            })
+          });
       },
     };
   }
-
-
+  
+  abrirModalMovimientos(producto_Id: any){
+    const  modal = this.modalService.open(BitacorasInventariosIndexComponent, {size: 'xl', keyboard: true, backdrop: "static", centered: true});
+    modal.componentInstance.Producto_Id = producto_Id;
+    
+    modal.result.then(res => {
+      if (res) {
+        this.refrescarTabla();
+      }
+    })
+  }
 }
+

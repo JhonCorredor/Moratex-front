@@ -47,7 +47,7 @@ export class SeguimientosFormComponent implements OnInit {
     private helperService: HelperService,
     private fb: FormBuilder,
     private datePipe: DatePipe
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.buildForm();

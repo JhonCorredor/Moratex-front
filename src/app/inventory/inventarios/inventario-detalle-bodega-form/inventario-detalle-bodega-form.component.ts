@@ -22,7 +22,7 @@ export class InventarioDetalleBodegaFormComponent implements OnInit {
     @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
     public dtTrigger: Subject<any> = new Subject();
     public opcionesDataTable: any = {};
-    public arrayBotonesDatatable: String[] = ['btn-modificar'];
+    public arrayBotonesDatatable: String[] = ['btn-modificarDetalleInventarioBodega'];
     public botones = ['btn-guardar'];
     public Id = null;
 
@@ -172,7 +172,7 @@ export class InventarioDetalleBodegaFormComponent implements OnInit {
                 }
             ],
             drawCallback: (settings: any) => {
-                $('.btn-dropdown-modificar')
+                $('.btn-dropdown-modificarDetalleInventarioBodega')
                     .off()
                     .on('click', (event: any) => {
                         this.service
