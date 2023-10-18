@@ -14,41 +14,62 @@
           </div>
 
           <div class="row">
-            <div class="input-group">
-              <label class="col-lg-1 col-md-4 col-sm-12">Código</label>
-              <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="Codigo"
-                />
-                <app-forms-messages
-                  [error]="frmProcedimientos.get('Codigo')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-1 col-md-4 col-sm-12">Nombre</label>
-              <div class="form-group col-lg-3 col-md-4 col-sm-12">
-                <input
-                  type="text"
-                  class="form-control form-control-sm"
-                  formControlName="Nombre"
-                />
-                <app-forms-messages
-                  [error]="frmProcedimientos.get('Nombre')"
-                  [statusForm]="statusForm"
-                ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12"
-                >Afecta Inventario</label
-              >
+            <div class="col-md-2">
+              <label>Código</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="Codigo"
+              />
+              <app-forms-messages
+                [error]="frmProcedimientos.get('Codigo')"
+                [statusForm]="statusForm"
+              ></app-forms-messages>
+            </div>
+            <div class="col-md-3">
+              <label>Nombre</label>
+              <input
+                type="text"
+                class="form-control form-control-sm"
+                formControlName="Nombre"
+              />
+              <app-forms-messages
+                [error]="frmProcedimientos.get('Nombre')"
+                [statusForm]="statusForm"
+              ></app-forms-messages>
+            </div>
+            <div class="col-md-2">
+              <label>Valor</label>
 
-              <div class="form-group col-lg-2 col-md-4 col-sm-12">
-                <ui-switch formControlName="AlimentaInventario"></ui-switch>
-              </div>
+              <input
+                type="text"
+                formControlName="Valor"
+                class="form-control form-control-sm text-right"
+              />
+              <app-forms-messages
+                [error]="frmProcedimientos.get('Valor')"
+                [statusForm]="statusForm"
+              ></app-forms-messages>
+            </div>
+            <div class="col-md-2">
+              <label>Unidad de Medida</label>
+              <ng-select
+                [items]="listUnidadMedidas"
+                bindLabel="textoMostrar"
+                bindValue="id"
+                formControlName="UnidadMedida_Id"
+              >
+              </ng-select>
+              <app-forms-messages
+                [error]="frmProcedimientos.get('UnidadMedida_Id')"
+                [statusForm]="statusForm"
+              ></app-forms-messages>
+            </div>
+            <div class="col-md-2">
+              <label>Afecta Inventario</label><br />
+              <ui-switch formControlName="AlimentaInventario"></ui-switch>
             </div>
           </div>
-
           <div class="row float-right">
             <div class="col-md-12">
               <app-botones

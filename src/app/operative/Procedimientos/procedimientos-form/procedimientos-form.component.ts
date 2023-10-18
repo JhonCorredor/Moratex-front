@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   HelperService,
   Messages,
   MessageType,
 } from 'src/app/admin/helper.service';
 import { ProcedimientosService } from '../procedimientos.service';
+import { GeneralParameterService } from '../../../parameters/general-parameter/general-parameter.service';
 
 @Component({
   selector: 'app-procedimientos-form',
@@ -15,7 +15,7 @@ import { ProcedimientosService } from '../procedimientos.service';
   styleUrls: ['./procedimientos-form.component.css'],
 })
 export class ProcedimientosFormComponent implements OnInit {
-  public frmProcedimientos: FormGroup;
+  public frmProcedimientos!: FormGroup;
   public statusForm: boolean = true;
   public id!: number;
   public botones = ['btn-guardar', 'btn-cancelar'];
@@ -26,11 +26,13 @@ export class ProcedimientosFormComponent implements OnInit {
     { name: 'Procedimientos' },
     { name: 'Crear' },
   ];
+  public listUnidadMedidas: any = [];
 
   constructor(
     public routerActive: ActivatedRoute,
     private service: ProcedimientosService,
-    private helperService: HelperService
+    private helperService: HelperService,
+    private GeneralService: GeneralParameterService
   ) {
     this.routerActive.params.subscribe((e) => (this.id = e.id));
 
@@ -43,6 +45,11 @@ export class ProcedimientosFormComponent implements OnInit {
         Validators.required,
         Validators.maxLength(100),
       ]),
+      Valor: new FormControl(null, [
+        Validators.required,
+        Validators.maxLength(10),
+      ]),
+      UnidadMedida_Id: new FormControl(null, [Validators.required]),
       AlimentaInventario: new FormControl(true, Validators.required),
       Estado: new FormControl(true, Validators.required),
     });
@@ -54,6 +61,10 @@ export class ProcedimientosFormComponent implements OnInit {
       this.service.getById(this.id).subscribe((l) => {
         this.frmProcedimientos.controls.Codigo.setValue(l.data.codigo);
         this.frmProcedimientos.controls.Nombre.setValue(l.data.nombre);
+        this.frmProcedimientos.controls.Valor.setValue(l.data.valor);
+        this.frmProcedimientos.controls.UnidadMedida_Id.setValue(
+          l.data.unidadMedida_Id
+        );
         this.frmProcedimientos.controls.AlimentaInventario.setValue(
           l.data.alimentaInventario
         );
@@ -62,6 +73,13 @@ export class ProcedimientosFormComponent implements OnInit {
     } else {
       this.titulo = `Crear Procedimientos`;
     }
+    this.cargarListas();
+  }
+
+  cargarListas() {
+    this.GeneralService.getAll('UnidadesMedidas').subscribe((r) => {
+      this.listUnidadMedidas = r.data;
+    });
   }
 
   save() {

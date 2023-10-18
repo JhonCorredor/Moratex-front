@@ -106,6 +106,18 @@ export class ProcedimientosIndexComponent implements OnInit {
           data: 'nombre',
         },
         {
+          title: 'Valor',
+          data: 'valor',
+          className: 'text-right',
+          render: function (data: any) {
+            return '$' + that.helperService.formaterNumber(data);
+          },
+        },
+        {
+          title: 'Unidad de Medida',
+          data: 'unidadMedida',
+        },
+        {
           title: 'Afecta Inventario',
           data: 'alimentaInventario',
           render: function (item: any) {

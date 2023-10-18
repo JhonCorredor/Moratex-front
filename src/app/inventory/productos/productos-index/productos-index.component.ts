@@ -5,7 +5,11 @@ import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { LANGUAGE_DATATABLE } from 'src/app/admin/datatable.language';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
-import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
+import {
+  HelperService,
+  Messages,
+  MessageType,
+} from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { ProductosFormComponent } from '../productos-form/productos-form.component';
 import { ProductosService } from '../productos.service';
@@ -13,21 +17,29 @@ import { ProductosService } from '../productos.service';
 @Component({
   selector: 'app-productos-index',
   templateUrl: './productos-index.component.html',
-  styleUrls: ['./productos-index.component.css']
+  styleUrls: ['./productos-index.component.css'],
 })
 export class ProductosIndexComponent implements OnInit {
-
   @ViewChild('botonesDatatable') botonesDatatable!: BotonesComponent;
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   public dtTrigger: Subject<any> = new Subject();
   public opcionesDataTable: any = {};
 
-  public API_URL : any;
-  public title = "Listado de  Insumos";
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`}, {name: "Inventario" , icon: "fas fa-cogs"}, {name: "Productos"}];
+  public API_URL: any;
+  public title = 'Listado de  Insumos';
+  public breadcrumb = [
+    { name: `Inicio`, icon: `fa-solid fa-house` },
+    { name: 'Inventario', icon: 'fas fa-cogs' },
+    { name: 'Productos' },
+  ];
   public botones: String[] = ['btn-nuevo'];
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
-  constructor(private service: ProductosService, private helperService: HelperService, private route: Router, private modalService: NgbModal) { }
+  constructor(
+    private service: ProductosService,
+    private helperService: HelperService,
+    private route: Router,
+    private modalService: NgbModal
+  ) {}
 
   ngOnInit(): void {
     this.cargarDatatable();
@@ -42,9 +54,9 @@ export class ProductosIndexComponent implements OnInit {
   }
 
   refrescarTabla() {
-    if(typeof this.dtElement.dtInstance != 'undefined'){
+    if (typeof this.dtElement.dtInstance != 'undefined') {
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-        dtInstance.ajax.reload()
+        dtInstance.ajax.reload();
       });
     }
   }
@@ -52,117 +64,151 @@ export class ProductosIndexComponent implements OnInit {
   cargarDatatable() {
     const that = this;
     that.opcionesDataTable = {
-        serverSide: true,
-        processing: true,
-        ordering: true,
-        responsive: true,
-        paging: true,
-        order: [0, 'desc'],
-        ajax: (dataTablesParameters: any, callback : any) => {
-          let pageNumber = (dataTablesParameters.start / dataTablesParameters.length) + 1
-          var data = new DatatableParameter();
-          data.pageNumber = pageNumber.toString();
-          data.pageSize = dataTablesParameters.length.toString();
-          data.filter = dataTablesParameters.search.value ? dataTablesParameters.search.value.replaceAll("$", "").replaceAll(".", "").replaceAll(",", "") : '';
-          data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());
-          data.directionOrder = dataTablesParameters.order[0].dir;
-          this.service.datatable(data).subscribe(res => {
-            callback({
-              recordsTotal: res.meta.totalCount,
-              recordsFiltered: res.meta.totalCount,
-              draw: dataTablesParameters.draw,
-              data: res.data
-            });
+      serverSide: true,
+      processing: true,
+      ordering: true,
+      responsive: true,
+      paging: true,
+      order: [0, 'desc'],
+      ajax: (dataTablesParameters: any, callback: any) => {
+        let pageNumber =
+          dataTablesParameters.start / dataTablesParameters.length + 1;
+        var data = new DatatableParameter();
+        data.pageNumber = pageNumber.toString();
+        data.pageSize = dataTablesParameters.length.toString();
+        data.filter = dataTablesParameters.search.value
+          ? dataTablesParameters.search.value
+              .replaceAll('$', '')
+              .replaceAll('.', '')
+              .replaceAll(',', '')
+          : '';
+        data.columnOrder = that.helperService.capitalizeFirstLetter(
+          dataTablesParameters.columns[
+            dataTablesParameters.order[0].column
+          ].data.toString()
+        );
+        data.directionOrder = dataTablesParameters.order[0].dir;
+        this.service.datatable(data).subscribe((res) => {
+          callback({
+            recordsTotal: res.meta.totalCount,
+            recordsFiltered: res.meta.totalCount,
+            draw: dataTablesParameters.draw,
+            data: res.data,
           });
+        });
+      },
+      language: LANGUAGE_DATATABLE,
+      columns: [
+        {
+          title: 'Código',
+          data: 'codigo',
         },
-        language: LANGUAGE_DATATABLE,
-        columns: [
-            {
-              title: "Código",
-              data: 'codigo',
-            },
-            {
-              title: "Nombre",
-              data: 'nombre'
-            },
-            {
-              title: "Caracteristica",
-              data: 'caracteristicaData'
-            },
-            {
-              title: "Categoria",
-              data: "categoria",
-            },
-            
-            {
-              title: "Unidad de Medida",
-              data: "unidadMedida",
-            },
-            {
-              title: "Minimo",
-              data: 'minimo',
-              className: "text-right"
-            },
-            {
-              title: "Maximo",
-              data: 'maximo',
-              className: "text-right"
-            },
-            {
-              title: "Precio Costo",
-              data: "precioCosto",
-              className: "text-right",
-              render : function(data : any,) {
-                return  "$"+that.helperService.formaterNumber(data);
-              }
-            },
-            {
-              title: "Estado",
-              data: 'estado',
-              render: function(item: any) {
-                if (item) {
-                  return "<label class='text-center badge badge-success'>Activo</label>";
-                } else {
-                  return "<label class='text-center badge badge-danger'>Inactivo</label>";
-                }
-              }
-            },
-            {
-              title: "Acciones",
-              orderable: false,
-              width: '300px',
-              data: "id",
-              render: function(id : any, type : any, row : any) {
-                const boton = that.botonesDatatable;
-                return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(id);
-              },
-              className: "pl-1 pr-0 text-center",
-              responsivePriority: 7
+        {
+          title: 'Nombre',
+          data: 'nombre',
+        },
+        {
+          title: 'Caracteristica',
+          data: 'caracteristicaData',
+        },
+        {
+          title: 'Categoria',
+          data: 'categoria',
+        },
+
+        {
+          title: 'Unidad de Medida',
+          data: 'unidadMedida',
+        },
+        {
+          title: 'Minimo',
+          data: 'minimo',
+          className: 'text-right',
+        },
+        {
+          title: 'Maximo',
+          data: 'maximo',
+          className: 'text-right',
+        },
+        {
+          title: 'Precio Costo',
+          data: 'precioCosto',
+          className: 'text-right',
+          render: function (data: any) {
+            return '$' + that.helperService.formaterNumber(data);
+          },
+        },
+        {
+          title: 'Producto terminado',
+          data: 'productoTerminado',
+          render: function (item: any) {
+            if (item) {
+              return "<label class='text-center badge badge-success'>Si</label>";
+            } else {
+              return "<label class='text-center badge badge-danger'>No</label>";
             }
-        ],
-        drawCallback: (settings : any) => {
-          $('.btn-dropdown-modificar').off().on('click', (event : any) => {
-            this.helperService.redirectApp(`inventario/productos/editar/${event.target.dataset.id}`);
+          },
+        },
+        {
+          title: 'Estado',
+          data: 'estado',
+          render: function (item: any) {
+            if (item) {
+              return "<label class='text-center badge badge-success'>Activo</label>";
+            } else {
+              return "<label class='text-center badge badge-danger'>Inactivo</label>";
+            }
+          },
+        },
+        {
+          title: 'Acciones',
+          orderable: false,
+          width: '300px',
+          data: 'id',
+          render: function (id: any, type: any, row: any) {
+            const boton = that.botonesDatatable;
+            return boton.botonesDropdown.nativeElement.outerHTML
+              .split('$id')
+              .join(id);
+          },
+          className: 'pl-1 pr-0 text-center',
+          responsivePriority: 7,
+        },
+      ],
+      drawCallback: (settings: any) => {
+        $('.btn-dropdown-modificar')
+          .off()
+          .on('click', (event: any) => {
+            this.helperService.redirectApp(
+              `inventario/productos/editar/${event.target.dataset.id}`
+            );
           });
-          $('.btn-dropdown-eliminar').off().on('click', (event : any) => {
+        $('.btn-dropdown-eliminar')
+          .off()
+          .on('click', (event: any) => {
             this.helperService.confirmDelete(() => {
-              this.service.delete(event.target.dataset.id).subscribe(l => {
+              this.service.delete(event.target.dataset.id).subscribe((l) => {
                 if (l.status) {
-                  this.helperService.showMessage(MessageType.SUCCESS, Messages.DELETESUCCESS);
-                  
+                  this.helperService.showMessage(
+                    MessageType.SUCCESS,
+                    Messages.DELETESUCCESS
+                  );
+
                   this.refrescarTabla();
                 } else {
-                  this.helperService.showMessage(MessageType.ERROR, Messages.DELETEERROR);
+                  this.helperService.showMessage(
+                    MessageType.ERROR,
+                    Messages.DELETEERROR
+                  );
                 }
-              })
+              });
             });
           });
-        }
+      },
     };
   }
 
   public nuevo() {
     this.helperService.redirectApp('inventario/productos/crear');
   }
-
 }
