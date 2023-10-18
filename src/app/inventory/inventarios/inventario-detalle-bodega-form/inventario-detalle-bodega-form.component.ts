@@ -51,7 +51,7 @@ export class InventarioDetalleBodegaFormComponent implements OnInit {
         this.frmInventarioDetalleBodega = this.fb.group({
             InventarioDetalle_Id: new FormControl(null, Validators.required),
             Bodega_Id: new FormControl(null, Validators.required),
-            Cantidad: new FormControl(null,[Validators.required])
+            Cantidad: new FormControl(null, [Validators.required])
         });
         this.buildSelect()
     }
@@ -81,20 +81,28 @@ export class InventarioDetalleBodegaFormComponent implements OnInit {
             this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
             return;
         }
+
         let data = {
             id: this.Id ?? 0,
             ...this.frmInventarioDetalleBodega.value
         };
-        this.service.save(this.Id, data).subscribe(l => {
-            if (!l.status) {
-                this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
-            } else {
-                this.refrescarTabla();
-                this.frmInventarioDetalleBodega.reset();
-                this.Id = null;
-                this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+
+        this.service.save(this.Id, data).subscribe(
+            (response) => {
+                if (response.status) {
+                    this.refrescarTabla();
+                    this.frmInventarioDetalleBodega.reset();
+                    this.Id = null;
+                    this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+                }
+            },
+            (error) => {
+                this.helperService.showMessage(
+                    MessageType.WARNING,
+                    error.error.message
+                );
             }
-        })
+        );
     }
 
     refrescarTabla() {
