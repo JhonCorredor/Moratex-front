@@ -56,6 +56,21 @@
                 </div>
               </ng-template>
             </li>
+
+            <li ngbNavItem>
+              <a ngbNavLink>Bodegas
+                <span  data-bs-toggle="tooltip" data-bs-placement="left" title="En este formulario se ve el detalle perteneciente al Inventario">
+                  <i class="fa-solid fa-circle-question"></i>
+                </span > 
+              </a>
+              <ng-template ngbNavContent>
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12">
+                    <app-inventario-detalle-bodega-form [Inventario_Id]="id"> </app-inventario-detalle-bodega-form>
+                  </div>
+                </div>
+              </ng-template>
+            </li>
           </ul>
           <div [ngbNavOutlet]="nav" class="mt-2"></div>
         </div>

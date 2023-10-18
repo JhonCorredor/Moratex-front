@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { InventarioDetalleFormComponent } from './inventario-detalle-formcomponent';
+import { InventarioDetalleFormComponent } from './inventario-detalle-form.component';
 
 describe('InventarioDetalleFormComponent', () => {
   let component: InventarioDetalleFormComponent;

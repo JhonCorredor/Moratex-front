@@ -4,7 +4,8 @@ import { CommonModule } from '@angular/common';
 import { InventariosRoutingModule } from './inventarios-routing.module';
 import { InventariosIndexComponent } from './inventarios-index/inventarios-index.component';
 import { InventariosFormComponent } from './inventarios-form/inventarios-form.component';
-import { InventarioDetalleFormComponent } from './inventario-detalle-form/inventario-detalle-formcomponent';
+import { InventarioDetalleFormComponent } from './inventario-detalle-form/inventario-detalle-form.component';
+import { InventarioDetalleBodegaFormComponent } from './inventario-detalle-bodega-form/inventario-detalle-bodega-form.component';
 import { GeneralModule } from 'src/app/general/general.module';
 import { DataTablesModule } from 'angular-datatables';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -19,7 +20,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
   declarations: [
     InventariosIndexComponent,
     InventariosFormComponent,
-    InventarioDetalleFormComponent
+    InventarioDetalleFormComponent,
+    InventarioDetalleBodegaFormComponent
   ],
   imports: [
     CommonModule,
