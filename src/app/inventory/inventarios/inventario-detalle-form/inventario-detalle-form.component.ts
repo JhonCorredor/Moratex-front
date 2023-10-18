@@ -96,16 +96,23 @@ export class InventarioDetalleFormComponent implements OnInit {
       ...this.frmInventarioDetalle.value,
       inventario_Id: this.Inventario_Id,
     };
-    this.service.save(this.Id, data).subscribe(l => {
-      if (!l.status) {
-        this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
-      } else {
-        this.refrescarTabla();
-        this.frmInventarioDetalle.reset();
-        this.Id = null;
-        this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+
+    this.service.save(this.Id, data).subscribe(
+      (response) => {
+        if (response.status) {
+          this.refrescarTabla();
+          this.frmInventarioDetalle.reset();
+          this.Id = null;
+          this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+        }
+      },
+      (error) => {
+        this.helperService.showMessage(
+          MessageType.WARNING,
+          error.error.message
+        );
       }
-    })
+    );
   }
 
   refrescarTabla() {
