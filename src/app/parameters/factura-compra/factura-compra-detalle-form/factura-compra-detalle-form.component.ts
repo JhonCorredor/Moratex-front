@@ -8,6 +8,7 @@ import { HelperService, Messages, MessageType } from 'src/app/admin/helper.servi
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { GeneralParameterService } from 'src/app/parameters/general-parameter/general-parameter.service';
 import { FacturaCompraDetalleService } from './factura-compra-detalle.service';
+import { ProductosService } from '../../../inventory/productos/productos.service';
 
 @Component({
   selector: 'app-factura-compra-detalle-form',
@@ -15,7 +16,7 @@ import { FacturaCompraDetalleService } from './factura-compra-detalle.service';
   styleUrls: ['./factura-compra-detalle-form.component.css']
 })
 export class FacturaCompraDetalleFormComponent implements OnInit {
-  
+
   @ViewChild('botonesDatatable') botonesDatatable!: BotonesComponent;
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   public dtTrigger: Subject<any> = new Subject();
@@ -23,35 +24,36 @@ export class FacturaCompraDetalleFormComponent implements OnInit {
   public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
   public botones = ['btn-guardar'];
 
-  @Input() facturaCompraId: any = null;
+  @Input() facturaCompra_Id: any = null;
   @Input() seeForm: any = null;
 
   public frmFacturaCompraDetalle: FormGroup;
-  public statusForm : boolean = true
-  public listFacturaCompra : any = [];
-  public listProducto : any = [];
-  public listUnidadMedida : any = [];
-  public colums : any =  []
-  constructor(private generalService: GeneralParameterService, private helperService: HelperService, private service: FacturaCompraDetalleService) { 
+  public statusForm: boolean = true
+  public listFacturaCompra: any = [];
+  public listProducto: any = [];
+  public listUnidadMedida: any = [];
+  public colums: any = [];
+
+  constructor(private generalService: GeneralParameterService, private helperService: HelperService, private service: FacturaCompraDetalleService, private productoService: ProductosService) {
     this.frmFacturaCompraDetalle = new FormGroup({
       Id: new FormControl(0, Validators.required),
-      FacturaCompraId: new FormControl(this.facturaCompraId, Validators.required),
+      Codigo: new FormControl(null),
+      FacturaCompra_Id: new FormControl(this.facturaCompra_Id, Validators.required),
       Cantidad: new FormControl(null, Validators.required),
-      PrecioProducto : new FormControl(null, Validators.required),
-      SubTotal: new FormControl(null, Validators.required),
-      Descuento: new FormControl(null, Validators.required),
-      Iva: new FormControl(null, Validators.required),
-      Observacion: new FormControl(null, Validators.required),
-      ProductoId: new FormControl(null, Validators.required),
-      UnidadMedidaId: new FormControl(null, Validators.required),
+      PrecioCosto: new FormControl(null, Validators.required),
+      SubTotal: new FormControl(null),
+      SubTotalString: new FormControl("$ 0"),
+      Descuento: new FormControl(0, Validators.required),
+      Iva: new FormControl(0, Validators.required),
+      Producto_Id: new FormControl(null, Validators.required),
     });
   }
 
   ngOnInit(): void {
     this.cargarDatatable();
     this.cargarSelects();
-    if(this.seeForm){
-       this.arrayBotonesDatatable = [];
+    if (this.seeForm) {
+      this.arrayBotonesDatatable = [];
     }
   }
 
@@ -70,33 +72,52 @@ export class FacturaCompraDetalleFormComponent implements OnInit {
     this.generalService.getAll("Productos").subscribe(r => {
       this.listProducto = r.data;
     })
-    this.generalService.getAll("UnidadesMedidas").subscribe(r => {
-      this.listUnidadMedida = r.data;
-    })
+  }
+
+  calcularSubTotal(){
+    let data = this.frmFacturaCompraDetalle.value;
+    var subtotal = parseInt(data.PrecioCosto) * parseInt(data.Cantidad);
+    var subTotalString = `$ 0`;
+    
+    if (!isNaN(subtotal)){
+      subTotalString = `$ ${this.helperService.formaterNumber(subtotal)}`;
+    }
+
+    this.frmFacturaCompraDetalle.controls.SubTotal.setValue(subtotal);
+    this.frmFacturaCompraDetalle.controls.SubTotalString.setValue(subTotalString);
   }
 
   save() {
-    this.frmFacturaCompraDetalle.controls.FacturaCompraId.setValue(this.facturaCompraId);
+    this.frmFacturaCompraDetalle.controls.FacturaCompra_Id.setValue(this.facturaCompra_Id);
+    
     if (this.frmFacturaCompraDetalle.invalid) {
-      this.statusForm  = false
+      this.statusForm = false
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
       return;
     }
-    let data  = this.frmFacturaCompraDetalle.value;
-    this.service.save(this.frmFacturaCompraDetalle.controls.Id.value, data).subscribe(l => {
-      if (!l.status) {
-        this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
-      } else {
-        this.refrescarTabla();
-        this.frmFacturaCompraDetalle.reset();
-        this.frmFacturaCompraDetalle.controls.Id.setValue(0);
-        this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-      }
+    
+    let data = this.frmFacturaCompraDetalle.value;
+
+    this.productoService.getById(data.Producto_Id).subscribe(r => {
+      data.Codigo =  r.data.codigo;
     })
+    
+    setTimeout(() => {
+      this.service.save(this.frmFacturaCompraDetalle.controls.Id.value, data).subscribe(l => {
+        if (!l.status) {
+          this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
+        } else {
+          this.refrescarTabla();
+          this.frmFacturaCompraDetalle.reset();
+          this.frmFacturaCompraDetalle.controls.Id.setValue(0);
+          this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+        }
+      })
+    }, 500);
   }
 
   refrescarTabla() {
-    if(typeof this.dtElement.dtInstance != 'undefined'){
+    if (typeof this.dtElement.dtInstance != 'undefined') {
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.ajax.reload()
       });
@@ -106,124 +127,110 @@ export class FacturaCompraDetalleFormComponent implements OnInit {
   cargarDatatable() {
     const that = this;
     that.opcionesDataTable = {
-        serverSide: true,
-        processing: true,
-        ordering: true,
-        responsive: true,
-        paging: true,
-        order: [0, 'desc'],
-        ajax: (dataTablesParameters: any, callback : any) => {
-          let pageNumber = (dataTablesParameters.start / dataTablesParameters.length) + 1
-          var data = new DatatableParameter();
-          data.pageNumber = pageNumber.toString();
-          data.pageSize = dataTablesParameters.length.toString();
-          data.filter = dataTablesParameters.search.value;
-          data.columnOrder = that.helperService.capitalizeFirstLetter(dataTablesParameters.columns[dataTablesParameters.order[0].column].data.toString());;
-          data.directionOrder = dataTablesParameters.order[0].dir;
-          data.foreignKey = this.facturaCompraId;
-          this.service.datatable(data).subscribe(res => {
-            callback({
-              recordsTotal: res.meta.totalCount,
-              recordsFiltered: res.meta.totalCount,
-              draw: dataTablesParameters.draw,
-              data: res.data
-            });
+      serverSide: true,
+      processing: true,
+      ordering: true,
+      responsive: true,
+      paging: true,
+      order: [0, 'desc'],
+      ajax: (dataTablesParameters: any, callback: any) => {
+        let pageNumber = (dataTablesParameters.start / dataTablesParameters.length) + 1
+        var data = new DatatableParameter();
+        data.pageNumber = pageNumber.toString();
+        data.pageSize = dataTablesParameters.length.toString();
+        data.filter = dataTablesParameters.search.value;
+        data.columnOrder = "Id";
+        data.directionOrder = dataTablesParameters.order[0].dir;
+        data.foreignKey = this.facturaCompra_Id;
+        this.service.datatable(data).subscribe(res => {
+          callback({
+            recordsTotal: res.meta.totalCount,
+            recordsFiltered: res.meta.totalCount,
+            draw: dataTablesParameters.draw,
+            data: res.data
           });
+        });
+      },
+      language: LANGUAGE_DATATABLE,
+      columns: [
+        {
+          title: "Producto",
+          data: 'producto',
         },
-        language: LANGUAGE_DATATABLE,
-        columns: [
-            {
-              title: "Factura Compra",
-              data: 'facturaCompra',
-            },
-            {
-              title: "Cantidad",
-              data:  "cantidad",
-              render : function(item : any) {
-                return that.helperService.formaterNumber(item)
+        {
+          title: "Cantidad",
+          data: "cantidad",
+        },
+        {
+          title: "Precio Costo",
+          data: 'precioCosto',
+          className: 'text-right',
+          render: function (data: any) {
+            return '$ ' + that.helperService.formaterNumber(data);
+          },
+        },
+        {
+          title: "Descuento",
+          data: 'descuento',
+          render: function (item: any) {
+            return that.helperService.formaterNumber(item)
+          }
+        },
+        {
+          title: "Iva",
+          data: 'iva',
+          render: function (item: any) {
+            return that.helperService.formaterNumber(item)
+          }
+        },
+        {
+          title: "SubTotal",
+          data: 'subTotal',
+          className: 'text-right',
+          render: function (data: any) {
+            return '$ ' + that.helperService.formaterNumber(data);
+          },
+        },
+        {
+          title: "Acciones",
+          orderable: false,
+          width: '300px',
+          data: "id",
+          render: function (id: any, type: any, row: any) {
+            const boton = that.botonesDatatable;
+            return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(id);
+          },
+          className: "pl-1 pr-0 text-center",
+          responsivePriority: 7
+        }
+      ],
+      drawCallback: (settings: any) => {
+        $('.btn-dropdown-modificar').off().on('click', (event: any) => {
+          this.service.getById(event.target.dataset.id).subscribe(res => {
+            this.frmFacturaCompraDetalle.controls.Id.setValue(res.data.id);
+            this.frmFacturaCompraDetalle.controls.Codigo.setValue(res.data.codigo);
+            this.frmFacturaCompraDetalle.controls.FacturaCompra_Id.setValue(res.data.facturaCompra_Id);
+            this.frmFacturaCompraDetalle.controls.Cantidad.setValue(res.data.cantidad);
+            this.frmFacturaCompraDetalle.controls.PrecioCosto.setValue(res.data.precioCosto);
+            this.frmFacturaCompraDetalle.controls.SubTotal.setValue(res.data.subTotal);
+            this.frmFacturaCompraDetalle.controls.Descuento.setValue(res.data.descuento);
+            this.frmFacturaCompraDetalle.controls.Iva.setValue(res.data.iva);
+            this.frmFacturaCompraDetalle.controls.Producto_Id.setValue(res.data.producto_Id);
+          })
+        });
+        $('.btn-dropdown-eliminar').off().on('click', (event: any) => {
+          this.helperService.confirmDelete(() => {
+            this.service.delete(event.target.dataset.id).subscribe(l => {
+              if (l.status) {
+                this.helperService.showMessage(MessageType.SUCCESS, Messages.DELETESUCCESS);
+                this.refrescarTabla();
+              } else {
+                this.helperService.showMessage(MessageType.ERROR, Messages.DELETEERROR);
               }
-            },
-            {
-            title: "Precio Producto",
-            data: 'precioProducto',
-            render : function(item : any) {
-              return that.helperService.formaterNumber(item)
-            }
-            },
-            {
-              title: "SubTotal",
-              data: 'subtotal',
-              render : function(item : any) {
-                return that.helperService.formaterNumber(item)
-              }
-            },
-            {
-              title: "Descuento",
-              data: 'descuento',
-              render : function(item : any) {
-                return that.helperService.formaterNumber(item)
-              }
-            },
-            {
-              title: "Iva",
-              data: 'iva',
-              render : function(item : any) {
-                return that.helperService.formaterNumber(item)
-              }
-            },
-            {
-              title: "Observacion",
-              data: 'observacion',
-            },
-            {
-              title: "Producto",
-              data: 'producto',
-            },
-            {
-              title: "Unidad Medida",
-              data: 'unidadMedida',
-            },
-            {
-              title: "Acciones",
-              orderable: false,
-              width: '300px',
-              data: "id",
-              render: function(id : any, type : any, row : any) {
-                const boton = that.botonesDatatable;
-                return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(id);
-              },
-              className: "pl-1 pr-0 text-center",
-              responsivePriority: 7
-            }
-        ],
-        drawCallback: (settings : any) => {
-          $('.btn-dropdown-modificar').off().on('click', (event : any) => {
-            this.service.getById(event.target.dataset.id).subscribe(res => {
-              this.frmFacturaCompraDetalle.controls.Id.setValue(res.data.id);
-              this.frmFacturaCompraDetalle.controls.FacturaCompraId.setValue(res.data.facturaCompraId);
-              this.frmFacturaCompraDetalle.controls.Cantidad.setValue(res.data.cantidad);
-              this.frmFacturaCompraDetalle.controls.PrecioProducto.setValue(res.data.precioProducto);
-              this.frmFacturaCompraDetalle.controls.SubTotal.setValue(res.data.subtotal);
-              this.frmFacturaCompraDetalle.controls.Descuento.setValue(res.data.descuento);
-              this.frmFacturaCompraDetalle.controls.Iva.setValue(res.data.iva);
-              this.frmFacturaCompraDetalle.controls.Observacion.setValue(res.data.observacion);
-              this.frmFacturaCompraDetalle.controls.ProductoId.setValue(res.data.productoId);
-              this.frmFacturaCompraDetalle.controls.UnidadMedidaId.setValue(res.data.unidadMedidaId);
             })
           });
-          $('.btn-dropdown-eliminar').off().on('click', (event : any) => {
-            this.helperService.confirmDelete(() => {
-              this.service.delete(event.target.dataset.id).subscribe(l => {
-                if (l.status) {
-                  this.helperService.showMessage(MessageType.SUCCESS, Messages.DELETESUCCESS);
-                  this.refrescarTabla();
-                } else {
-                  this.helperService.showMessage(MessageType.ERROR, Messages.DELETEERROR);
-                }
-              })
-            });
-          });
-        }
+        });
+      }
     };
   }
 

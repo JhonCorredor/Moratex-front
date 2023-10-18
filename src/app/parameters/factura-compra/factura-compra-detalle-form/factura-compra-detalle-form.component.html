@@ -1,46 +1,52 @@
 <form [formGroup]="frmFacturaCompraDetalle" class="mb-4">
-    <div class="row" *ngIf="!seeForm">
-        <div class="input-group">
-            <label class="col-lg-1 col-md-4 col-sm-12">Cantidad</label>
-            <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <input type="number" class="form-control form-control-sm" formControlName="Cantidad">  
-                <app-forms-messages [error]="frmFacturaCompraDetalle.get('Cantidad')" [statusForm]=statusForm ></app-forms-messages>
+    <div class="container-fluid" *ngIf="!seeForm">
+        <div class="row">
+            <div class="col-md-3 col-lg-3 col-sm-3">
+                <label>Producto</label>
+                <ng-select [items]="listProducto" bindLabel="textoMostrar" bindValue="id" formControlName="Producto_Id">
+                </ng-select>
+                <app-forms-messages [error]="frmFacturaCompraDetalle.get('Producto_Id')"
+                    [statusForm]=statusForm></app-forms-messages>
             </div>
-            <label class="col-lg-1 col-md-4 col-sm-12">Precio Producto</label>
-            <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <input type="v" class="form-control form-control-sm" formControlName="PrecioProducto">  
-                <app-forms-messages [error]="frmFacturaCompraDetalle.get('PrecioProducto')" [statusForm]=statusForm ></app-forms-messages>
+            <div class="col-md-1 col-lg-1 col-sm-1">
+                <label>Cantidad</label>
+                <input type="number" class="form-control" formControlName="Cantidad">
+                <app-forms-messages [error]="frmFacturaCompraDetalle.get('Cantidad')"
+                    [statusForm]=statusForm></app-forms-messages>
             </div>
-            <label class="col-lg-1 col-md-4 col-sm-12">SubTotal</label>
-            <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <input type="number" class="form-control form-control-sm" formControlName="SubTotal">  
-                <app-forms-messages [error]="frmFacturaCompraDetalle.get('SubTotal')" [statusForm]=statusForm ></app-forms-messages>
+            <div class="col-md-2 col-lg-2 col-sm-2">
+                <label>Precio Costo</label>
+                <input type="number" class="form-control" formControlName="PrecioCosto" (blur)="calcularSubTotal()">
+                <app-forms-messages [error]="frmFacturaCompraDetalle.get('PrecioCosto')"
+                    [statusForm]=statusForm></app-forms-messages>
             </div>
-            <label class="col-lg-1 col-md-4 col-sm-12">Descuento</label>
-            <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <input type="number" class="form-control form-control-sm" formControlName="Descuento">  
-                <app-forms-messages [error]="frmFacturaCompraDetalle.get('SubTotal')" [statusForm]=statusForm ></app-forms-messages>
+            <div class="col-md-2 col-lg-2 col-sm-2">
+                <label>Descuento <span class="badge bg-secondary">Valor</span></label>
+                <input type="number" class="form-control" formControlName="Descuento">
+                <app-forms-messages [error]="frmFacturaCompraDetalle.get('Descuento')"
+                    [statusForm]=statusForm></app-forms-messages>
             </div>
-            <label class="col-lg-1 col-md-4 col-sm-12">Iva</label>
-            <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <input type="number" class="form-control form-control-sm" formControlName="Iva">  
-                <app-forms-messages [error]="frmFacturaCompraDetalle.get('SubTotal')" [statusForm]=statusForm ></app-forms-messages>
+            <div class="col-md-2 col-lg-2 col-sm-2">
+                <label>Iva <span class="badge bg-secondary">Porcentaje</span></label>
+                <input type="number" class="form-control" formControlName="Iva">
+                <app-forms-messages [error]="frmFacturaCompraDetalle.get('Iva')"
+                    [statusForm]=statusForm></app-forms-messages>
             </div>
-            <label class="col-lg-1 col-md-4 col-sm-12">Observacion</label>
-            <div class="form-group col-lg-5 col-md-6 col-sm-12">
-                <input type="text" class="form-control form-control-sm" formControlName="Observacion">  
-                <app-forms-messages [error]="frmFacturaCompraDetalle.get('Observacion')" [statusForm]=statusForm ></app-forms-messages>
+            <div class="col-md-2 col-lg-2 col-sm-2">
+                <label>Sub Total</label>
+                <input type="text" class="form-control border-0" formControlName="SubTotalString" readonly="readonly"
+                    style="background-color: transparent !important;">
             </div>
-            <label class="col-lg-1 col-md-4 col-sm-12">Producto</label>
-            <div class="form-group col-lg-5 col-md-6 col-sm-12">            
-                <ng-select [items]="listProducto" bindLabel="textoMostrar" bindValue="id" formControlName="ProductoId" > </ng-select>
-                <app-forms-messages [error]="frmFacturaCompraDetalle.get('ProductoId')" [statusForm]=statusForm ></app-forms-messages>
+            <div class="col-md-2 col-lg-2 col-sm-2 d-none">
+                <label>Sub Total</label>
+                <input type="text" class="form-control border-0" formControlName="SubTotal">
+                <app-forms-messages [error]="frmFacturaCompraDetalle.get('SubTotal')"
+                    [statusForm]=statusForm></app-forms-messages>
             </div>
-            <label class="col-lg-1 col-md-4 col-sm-12">Unidad Medida</label>
-            <div class="form-group col-lg-5 col-md-6 col-sm-12">            
-                <ng-select [items]="listUnidadMedida" bindLabel="textoMostrar" bindValue="id" formControlName="UnidadMedidaId" > </ng-select>
-                <app-forms-messages [error]="frmFacturaCompraDetalle.get('UnidadMedidaId')" [statusForm]=statusForm ></app-forms-messages>
-            </div>
+        </div>
+        <br>
+        <div class="row">
+
         </div>
     </div>
     <div class="row float-right" *ngIf="!seeForm">
@@ -53,8 +59,10 @@
     <div class="dt-responsive">
         <div class="row">
             <div class="col-md-12 table-responsive">
-            <table datatable [dtOptions]="opcionesDataTable" [dtTrigger]="dtTrigger" class="display compact responsive w-100 table table-striped table-bordered  "></table>
-            <app-botones #botonesDatatable [dropdown]="true" [hidden]="true" [botones]="arrayBotonesDatatable" ></app-botones>
+                <table datatable [dtOptions]="opcionesDataTable" [dtTrigger]="dtTrigger"
+                    class="display compact responsive w-100 table table-striped table-bordered  "></table>
+                <app-botones #botonesDatatable [dropdown]="true" [hidden]="true"
+                    [botones]="arrayBotonesDatatable"></app-botones>
             </div>
         </div>
     </div>

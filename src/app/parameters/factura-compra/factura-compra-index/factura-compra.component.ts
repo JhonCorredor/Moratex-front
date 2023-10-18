@@ -95,9 +95,14 @@ export class FacturaCompraIndexComponent implements OnInit {
         {
           title: "Total",
           data: 'total',
-          render: (item: any) => {
-            return this.helperService.formaterNumber(item);
-          }
+          className: 'text-right',
+          render: function (data: any) {
+            return '$ ' + that.helperService.formaterNumber(data);
+          },
+        },
+        {
+          title: "Empleado",
+          data: 'empleado',
         },
         {
           title: "Estado",
@@ -136,10 +141,10 @@ export class FacturaCompraIndexComponent implements OnInit {
       },
       drawCallback: (settings: any) => {
         $('.btn-dropdown-modificar').off().on('click', (event: any) => {
-          this.helperService.redirectApp(`parametros/factura-compra/editar/${event.target.dataset.id}`)
+          this.helperService.redirectApp(`parametros/facturaCompra/editar/${event.target.dataset.id}`)
         });
         $('.btn-dropdown-ver').off().on('click', (event: any) => {
-          this.helperService.redirectApp(`parametros/factura-compra/ver/${event.target.dataset.id}`);
+          this.helperService.redirectApp(`parametros/facturaCompra/ver/${event.target.dataset.id}`);
         });
         $('.btn-dropdown-eliminar').off().on('click', (event: any) => {
           this.helperService.confirmDelete(() => {
@@ -158,7 +163,7 @@ export class FacturaCompraIndexComponent implements OnInit {
   }
 
   public nuevo() {
-    this.helperService.redirectApp('parametros/factura-compra/crear');
+    this.helperService.redirectApp('parametros/facturaCompra/crear');
   }
 
   }

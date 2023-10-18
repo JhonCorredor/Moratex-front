@@ -54,25 +54,11 @@
                 <span *ngIf="dataFormulario"><span>&nbsp;&nbsp; Ir a : </span>&nbsp;&nbsp;<u><a class="nav-link text-decoration-none text-black" href="{{document }}/{{ dataFormulario?.url}}">{{dataFormulario?.nombre}}</a></u></span>
             </div>
             <div class="sidebar">
-                <!-- <div class="user-panel mt-3 pb-3 mb-3 d-flex">
-                    <div class="image">
-                        <img src="#" class="img-circle elevation-2" alt="">
-                    </div>
-                    <div class="info">
-                        <a href="#" class="d-block">Diego Rivas</a>
-                    </div>
-                </div> -->
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <!-- <li class="nav-item">
-                            <a [routerLink]="['dashboard']" class="nav-link">
-                                <i class="nav-icon fas fa-tachometer-alt"></i>
-                                <p>Moratex</p>
-                            </a>
-                        </li> -->
                         <li class="nav-item" *ngFor="let item of listMenus">
                             <a href="#" class="nav-link">
-                                <i [ngClass]="getClass('fas fa-cog' , item.icono)"></i>&nbsp;
+                                <i [ngClass]="getClass('fas fa-cog' , item.icono)" style="--fa-primary-color: #48487f; --fa-secondary-color: #48487f;"></i>&nbsp;
                                 <p>{{item.nombre}} <i class="fas fa-angle-left right"></i></p>
                             </a>
                             <ul class="nav nav-treeview">
@@ -80,7 +66,7 @@
 
                                 <li class="nav-item" *ngFor="let itemForm of item.formularios">
                                     <a [routerLink]="itemForm.url" class="nav-link" (click)="scrollTop()">
-                                        &nbsp;&nbsp;&nbsp;<i [ngClass]="getClass('fa-regular fa-file' , itemForm.icono)"></i>&nbsp;
+                                        &nbsp;&nbsp;&nbsp;<i [ngClass]="getClass('fa-regular fa-file' , itemForm.icono)" style="--fa-primary-color: #48487f; --fa-secondary-color: #48487f;"></i>&nbsp;
                                         <p>{{itemForm.nombre}}</p>
                                     </a>
                                 </li>

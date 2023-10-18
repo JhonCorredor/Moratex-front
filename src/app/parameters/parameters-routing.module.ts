@@ -225,7 +225,7 @@ const routes: Routes = [
       import('./clientes/clientes.module').then((m) => m.ClientesModule),
   },
   {
-    path: 'factura-compra',
+    path: 'facturaCompra',
     loadChildren: () =>
       import('./factura-compra/factura-compra.module').then(
         (m) => m.FacturaCompraModule
