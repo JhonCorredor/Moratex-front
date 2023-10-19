@@ -5,9 +5,11 @@ import { HelperService, Messages, MessageType } from 'src/app/admin/helper.servi
 import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
 import { ClientesService } from 'src/app/parameters/clientes/clientes.service';
 import { GeneralParameterService } from 'src/app/parameters/general-parameter/general-parameter.service';
+import { GeneralKeyParameterService } from 'src/app/parameters/general-key-parameter/general-key-parameter.service';
 import { PersonasService } from 'src/app/security/personas/personas.service';
 import { OrdenesPedidosService } from '../ordenes-pedidos.service';
 import { ArchivoService } from 'src/app/parameters/archivo/archivo.service';
+import { ProcedimientosService } from 'src/app/operative/Procedimientos/procedimientos.service';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { DatePipe } from '@angular/common';
 
@@ -29,6 +31,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
     public listProcedimientos: any = [];
     public listClientes: any = [];
     public listEmpleados: any = [];
+    public listTalleres: any = [];
     public listUbicaciones = [
         {
             "Nombre": "Superior Derecha",
@@ -56,7 +59,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
     public dataArchivo: any = undefined;
 
 
-    constructor(public routerActive: ActivatedRoute, private service: OrdenesPedidosService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private ArchivoService: ArchivoService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe) {
+    constructor(public routerActive: ActivatedRoute, private service: OrdenesPedidosService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private ArchivoService: ArchivoService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private procedimientoService: ProcedimientosService, private generalKeyParameterService: GeneralKeyParameterService) {
         this.frmOrdenesPedidos = new FormGroup({
             DocumentoCliente: new FormControl(null),
             DocumentoEmpleado: new FormControl(null),
@@ -76,6 +79,9 @@ export class OrdenesPedidosFormComponent implements OnInit {
             Estado_Id: new FormControl(null, [Validators.required]),
             Empleado_Id: new FormControl(null, [Validators.required]),
             Procedimiento_Id: new FormControl(null, [Validators.required]),
+            SubTotal: new FormControl(null, [Validators.required]),
+            SubTotalString: new FormControl("$ 0"),
+            Taller_Id: new FormControl(null, [Validators.required]),
             ArchivoOrdenPedido_Id: new FormControl(null),
         });
         this.routerActive.params.subscribe(l => this.id = l.id);
@@ -88,7 +94,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
             this.titulo = "Editar Ordenes de Pedidos";
             this.service.getOrdenesPedidosById(this.id).subscribe(({ data }) => {
                 const formattedDate = this.datePipe.transform(data.fechaEntrega, 'yyyy-MM-dd');
-                
+
                 this.frmOrdenesPedidos.controls.Fecha.setValue(data.fecha);
                 this.frmOrdenesPedidos.controls.FechaEntrega.setValue(formattedDate);
                 this.frmOrdenesPedidos.controls.Cantidad.setValue(data.cantidad);
@@ -101,6 +107,11 @@ export class OrdenesPedidosFormComponent implements OnInit {
                 this.frmOrdenesPedidos.controls.Estado_Id.setValue(data.estado_Id);
                 this.frmOrdenesPedidos.controls.Empleado_Id.setValue(data.empleado_Id);
                 this.frmOrdenesPedidos.controls.Procedimiento_Id.setValue(data.procedimiento_Id);
+                this.frmOrdenesPedidos.controls.SubTotal.setValue(data.subTotal);
+                this.frmOrdenesPedidos.controls.Taller_Id.setValue(data.taller_Id);
+                var subTotalString = `$ ${this.helperService.formaterNumber(data.subTotal)}`;
+                this.frmOrdenesPedidos.controls.SubTotalString.setValue(subTotalString);
+
                 this.empleadoService.getEmpleadosById(data.empleado_Id).subscribe(resEmpleado => {
                     resEmpleado
                     if (resEmpleado.status && resEmpleado.status == true) { // se deja validado == true porque en caso de no encontrarn un registro el backend devuelve un status 404
@@ -143,6 +154,8 @@ export class OrdenesPedidosFormComponent implements OnInit {
                         this.frmOrdenesPedidos.controls.ArchivoOrdenPedido_Id.setValue(res.data.id);
                     })
                 }
+
+                localStorage.setItem('SubTotalOrdenPedido',data.subTotal);
             })
         } else {
             this.titulo = "Crear Ordenes de Pedidos";
@@ -153,13 +166,19 @@ export class OrdenesPedidosFormComponent implements OnInit {
         this.generalParameterService.getAll("Clientes").subscribe(r => {
             this.listClientes = r.data;
         })
+
         this.generalParameterService.getAll("Procedimientos").subscribe(r => {
             this.listProcedimientos = r.data;
         })
+
+        this.generalKeyParameterService.getAll("Talleres").subscribe(r => {
+            this.listTalleres = r.data;
+        })
+
         this.cargarEmpleado();
         this.cargarEstados();
     }
-    
+
     cargarEmpleado() {
         var persona_Id = localStorage.getItem("persona_Id");
 
@@ -199,6 +218,47 @@ export class OrdenesPedidosFormComponent implements OnInit {
             this.frmOrdenesPedidos.controls.Estado_Id.setValue(res.data[0].id);
 
         })
+    }
+
+    ProcedimientoById(procedimiento_Id : any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.procedimientoService.getById(procedimiento_Id).subscribe(
+                (datos) => {
+                    resolve(datos);
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
+        });
+    }
+
+    calcularSubTotal() {
+        let data = this.frmOrdenesPedidos.value;
+        var ProcedimientoValor;
+        var subtotal = 0;
+
+        this.ProcedimientoById(data.Procedimiento_Id)
+            .then((procedimiento) => {
+                ProcedimientoValor = procedimiento.data.valor;
+
+                if (ProcedimientoValor !== null) {
+                    subtotal = parseInt(ProcedimientoValor) * parseInt(data.Cantidad);
+                }
+
+                var subTotalString = `$ 0`;
+
+                if (!isNaN(subtotal)) {
+                    subTotalString = `$ ${this.helperService.formaterNumber(subtotal)}`;
+                }
+
+                this.frmOrdenesPedidos.controls.SubTotal.setValue(subtotal);
+                this.frmOrdenesPedidos.controls.SubTotalString.setValue(subTotalString);
+                localStorage.setItem("ProcedimientoSubTotal", subtotal.toString());
+            })
+            .catch((error) => {
+                console.error('Error al obtener el procedimiento:', error);
+            });
     }
 
     save() {

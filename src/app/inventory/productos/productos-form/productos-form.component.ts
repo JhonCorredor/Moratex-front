@@ -1,20 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import {
-  HelperService,
-  Messages,
-  MessageType,
-} from 'src/app/admin/helper.service';
+import { HelperService, Messages, MessageType, } from 'src/app/admin/helper.service';
 import { ArchivoService } from 'src/app/parameters/archivo/archivo.service';
 import { GeneralParameterService } from '../../../parameters/general-parameter/general-parameter.service';
 import { ProductosService } from '../productos.service';
+import { DatatableParameter } from 'src/app/admin/datatable.parameters';
+import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
 
 @Component({
   selector: 'app-productos-form',
   templateUrl: './productos-form.component.html',
   styleUrls: ['./productos-form.component.css'],
 })
+
 export class ProductosFormComponent implements OnInit {
   public frmProductos: FormGroup;
   public statusForm: boolean = true;
@@ -23,7 +22,6 @@ export class ProductosFormComponent implements OnInit {
 
   public botones = ['btn-guardar', 'btn-cancelar'];
   public titulo = '';
-  public listMarcas = [];
   public listCategorias = [];
   public listUnidadesMedidas = [];
   public checkMax: boolean = false;
@@ -34,41 +32,24 @@ export class ProductosFormComponent implements OnInit {
     public routerActive: ActivatedRoute,
     private service: ProductosService,
     private helperService: HelperService,
-    private marcasservice: GeneralParameterService,
     private categoriasservice: GeneralParameterService,
     private unidadesMedidasservice: GeneralParameterService,
-    private ArchivoService: ArchivoService
+    private ArchivoService: ArchivoService,
+    private empleadoService: EmpleadosService
   ) {
     this.frmProductos = new FormGroup({
-      Minimo: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(/^([0-9])*$/),
-      ]),
-      Maximo: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(/^([0-9])*$/),
-      ]),
-      PrecioCosto: new FormControl(null, [
-        Validators.required,
-        Validators.pattern(/^([0-9])*$/),
-      ]),
-      Codigo: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(20),
-      ]),
-      Nombre: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(100),
-      ]),
-      CaracteristicaData: new FormControl(null, [
-        Validators.required,
-        Validators.maxLength(500),
-      ]),
-      ProductoTerminado: new FormControl(null),
-      Estado: new FormControl(true, Validators.required),
-      Categoria_Id: new FormControl(null, Validators.required),
-      UnidadMedida_Id: new FormControl(null, Validators.required),
+      Minimo: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
+      Maximo: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
+      PrecioCosto: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
+      Codigo: new FormControl(null, [Validators.required, Validators.maxLength(20),]),
+      Nombre: new FormControl(null, [Validators.required, Validators.maxLength(100),]),
+      CaracteristicaData: new FormControl(null, [Validators.required, Validators.maxLength(500),]),
+      ProductoTerminado: new FormControl(false, [Validators.required]),
+      Estado: new FormControl(true, [Validators.required]),
+      Categoria_Id: new FormControl(null, [Validators.required]),
+      UnidadMedida_Id: new FormControl(null, [Validators.required]),
       ImagenProductoId: new FormControl(null),
+      Empleado_Id: new FormControl(null, [Validators.required]),
     });
     this.routerActive.params.subscribe((e) => (this.id = e.id));
   }
@@ -106,19 +87,34 @@ export class ProductosFormComponent implements OnInit {
     } else {
       this.titulo = 'Crear producto';
     }
-    this.cargarCategorias();
-    this.cargarUnidadesMedidas();
+    this.cargarListas();
   }
 
-  cargarCategorias() {
+  cargarListas() {
     this.categoriasservice.getAll('Categorias').subscribe((res) => {
       this.listCategorias = res.data;
     });
-  }
 
-  cargarUnidadesMedidas() {
     this.unidadesMedidasservice.getAll('UnidadesMedidas').subscribe((res) => {
       this.listUnidadesMedidas = res.data;
+    });
+
+    this.cargarEmpleado();
+  }
+
+  cargarEmpleado() {
+    var persona_Id = localStorage.getItem("persona_Id");
+
+    var data = new DatatableParameter();
+    data.pageNumber = "1";
+    data.pageSize = "10";
+    data.filter = "";
+    data.columnOrder = "";
+    data.directionOrder = "";
+    data.foreignKey = Number(persona_Id);
+
+    this.empleadoService.getAllEmpleados(data).subscribe(res => {
+      this.frmProductos.controls.Empleado_Id.setValue(res.data[0].id);
     });
   }
 
@@ -134,7 +130,7 @@ export class ProductosFormComponent implements OnInit {
         if (this.frmProductos.controls.ImagenProductoId.value) {
           this.ArchivoService.delete(
             this.frmProductos.controls.ImagenProductoId.value
-          ).subscribe(() => {});
+          ).subscribe(() => { });
         }
         this.ArchivoService.save(this.dataArchivo).subscribe((l) => {
           if (l.status != 'Error') {

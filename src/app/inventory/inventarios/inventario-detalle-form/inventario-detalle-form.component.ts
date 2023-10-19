@@ -10,6 +10,7 @@ import { HelperService, Messages, MessageType } from 'src/app/admin/helper.servi
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { InventarioDetalleService } from '../inventario-detalle.service';
 import { BitacorasInventariosIndexComponent } from '../bitacora-inventario-index/bitacora-inventario-index.component';
+import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
 
 @Component({
   selector: 'app-inventario-detalle-form',
@@ -36,6 +37,7 @@ export class InventarioDetalleFormComponent implements OnInit {
     private service: InventarioDetalleService,
     private helperService: HelperService,
     private modalService: NgbModal,
+    private empleadoService: EmpleadosService,
     private fb: FormBuilder) {
 
   }
@@ -51,6 +53,7 @@ export class InventarioDetalleFormComponent implements OnInit {
       CantidadUsada: new FormControl(null, [Validators.required]),
       CantidadIngresada: new FormControl(null, [Validators.required]),
       Producto_Id: new FormControl(null, Validators.required),
+      Empleado_Id: new FormControl(null, [Validators.required]),
     });
     this.buildSelect()
   }
@@ -67,25 +70,25 @@ export class InventarioDetalleFormComponent implements OnInit {
     this.service.getAll("Productos").subscribe(({ data }) => {
       this.listProductos = data;
     });
+
+    this.cargarEmpleado();
   }
 
+  cargarEmpleado() {
+    var persona_Id = localStorage.getItem("persona_Id");
 
-  // changeCantidadTotal(){
-  //   let ingresada = this.frmInventarioDetalle.controls.CantidadIngresada.value;
-  //   let usada = this.frmInventarioDetalle.controls.CantidadUsada.value;
+    var data = new DatatableParameter();
+    data.pageNumber = "1";
+    data.pageSize = "10";
+    data.filter = "";
+    data.columnOrder = "";
+    data.directionOrder = "";
+    data.foreignKey = Number(persona_Id);
 
-  //   if(ingresada != null  && ingresada != undefined && usada != undefined && usada != null){
-  //     if(ingresada > usada){
-  //       let total = ingresada - usada;
-  //       this.frmInventarioDetalle.controls.CantidadTotal.setValue(total);
-  //     }
-  //     if(ingresada < usada){
-  //       this.helperService.showMessage(MessageType.WARNING, Messages.INVALIDOPERATION);
-  //       this.frmInventarioDetalle.controls.CantidadTotal.setValue(null);
-  //     }
-  //   }
-
-  // }
+    this.empleadoService.getAllEmpleados(data).subscribe(res => {
+      this.frmInventarioDetalle.controls.Empleado_Id.setValue(res.data[0].id);
+    });
+  }
 
 
   save() {

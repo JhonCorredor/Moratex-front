@@ -7,7 +7,7 @@ import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { GeneralParameterService } from 'src/app/parameters/general-parameter/general-parameter.service';
-import { FacturaCompraDetalleService } from './factura-compra-detalle.service';
+import { FacturaCompraDetalleService } from '../factura-compra-detalle.service';
 import { ProductosService } from '../../../inventory/productos/productos.service';
 
 @Component({

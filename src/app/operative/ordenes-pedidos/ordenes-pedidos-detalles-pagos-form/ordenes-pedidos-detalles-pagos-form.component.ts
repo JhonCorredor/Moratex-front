@@ -44,7 +44,7 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     private helperService: HelperService,
     private fb: FormBuilder,
     private datePipe: DatePipe
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.buildForm();
@@ -57,6 +57,7 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
       Valor: [null, Validators.required],
       Empleado_Id: [null, Validators.required],
       MedioPago_Id: [null, [Validators.required]],
+      SaldoString: ["$ 0"],
     });
     this.buildSelect();
   }
@@ -74,7 +75,40 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     this.service.getAll('MediosPagos').subscribe(({ data }) => {
       this.listMediosPagos = data;
     });
+    this.calcularSaldo();
   }
+
+  ValorTotalPagosById(ordenPedido_Id: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.service.GetTotalPagos(ordenPedido_Id).subscribe(
+        (datos) => {
+          resolve(datos);
+        },
+        (error) => {
+          reject(error);
+        }
+      );
+    });
+  }
+
+  calcularSaldo() {
+    var saldoString = "$ 0"
+    var subtotal = localStorage.getItem('SubTotalOrdenPedido');
+
+    this.ValorTotalPagosById(this.OrdenPedido_Id)
+      .then((valorTotal) => {
+        console.log(valorTotal);
+        if (subtotal !== null && valorTotal !== null) {
+          var saldo = parseInt(subtotal) - parseInt(valorTotal);
+          saldoString = `$ ${this.helperService.formaterNumber(saldo)}`;
+        }
+        this.frmOrdenesPedidosDetallesPagos.controls.SaldoString.setValue(saldoString);
+      })
+      .catch((error) => {
+        console.error('Error al obtener el valor total de los pagos:', error);
+      });
+  }
+
 
   cargarEmpleado() {
     var persona_Id = localStorage.getItem('persona_Id');
@@ -88,7 +122,6 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     data.foreignKey = Number(persona_Id);
 
     this.empleadoService.getAllEmpleados(data).subscribe((res) => {
-      console.log(res.data[0]);
       this.listEmpleados = [
         {
           id: res.data[0].id,
@@ -117,6 +150,8 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
         if (response.status) {
           this.refrescarTabla();
           this.frmOrdenesPedidosDetallesPagos.reset();
+          this.buildSelect();
+          this.calcularSaldo();
           this.Id = null;
           this.helperService.showMessage(
             MessageType.SUCCESS,
@@ -242,5 +277,6 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
           });
       },
     };
+
   }
 }

@@ -5,169 +5,109 @@
       <div class="card-body">
         <form [formGroup]="frmOrdenesPedidos" class="mb-4">
           <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-3 col-lg-3 col-sm-3">
               <label>Cliente</label>
-              <ng-select
-                [items]="listClientes"
-                bindLabel="textoMostrar"
-                bindValue="id"
-                formControlName="Cliente_Id"
-              >
+              <ng-select [items]="listClientes" bindLabel="textoMostrar" bindValue="id" formControlName="Cliente_Id">
               </ng-select>
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Cliente_Id')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Cliente_Id')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-lg-3 col-sm-3">
               <label>Procedimiento</label>
-              <ng-select
-                [items]="listProcedimientos"
-                bindLabel="textoMostrar"
-                bindValue="id"
-                formControlName="Procedimiento_Id"
-              >
+              <ng-select [items]="listProcedimientos" bindLabel="textoMostrar" bindValue="id"
+                formControlName="Procedimiento_Id">
               </ng-select>
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Procedimiento_Id')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Procedimiento_Id')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2 col-lg-2 col-sm-2">
               <label>Cantidad</label>
-              <input
-                type="number"
-                class="form-control form-control-sm"
-                formControlName="Cantidad"
-              />
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Cantidad')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <input type="number" class="form-control form-control-sm" formControlName="Cantidad"
+                (blur)="calcularSubTotal()" />
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Cantidad')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2 col-lg-2 col-sm-2">
               <label>Ubicacion</label>
-              <ng-select
-                [items]="listUbicaciones"
-                bindLabel="Nombre"
-                bindValue="Nombre"
-                formControlName="Ubicacion"
-              >
+              <ng-select [items]="listUbicaciones" bindLabel="Nombre" bindValue="Nombre" formControlName="Ubicacion">
               </ng-select>
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Ubicacion')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Ubicacion')"
+                [statusForm]="statusForm"></app-forms-messages>
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2">
+              <label>Tamaño</label>
+              <input type="text" class="form-control form-control-sm" formControlName="Tamaño" />
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Tamaño')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
           </div>
           <br />
           <div class="row">
-            <div class="col-md-3">
-              <label>Tamaño</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="Tamaño"
-              />
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Tamaño')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+            <div class="col-md-3 col-lg-3 col-sm-3">
+              <label>Taller</label>
+              <ng-select [items]="listTalleres" bindLabel="textoMostrar" bindValue="id" formControlName="Taller_Id">
+              </ng-select>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Taller_Id')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-lg-3 col-sm-3">
               <label>Fecha de Entrega</label>
-              <input
-                type="date"
-                class="form-control form-control-sm"
-                formControlName="FechaEntrega"
-              />
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('FechaEntrega')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <input type="date" class="form-control form-control-sm" formControlName="FechaEntrega" />
+              <app-forms-messages [error]="frmOrdenesPedidos.get('FechaEntrega')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-lg-3 col-sm-3">
               <label>Archivo</label><br />
-              <input
-                type="file"
-                class="form-control form-control-sm"
-                (change)="fileEvent($event)"
-              />
+              <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)" />
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 col-lg-1 col-sm-1">
               <label>Trae Prenda</label><br />
               <ui-switch formControlName="TraePrenda"></ui-switch>
             </div>
+            <div class="col-md-2 col-lg-2 col-sm-2">
+              <label>Sub Total</label>
+              <input type="text" class="form-control border-0" formControlName="SubTotalString" readonly="readonly"
+                style="background-color: transparent !important; font-size:medium!important">
+            </div>
           </div>
           <br />
           <div class="row">
-            <div class="col-md-3 d-none">
+            <div class="col-md-3 col-lg-3 col-sm-3 d-none">
               <label>Empleado</label>
-              <ng-select
-                [items]="listEmpleados"
-                bindLabel="textoMostrar"
-                bindValue="id"
-                formControlName="Empleado_Id"
-              >
+              <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id" formControlName="Empleado_Id">
               </ng-select>
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Empleado_Id')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Empleado_Id')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3 d-none">
+            <div class="col-md-3 col-lg-3 col-sm-3 d-none ">
               <label>Estado</label>
-              <ng-select
-                [items]="listEstados"
-                bindLabel="textoMostrar"
-                bindValue="id"
-                formControlName="Estado_Id"
-              >
+              <ng-select [items]="listEstados" bindLabel="textoMostrar" bindValue="id" formControlName="Estado_Id">
               </ng-select>
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Estado_Id')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Estado_Id')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
 
-            <div class="col-md-9">
+            <div class="col-md-9 col-lg-9 col-sm-9">
               <label>Observación</label>
-              <textarea
-                class="form-control"
-                formControlName="Observacion"
-                rows="4"
-              ></textarea>
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Observacion')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <textarea class="form-control" formControlName="Observacion" rows="4"></textarea>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Observacion')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 col-lg-3 col-sm-3">
               <label>Colores</label>
-              <select
-                formControlName="Colores"
-                [(ngModel)]="selectedColors"
-                multiple
-                class="form-control"
-              >
+              <select formControlName="Colores" [(ngModel)]="selectedColors" multiple class="form-control">
                 <option *ngFor="let color of colors" [value]="color">
                   {{ color }}
                 </option>
               </select>
-              <app-forms-messages
-                [error]="frmOrdenesPedidos.get('Colores')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Colores')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
           </div>
           <br />
           <div class="row float-right">
             <div class="col-md-12">
-              <app-botones
-                [botones]="botones"
-                (eventSave)="save()"
-                (eventCancel)="cancel()"
-              ></app-botones>
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
             </div>
           </div>
           <br />
@@ -176,13 +116,9 @@
           <div class="card-footer" *ngIf="id">
             <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
               <li ngbNavItem>
-                <a ngbNavLink
-                  >Seguimientos
-                  <span
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    title="En este formulario se asocian los seguimientos pertenecientes al la orden"
-                  >
+                <a ngbNavLink>Seguimientos
+                  <span data-bs-toggle="tooltip" data-bs-placement="left"
+                    title="En este formulario se asocian los seguimientos pertenecientes al la orden">
                     <i class="fa-solid fa-circle-question"></i>
                   </span>
                 </a>
@@ -196,13 +132,9 @@
                 </ng-template>
               </li>
               <li ngbNavItem>
-                <a ngbNavLink
-                  >Detalles de Pagos
-                  <span
-                    data-bs-toggle="tooltip"
-                    data-bs-placement="left"
-                    title="En este formulario se asocian los detalles de pago pertenecientes al la orden"
-                  >
+                <a ngbNavLink>Detalles de Pagos
+                  <span data-bs-toggle="tooltip" data-bs-placement="left"
+                    title="En este formulario se asocian los detalles de pago pertenecientes al la orden">
                     <i class="fa-solid fa-circle-question"></i>
                   </span>
                 </a>
@@ -211,6 +143,22 @@
                     <div class="col-lg-12 col-md-12 col-sm-12">
                       <app-ordenes-pedidos-detalles-form [OrdenPedido_Id]="id">
                       </app-ordenes-pedidos-detalles-form>
+                    </div>
+                  </div>
+                </ng-template>
+              </li>
+              <li ngbNavItem>
+                <a ngbNavLink>Insumos
+                  <span data-bs-toggle="tooltip" data-bs-placement="left"
+                    title="En este formulario se asocian los Insumos al la orden">
+                    <i class="fa-solid fa-circle-question"></i>
+                  </span>
+                </a>
+                <ng-template ngbNavContent>
+                  <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                      <app-ordenes-pedidos-productos-form [OrdenPedido_Id]="id">
+                      </app-ordenes-pedidos-productos-form>
                     </div>
                   </div>
                 </ng-template>
