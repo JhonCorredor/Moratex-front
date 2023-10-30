@@ -15,6 +15,11 @@ const routes: Routes = [
       import('./costos/costos.module').then((m) => m.CostosModule),
   },
   {
+    path: 'cierres',
+    loadChildren: () =>
+      import('./cierres/cierres.module').then((m) => m.CierresModule),
+  },
+  {
     path: 'generar-cotizaciones',
     loadChildren: () =>
       import('./generar-cotizacion/generar-cotizacion.module').then(

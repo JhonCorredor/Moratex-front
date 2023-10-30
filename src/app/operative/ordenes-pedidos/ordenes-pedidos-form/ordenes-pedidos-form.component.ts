@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
 import { ClientesService } from 'src/app/parameters/clientes/clientes.service';
@@ -12,6 +12,7 @@ import { ArchivoService } from 'src/app/parameters/archivo/archivo.service';
 import { ProcedimientosService } from 'src/app/operative/Procedimientos/procedimientos.service';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { DatePipe } from '@angular/common';
+
 
 @Component({
     selector: 'app-ordenes-pedidos-form',
@@ -31,6 +32,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
     public listProcedimientos: any = [];
     public listClientes: any = [];
     public listEmpleados: any = [];
+    public listEmpleadoAsignado: any = [];
     public listTalleres: any = [];
     public listUbicaciones = [
         {
@@ -57,9 +59,16 @@ export class OrdenesPedidosFormComponent implements OnInit {
     public selectedColors: string[] = [];
 
     public dataArchivo: any = undefined;
+    public disableForm: boolean = false;
 
 
-    constructor(public routerActive: ActivatedRoute, private service: OrdenesPedidosService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private ArchivoService: ArchivoService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private procedimientoService: ProcedimientosService, private generalKeyParameterService: GeneralKeyParameterService) {
+    constructor(public routerActive: ActivatedRoute, private service: OrdenesPedidosService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private ArchivoService: ArchivoService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private procedimientoService: ProcedimientosService, private generalKeyParameterService: GeneralKeyParameterService, private router: Router) {
+        this.router.events.subscribe((event: any) => {
+            if (event instanceof NavigationEnd) {
+                let url = event.url.split('/')[3];
+                this.disableForm = (url == "ver") ? true : false
+            }
+        });
         this.frmOrdenesPedidos = new FormGroup({
             DocumentoCliente: new FormControl(null),
             DocumentoEmpleado: new FormControl(null),
@@ -78,6 +87,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
             Cliente_Id: new FormControl(null, [Validators.required]),
             Estado_Id: new FormControl(null, [Validators.required]),
             Empleado_Id: new FormControl(null, [Validators.required]),
+            EmpleadoAsignado_Id: new FormControl(null, [Validators.required]),
             Procedimiento_Id: new FormControl(null, [Validators.required]),
             SubTotal: new FormControl(null, [Validators.required]),
             SubTotalString: new FormControl("$ 0"),
@@ -90,11 +100,15 @@ export class OrdenesPedidosFormComponent implements OnInit {
     ngOnInit(): void {
         this.cargarListas();
         this.frmOrdenesPedidos.controls.Fecha.setValue(new Date());
-        if (this.id != undefined && this.id != null) {
+        if (this.disableForm) {
+            this.titulo = "Ver Registro de Ordenes de Pedidos";
+            this.botones = ['btn-cancelar'];
+        }else{
             this.titulo = "Editar Ordenes de Pedidos";
+        }
+        if (this.id != undefined && this.id != null) {
             this.service.getOrdenesPedidosById(this.id).subscribe(({ data }) => {
                 const formattedDate = this.datePipe.transform(data.fechaEntrega, 'yyyy-MM-dd');
-
                 this.frmOrdenesPedidos.controls.Fecha.setValue(data.fecha);
                 this.frmOrdenesPedidos.controls.FechaEntrega.setValue(formattedDate);
                 this.frmOrdenesPedidos.controls.Cantidad.setValue(data.cantidad);
@@ -106,6 +120,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
                 this.frmOrdenesPedidos.controls.Cliente_Id.setValue(data.cliente_Id);
                 this.frmOrdenesPedidos.controls.Estado_Id.setValue(data.estado_Id);
                 this.frmOrdenesPedidos.controls.Empleado_Id.setValue(data.empleado_Id);
+                this.frmOrdenesPedidos.controls.EmpleadoAsignado_Id.setValue(data.empleadoAsignado_Id);
                 this.frmOrdenesPedidos.controls.Procedimiento_Id.setValue(data.procedimiento_Id);
                 this.frmOrdenesPedidos.controls.SubTotal.setValue(data.subTotal);
                 this.frmOrdenesPedidos.controls.Taller_Id.setValue(data.taller_Id);
@@ -154,8 +169,6 @@ export class OrdenesPedidosFormComponent implements OnInit {
                         this.frmOrdenesPedidos.controls.ArchivoOrdenPedido_Id.setValue(res.data.id);
                     })
                 }
-
-                localStorage.setItem('SubTotalOrdenPedido',data.subTotal);
             })
         } else {
             this.titulo = "Crear Ordenes de Pedidos";
@@ -174,6 +187,10 @@ export class OrdenesPedidosFormComponent implements OnInit {
         this.generalKeyParameterService.getAll("Talleres").subscribe(r => {
             this.listTalleres = r.data;
         })
+
+        this.empleadoService.getAll("Empleados").subscribe(res => {
+            this.listEmpleadoAsignado = res.data;
+        });
 
         this.cargarEmpleado();
         this.cargarEstados();
@@ -220,7 +237,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
         })
     }
 
-    ProcedimientoById(procedimiento_Id : any): Promise<any> {
+    ProcedimientoById(procedimiento_Id: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.procedimientoService.getById(procedimiento_Id).subscribe(
                 (datos) => {
@@ -254,7 +271,6 @@ export class OrdenesPedidosFormComponent implements OnInit {
 
                 this.frmOrdenesPedidos.controls.SubTotal.setValue(subtotal);
                 this.frmOrdenesPedidos.controls.SubTotalString.setValue(subTotalString);
-                localStorage.setItem("ProcedimientoSubTotal", subtotal.toString());
             })
             .catch((error) => {
                 console.error('Error al obtener el procedimiento:', error);

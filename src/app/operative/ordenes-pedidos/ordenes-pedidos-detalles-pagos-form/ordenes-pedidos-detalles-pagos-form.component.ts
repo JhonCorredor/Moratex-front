@@ -12,6 +12,7 @@ import {
 } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { OrdenesPedidosDetallesPagosService } from '../ordenes-pedidos-detalles-pagos.service';
+import { OrdenesPedidosService } from '../ordenes-pedidos.service';
 import { EmpleadosService } from '../../../parameters/empleados/empleados.service';
 import { DatePipe } from '@angular/common';
 
@@ -25,7 +26,7 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   public dtTrigger: Subject<any> = new Subject();
   public opcionesDataTable: any = {};
-  public arrayBotonesDatatable: String[] = ['btn-modificarOP'];
+  public arrayBotonesDatatable: String[] = ['btn-modificarOP', 'btn-Imprimir-tikect'];
   public botones = ['btn-guardar'];
   public Id = null;
   public persona_Id!: string | number;
@@ -41,6 +42,7 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     public routerActive: ActivatedRoute,
     private service: OrdenesPedidosDetallesPagosService,
     private empleadoService: EmpleadosService,
+    private OrdenPedidoService: OrdenesPedidosService,
     private helperService: HelperService,
     private fb: FormBuilder,
     private datePipe: DatePipe
@@ -93,11 +95,14 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
 
   calcularSaldo() {
     var saldoString = "$ 0"
-    var subtotal = localStorage.getItem('SubTotalOrdenPedido');
+    var subtotal: any;
+
+    this.OrdenPedidoService.getOrdenesPedidosById(this.OrdenPedido_Id).subscribe(({ data }) => {
+      subtotal = data.subTotal;
+    })
 
     this.ValorTotalPagosById(this.OrdenPedido_Id)
       .then((valorTotal) => {
-        console.log(valorTotal);
         if (subtotal !== null && valorTotal !== null) {
           var saldo = parseInt(subtotal) - parseInt(valorTotal);
           saldoString = `$ ${this.helperService.formaterNumber(saldo)}`;
@@ -173,6 +178,30 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
       this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
         dtInstance.ajax.reload();
       });
+    }
+  }
+
+  ImprimirTicket(id: any) {
+    this.service.GetArchivoPago(id).subscribe(({ data }) => {
+      this.openPdfInNewTab(data.archivo);
+    })
+  }
+
+  openPdfInNewTab(pdfContent: string) {
+    const byteCharacters = atob(pdfContent);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+    const objectUrl = URL.createObjectURL(blob);
+
+    const newWindow = window.open(objectUrl, '_blank');
+
+    if (newWindow) {
+      newWindow.document.title = 'Recibo de pago';
+      newWindow.print();
     }
   }
 
@@ -273,6 +302,16 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
                 this.frmOrdenesPedidosDetallesPagos.controls.MedioPago_Id.setValue(
                   data.medioPago_Id
                 );
+              });
+          });
+
+        $('.btn-dropdown-Imprimir-tikect')
+          .off()
+          .on('click', (event: any) => {
+            this.service
+              .getOrdenesPedidosDetallesPagosById(event.target.dataset.id)
+              .subscribe(({ data }) => {
+                this.ImprimirTicket(data.id);
               });
           });
       },

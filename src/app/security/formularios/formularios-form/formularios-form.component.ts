@@ -85,7 +85,8 @@ export class FormulariosFormComponent implements OnInit {
       { textoMostrar :"fa-duotone fa-money-bill-transfer" ,   name : "money-bill"},
       { textoMostrar :"fa-duotone fa-ruler-vertical" , name : "ruler"},
       { textoMostrar :"fa-duotone fa-file-invoice-dollar" , name : "invoice-dollar"},
-      { textoMostrar :"fa-duotone fa-cart-flatbed-boxes" , name : "flatbed-boxes"}
+      { textoMostrar :"fa-duotone fa-cart-flatbed-boxes" , name : "flatbed-boxes"},
+      { textoMostrar :"fa-duotone fa-shop-lock" , name : "shop-lock"}
     ]
   }
 

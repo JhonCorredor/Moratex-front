@@ -51,13 +51,12 @@
             </a>
             <div class="mb-2 mt-3 pr-3 pl-3">
                 <ng-select [items]="listFormularios" bindLabel="textoMostrar" bindValue="id" (change)="selectFormulario($event)"> </ng-select>
-                <span *ngIf="dataFormulario"><span>&nbsp;&nbsp; Ir a : </span>&nbsp;&nbsp;<u><a class="nav-link text-decoration-none text-black" href="{{document }}/{{ dataFormulario?.url}}">{{dataFormulario?.nombre}}</a></u></span>
             </div>
             <div class="sidebar">
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li class="nav-item" *ngFor="let item of listMenus">
-                            <a href="#" class="nav-link">
+                            <a href="#" class="nav-link" *ngIf="item.formularios.length > 0">
                                 <i [ngClass]="getClass('fas fa-cog' , item.icono)" style="--fa-primary-color: #48487f; --fa-secondary-color: #48487f;"></i>&nbsp;
                                 <p>{{item.nombre}} <i class="fas fa-angle-left right"></i></p>
                             </a>

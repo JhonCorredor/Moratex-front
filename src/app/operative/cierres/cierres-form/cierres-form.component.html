@@ -1,0 +1,66 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-body">
+                <form [formGroup]="frmCierres" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3 col-lg-3 d-none">
+                            <label>Fecha Creación</label>
+                            <input type="datetime-local" class="form-control form-control-sm" formControlName="FechaCreacion">
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-lg-3">
+                            <label>Fecha Inicial</label>
+                            <input type="datetime-local" class="form-control form-control-sm" formControlName="FechaInicial">
+                            <app-forms-messages [error]="frmCierres.get('FechaInicial')"
+                                [statusForm]=statusForm></app-forms-messages>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-lg-3">
+                            <label>Fecha Final</label>
+                            <input type="datetime-local" class="form-control form-control-sm" formControlName="FechaFinal">
+                            <app-forms-messages [error]="frmCierres.get('FechaFinal')"
+                                [statusForm]=statusForm></app-forms-messages>
+                        </div>
+
+                        <div class="col-md-3 col-sm-3 col-lg-3">
+                            <label>Base</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="Base">
+                            <app-forms-messages [error]="frmCierres.get('Base')"
+                                [statusForm]=statusForm></app-forms-messages>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-lg-3">
+                            <label>Saldo del Empleado</label>
+                            <input type="number" class="form-control form-control-sm" formControlName="SaldoEmpleado">
+                            <app-forms-messages [error]="frmCierres.get('SaldoEmpleado')"
+                                [statusForm]=statusForm></app-forms-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div>
+                        <div class="col-md-9 col-sm-9 col-lg-9">
+                            <label>Observación</label>
+                            <textarea class="form-control" formControlName="Observacion" rows="3"></textarea>
+                        </div>
+                        <div class="col-md-3 col-sm-3 col-lg-3 d-none">
+                            <label>Empleado</label>
+                            <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id"
+                                formControlName="Empleado_Id">
+                            </ng-select>
+                            <app-forms-messages [error]="frmCierres.get('Empleado_Id')"
+                                [statusForm]=statusForm></app-forms-messages>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="row float-right">
+                        <div class="col-md-12">
+                            <app-botones [botones]="botones" (eventSave)="save()"
+                                (eventCancel)="cancel()"></app-botones>
+                        </div>
+                    </div>
+                    <br>
+                </form>
+                <br>
+            </div>
+        </div>
+    </div>
+</section>

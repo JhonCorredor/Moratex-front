@@ -171,7 +171,7 @@ export class UsuariosRolesComponent implements OnInit {
           .on('click', (event: any) => {
             this.service.getById(event.target.dataset.id).subscribe((res) => {
               this.frmUsuariosRol.controls.Id.setValue(res.data.id);
-              this.frmUsuariosRol.controls.Rol_Id.setValue(res.data.prendaId);
+              this.frmUsuariosRol.controls.Rol_Id.setValue(res.data.rol_Id);
               this.frmUsuariosRol.controls.Estado.setValue(res.data.estado);
             });
           });

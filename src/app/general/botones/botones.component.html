@@ -2,7 +2,7 @@
     <div #botonesNormal class="button-group">
       <button type="submit" class="btn btn-sm btn-primary float-right" *ngIf="validateIfExists('btn-guardar')" (click)="eventSave.emit()"><i class="far fa-save"></i> Guardar</button>
       <button class="btn btn-sm btn-primary float-right" *ngIf="validateIfExists('btn-nuevo')" (click)="eventNew.emit()"><i class="fas fa-plus"></i> Nuevo</button>
-      <button class="btn btn-sm btn-primary float-right" *ngIf="validateIfExists('btn-modificar')" (click)="eventEdit.emit()"><i class="far fa-edit"></i> Modificar</button>
+      <button class="btn btn-sm btn-primary float-right" *ngIf="validateIfExists('btn-modificar')" (click)="eventEdit.emit()"><i class="fa-duotone fa-pen-to-square"></i> Modificar</button>
       <button class="btn btn-sm btn-danger float-right" *ngIf="validateIfExists('btn-eliminar')" (click)="eventDelete.emit()"><i class="far fa-trash-alt"></i> Eliminar</button>
       <button class="btn btn-sm btn-secondary float-right" *ngIf="validateIfExists('btn-archivo')" (click)="eventArchive.emit()"><i class="fas fa-file"></i> Subir archivo</button>
       <button class="btn btn-sm btn-info float-right" *ngIf="validateIfExists('btn-imprimir')" (click)="eventPrint.emit()"><i class="fas fa-print"></i> Imprimir</button>
@@ -13,7 +13,6 @@
       <button class="btn btn-sm btn-secondary float-right" *ngIf="validateIfExists('btn-precotizacion')" (click)="eventPrecotizacion.emit()"><i class="fas far fa-eye"></i> Ver precotización</button>
       <button class="btn btn-sm btn-secondary float-right" *ngIf="validateIfExists('btn-generar-cotizacion')" (click)="eventGenerarCotizacion.emit()"><i class="fas far fa-save"></i> Generar cotización</button>
       <button class="btn btn-sm btn-success float-right" *ngIf="validateIfExists('btn-descargar-archivo')" (click)="eventDowloand.emit()"><i class="fas far fa-save"></i> Decargar</button>
-
       <button class="btn btn-sm btn-primary float-right" *ngIf="validateIfExists('btn-agregar')" (click)="eventAgg.emit()"><i class="fas fa-plus"></i> Agregar</button>
       <button class="btn btn-sm btn-success float-right" *ngIf="validateIfExists('btn-importar-empleado')" (click)="eventImportarEmpleado.emit()"><i class="fa-solid fa-file-excel"></i> Importar</button>
       <button class="btn btn-sm btn-success float-right" *ngIf="validateIfExists('btn-carge-masivo')" (click)="eventCargeMasivo.emit()"><i class="fas far fa-eye"></i> Carge masivo</button>
@@ -24,19 +23,21 @@
   <ng-template #isDropdown>
     <div #botonesDropdown class="btn-group">
       <div role="group"  class="button-group " aria-label="Basic example">
-        <a class="btn btn-sm btn-outline-success btn-dropdown-movimiento" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-movimiento')"><i class="fa-solid fa-person-dolly" data-id="$id"></i> Movimiento</a>
-        <a class="btn btn-sm btn-outline-danger btn-dropdown-eliminar" data-id="$id" (click)="eventDelete.emit()" *ngIf="validateIfExists('btn-eliminar')"><i class="fas fa-trash" data-id="$id"></i> Eliminar</a>
-        <a class="btn btn-sm btn-outline-warning btn-dropdown-modificar" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificar')"><i class="far fa-edit" data-id="$id"></i> Editar</a>
-        <a class="btn btn-sm btn-outline-warning btn-dropdown-modificarOP" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificarOP')"><i class="far fa-edit" data-id="$id"></i> Editar</a>
-        <a class="btn btn-sm btn-outline-warning btn-dropdown-modificarDetalleInventarioBodega" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificarDetalleInventarioBodega')"><i class="far fa-edit" data-id="$id"></i> Editar</a>
-        <a class="btn btn-sm btn-outline-info btn-dropdown-ver" data-id="$id" (click)="eventSee.emit()" *ngIf="validateIfExists('btn-ver')"><i class="fa-solid fa-eye" data-id="$id"></i> Ver </a>
-        <a class="btn btn-sm btn-outline-primary btn-dropdown-contraseña" data-id="$id" (click)="eventChangePassword.emit()" *ngIf="validateIfExists('btn-cambiar-contraseña')" ><i class="fa-solid fa-user" data-id="$id"></i> Cambiar Contraseña</a> 
-        <a class="btn btn-sm btn-outline-success btn-dropdown-descargar" data-id="$id" (click)="eventDowloand.emit()" *ngIf="validateIfExists('btn-descargar')" ><i class="fa-solid fa-download" data-id="$id"></i> Descargar</a>
-        <a class="btn btn-sm btn-outline-info btn-dropdown-ficha-tecnica" data-id="$id" (click)="eventFichaTecnica.emit()" *ngIf="validateIfExists('btn-ficha-tecnica')" ><i class="fa-solid fa-eye" data-id="$id"></i> Ver ficha técnica</a>
-        <a class="btn btn-sm btn-outline-info btn-dropdown-copiar" data-id="$id" (click)="eventCopy.emit()" *ngIf="validateIfExists('btn-copiar')" ><i class="fa-solid fa-copy" data-id="$id"></i> Copiar</a>
-        <a class="btn btn-sm btn-outline-info btn-dropdown-ver-imagen" data-id="$id" (click)="eventVerImagen.emit()" *ngIf="validateIfExists('btn-ver-imagen')" ><i class="fa-solid fa-eye" data-id="$id"></i> Ver Imagen</a>
-        <a class="btn btn-sm btn-outline-info btn-dropdown-ver-talla" data-id="$id" (click)="eventVerImagen.emit()" *ngIf="validateIfExists('btn-ver-talla')" ><i class="fa-solid fa-eye" data-id="$id"></i> Ver Talla</a>
-        <a class="btn btn-sm btn-outline-info btn-dropdown-generar-orden-produccion" data-id="$id" (click)="eventGenerarOrdenProduccion.emit()" *ngIf="validateIfExists('btn-generar-orden-produccion')" ><i class="fa-solid fa-edit" data-id="$id"></i> Armar orden producción</a>
+        <a title="Movimiento" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-movimiento" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-movimiento')"><i class="fa-duotone fa-person-dolly" data-id="$id"></i></a>
+        <a title="Eliminar" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-eliminar" data-id="$id" (click)="eventDelete.emit()" *ngIf="validateIfExists('btn-eliminar')"><i class="fa-duotone fa-trash-can" data-id="$id"></i></a>
+        <a title="Editar" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-modificar" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificar')"><i class="fa-duotone fa-pen-to-square" data-id="$id"></i></a>
+        <a title="Editar" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-modificarOP" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificarOP')"><i class="fa-duotone fa-pen-to-square" data-id="$id"></i></a>
+        <a title="Imprimir Recibo" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-Imprimir-tikect" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-Imprimir-tikect')"><i class="fa-duotone fa-print" data-id="$id"></i></a>
+        <a title="Editar" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-modificarOrdenPedidoProducto" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificarOrdenPedidoProducto')"><i class="fa-duotone fa-pen-to-square" data-id="$id"></i></a>
+        <a title="Editar" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-modificarDetalleInventarioBodega" data-id="$id" (click)="eventEdit.emit()" *ngIf="validateIfExists('btn-modificarDetalleInventarioBodega')"><i class="fa-duotone fa-pen-to-square" data-id="$id"></i></a>
+        <a title="Ver" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-ver" data-id="$id" (click)="eventSee.emit()" *ngIf="validateIfExists('btn-ver')"><i class="fa-duotone fa-eye" data-id="$id"></i></a>
+        <a title="Cambiar contraseña" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-contraseña" data-id="$id" (click)="eventChangePassword.emit()" *ngIf="validateIfExists('btn-cambiar-contraseña')" ><i class="fa-duotone fa-key" data-id="$id"></i></a> 
+        <a title="Descargar" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-descargar" data-id="$id" (click)="eventDowloand.emit()" *ngIf="validateIfExists('btn-descargar')" ><i class="fa-duotone fa-download" data-id="$id"></i></a>
+        <a title="Ficha Técnica" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-ficha-tecnica" data-id="$id" (click)="eventFichaTecnica.emit()" *ngIf="validateIfExists('btn-ficha-tecnica')" ><i class="fa-duotone fa-eye" data-id="$id"></i></a>
+        <a title="Copiar" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-copiar" data-id="$id" (click)="eventCopy.emit()" *ngIf="validateIfExists('btn-copiar')" ><i class="fa-duotone fa-copy" data-id="$id"></i></a>
+        <a title="Ver Imagen" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-ver-imagen" data-id="$id" (click)="eventVerImagen.emit()" *ngIf="validateIfExists('btn-ver-imagen')" ><i class="fa-duotone fa-eye" data-id="$id"></i></a>
+        <a title="Ver Talla" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-ver-talla" data-id="$id" (click)="eventVerImagen.emit()" *ngIf="validateIfExists('btn-ver-talla')" ><i class="fa-duotone fa-eye" data-id="$id"></i></a>
+        <a title="Generar Orden de Producción" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-generar-orden-produccion" data-id="$id" (click)="eventGenerarOrdenProduccion.emit()" *ngIf="validateIfExists('btn-generar-orden-produccion')" ><i class="fa-duotone fa-pen-to-square" data-id="$id"></i></a>
       </div>
     </div>
   </ng-template>

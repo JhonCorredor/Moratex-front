@@ -6,7 +6,6 @@ import { OrdenesPedidosIndexComponent } from './ordenes-pedidos-index/ordenes-pe
 import { SeguimientosFormComponent } from './seguimientos-form/seguimientos-form.component';
 import { OrdenesPedidosDetallesPagosFormComponent } from './ordenes-pedidos-detalles-pagos-form/ordenes-pedidos-detalles-pagos-form.component';
 import { OrdenesPedidosProductosFormComponent } from './ordenes-pedidos-productos-form/ordenes-pedidos-productos-form.component';
-
 import { FormsModule , ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
 import { UiSwitchModule } from 'ngx-ui-switch';

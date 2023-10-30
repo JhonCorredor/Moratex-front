@@ -8,6 +8,8 @@ const routes: Routes = [
   { path: '', component: OrdenesPedidosIndexComponent, canActivate: [AuthGuard] },
   { path: 'crear', component: OrdenesPedidosFormComponent, canActivate: [AuthGuard] },
   { path: 'editar/:id', component: OrdenesPedidosFormComponent, canActivate: [AuthGuard] },
+  { path: 'ver/:id', component: OrdenesPedidosFormComponent, canActivate: [AuthGuard] },
+
 ];
 
 @NgModule({

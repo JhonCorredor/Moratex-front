@@ -39,7 +39,7 @@ export class CostosFormComponent implements OnInit {
     this.frmCostos = new FormGroup({
       Descripcion: new FormControl(null, Validators.required),
       Fecha: new FormControl(null),
-      FechaCosto: new FormControl(true, Validators.required),
+      FechaCosto: new FormControl(null, Validators.required),
       Valor: new FormControl(null, Validators.required),
       PagoCaja: new FormControl(false, Validators.required),
       NumeroFactura: new FormControl(null, Validators.required),
@@ -57,8 +57,8 @@ export class CostosFormComponent implements OnInit {
     if (this.id != undefined && this.id != null) {
       this.titulo = 'Editar Costo';
       this.service.getById(this.id).subscribe((l) => {
-        const formattedFecha = this.datePipe.transform(l.data.fecha, 'yyyy-MM-dd');
-        const formattedFechaCosto = this.datePipe.transform(l.data.fechaCosto, 'yyyy-MM-dd');
+        const formattedFecha = this.datePipe.transform(l.data.fecha, 'yyyy-MM-ddTHH:mm:ss', 'America/Bogota');
+        const formattedFechaCosto = this.datePipe.transform(l.data.fechaCosto, 'yyyy-MM-ddTHH:mm:ss', 'America/Bogota');
 
         this.frmCostos.controls.Descripcion.setValue(l.data.descripcion);
         this.frmCostos.controls.Fecha.setValue(formattedFecha);

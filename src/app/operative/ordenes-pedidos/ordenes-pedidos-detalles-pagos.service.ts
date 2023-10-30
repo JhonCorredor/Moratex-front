@@ -31,6 +31,10 @@ export class OrdenesPedidosDetallesPagosService {
     return this.http.get<any>(`${this.url}${this.ruta}/GetTotalPagos/${id}`, {headers: this.header});
   }
 
+  public GetArchivoPago(id : any) : Observable<any> {
+    return this.http.get<any>(`${this.url}${this.ruta}/GetArchivoPago/${id}`, {headers: this.header});
+  }
+
   public getAll(ruta: String) : Observable<any> {
     return this.http.get<any>(`${environment.url}${ruta}/AllSelect`, {headers: this.header});
   }
