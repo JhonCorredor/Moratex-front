@@ -34,7 +34,7 @@
     "primeicons": "^5.0.0",
     "primeng": "^12.2.3",
     "rxjs": "~6.6.0",
-    "sweetalert2": "^11.4.14",
+    "sweetalert2": "^11.9.0",
     "text-mask-addons": "^3.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"

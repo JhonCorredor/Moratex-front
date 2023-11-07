@@ -30,7 +30,7 @@ export class CierresIndexComponent implements OnInit {
         { name: `Inicio`, icon: `fa-duotone fa-house` }, { name: "Operativo", icon: "fa-duotone fa-vest-patches" }, { name: "Cierres", icon: "fa-duotone fa-shop-lock" },
     ];
     public botones: String[] = ['btn-nuevo'];
-    public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar', 'btn-Imprimir-tikect'];
+    public arrayBotonesDatatable: String[] = ['btn-Imprimir-tikect'];
     constructor(
         private service: CierresService,
         private helperService: HelperService,

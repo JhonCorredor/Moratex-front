@@ -15,6 +15,7 @@ import { OrdenesPedidosDetallesPagosService } from '../ordenes-pedidos-detalles-
 import { OrdenesPedidosService } from '../ordenes-pedidos.service';
 import { EmpleadosService } from '../../../parameters/empleados/empleados.service';
 import { DatePipe } from '@angular/common';
+import Swal from 'sweetalert2'
 
 @Component({
   selector: 'app-ordenes-pedidos-detalles-form',
@@ -99,19 +100,19 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
 
     this.OrdenPedidoService.getOrdenesPedidosById(this.OrdenPedido_Id).subscribe(({ data }) => {
       subtotal = data.subTotal;
-    })
 
-    this.ValorTotalPagosById(this.OrdenPedido_Id)
-      .then((valorTotal) => {
-        if (subtotal !== null && valorTotal !== null) {
-          var saldo = parseInt(subtotal) - parseInt(valorTotal);
-          saldoString = `$ ${this.helperService.formaterNumber(saldo)}`;
-        }
-        this.frmOrdenesPedidosDetallesPagos.controls.SaldoString.setValue(saldoString);
-      })
-      .catch((error) => {
-        console.error('Error al obtener el valor total de los pagos:', error);
-      });
+      this.ValorTotalPagosById(this.OrdenPedido_Id)
+        .then((valorTotal) => {
+          if (subtotal !== null && valorTotal !== null) {
+            var saldo = parseInt(subtotal) - parseInt(valorTotal);
+            saldoString = `$ ${this.helperService.formaterNumber(saldo)}`;
+          }
+          this.frmOrdenesPedidosDetallesPagos.controls.SaldoString.setValue(saldoString);
+        })
+        .catch((error) => {
+          console.error('Error al obtener el valor total de los pagos:', error);
+        });
+    })
   }
 
 
@@ -145,32 +146,49 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
       return;
     }
-    let data = {
-      id: this.Id ?? 0,
-      ...this.frmOrdenesPedidosDetallesPagos.value,
-      OrdenPedido_Id: this.OrdenPedido_Id,
-    };
-    this.service.save(this.Id, data).subscribe(
-      (response) => {
-        if (response.status) {
-          this.refrescarTabla();
-          this.frmOrdenesPedidosDetallesPagos.reset();
-          this.buildSelect();
-          this.calcularSaldo();
-          this.Id = null;
-          this.helperService.showMessage(
-            MessageType.SUCCESS,
-            Messages.SAVESUCCESS
-          );
-        }
-      },
-      (error) => {
-        this.helperService.showMessage(
-          MessageType.WARNING,
-          error.error.message
+
+    Swal.fire({
+      title: '¿Quieres guardar los cambios?',
+      text: 'Una vez guardado no se puede cambiar.',
+      showCancelButton: true,
+      confirmButtonText: 'Guardar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        let data = {
+          id: this.Id ?? 0,
+          ...this.frmOrdenesPedidosDetallesPagos.value,
+          OrdenPedido_Id: this.OrdenPedido_Id,
+        };
+        this.service.save(this.Id, data).subscribe(
+          (response) => {
+            if (response.status) {
+              this.refrescarTabla();
+              this.frmOrdenesPedidosDetallesPagos.reset();
+              this.buildSelect();
+              this.calcularSaldo();
+              this.Id = null;
+              this.helperService.showMessage(
+                MessageType.SUCCESS,
+                Messages.SAVESUCCESS
+              );
+            }
+          },
+          (error) => {
+            this.helperService.showMessage(
+              MessageType.WARNING,
+              error.error.message
+            );
+            this.frmOrdenesPedidosDetallesPagos.reset();
+            this.buildSelect();
+            this.Id = null;
+          }
         );
+      } else {
+        this.frmOrdenesPedidosDetallesPagos.reset();
+        this.buildSelect();
+        this.Id = null;
       }
-    );
+    })
   }
 
   refrescarTabla() {

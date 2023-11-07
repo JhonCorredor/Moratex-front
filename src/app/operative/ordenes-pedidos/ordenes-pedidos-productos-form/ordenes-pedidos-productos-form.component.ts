@@ -9,6 +9,7 @@ import { LANGUAGE_DATATABLE } from 'src/app/admin/datatable.language';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
+import Swal from 'sweetalert2'
 
 @Component({
     selector: 'app-ordenes-pedidos-productos-form',
@@ -18,6 +19,7 @@ import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service
 
 export class OrdenesPedidosProductosFormComponent implements OnInit {
     @ViewChild('botonesDatatable') botonesDatatable!: BotonesComponent;
+    @ViewChild('botonesDatatableEntrada') botonesDatatableEntrada!: BotonesComponent;
     @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
     @ViewChild(DataTableDirective) dtElementEntrada!: DataTableDirective;
     public dtTrigger: Subject<any> = new Subject();
@@ -25,6 +27,7 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
     public opcionesDataTable: any = {};
     public opcionesDataTableEntrada: any = {};
     public arrayBotonesDatatable: String[] = ['btn-modificarOrdenPedidoProducto'];
+    public arrayBotonesDatatableE: String[] = ['btn-modificarOrdenPedidoProducto', 'btn-terminado'];
     public botones = ['btn-guardar'];
     public Id = null;
     @Input() OrdenPedido_Id: any = null;
@@ -62,6 +65,7 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
             Producto_Id: [null, Validators.required],
             Cantidad: [0, Validators.required],
             Entrada: [false, Validators.required],
+            ProductoTerminado: [false, Validators.required],
             Empleado_Id: [null, Validators.required]
         });
         this.buildSelect();
@@ -102,36 +106,51 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
             this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
             return;
         }
-        let data = {
-            id: this.Id ?? 0,
-            ...this.frmOrdenesPedidosProductos.value,
-            OrdenPedido_Id: this.OrdenPedido_Id,
-        };
-        this.service.save(this.Id, data).subscribe(
-            (response) => {
-                if (response.status) {
-                    if (!this.frmOrdenesPedidosProductos.controls.Entrada.value) {
-                        this.refrescarTablas(false);
-                    } else {
-                        this.refrescarTablas(true);
-                    }
 
-                    this.frmOrdenesPedidosProductos.reset();
-                    this.buildSelect();
-                    this.Id = null;
-                    this.helperService.showMessage(
-                        MessageType.SUCCESS,
-                        Messages.SAVESUCCESS
-                    );
-                }
-            },
-            (error) => {
-                this.helperService.showMessage(
-                    MessageType.WARNING,
-                    error.error.message
+        Swal.fire({
+            title: '¿Quieres guardar los cambios?',
+            text: 'Estos cambios afectan el inventario',
+            showCancelButton: true,
+            confirmButtonText: 'Guardar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                let data = {
+                    id: this.Id ?? 0,
+                    ...this.frmOrdenesPedidosProductos.value,
+                    OrdenPedido_Id: this.OrdenPedido_Id,
+                };
+
+                this.service.save(this.Id, data).subscribe(
+                    (response) => {
+                        if (response.status) {
+                            if (!this.frmOrdenesPedidosProductos.controls.Entrada.value) {
+                                this.refrescarTablas(false);
+                            } else {
+                                this.refrescarTablas(true);
+                            }
+
+                            this.frmOrdenesPedidosProductos.reset();
+                            this.buildSelect();
+                            this.Id = null;
+                            this.helperService.showMessage(
+                                MessageType.SUCCESS,
+                                Messages.SAVESUCCESS
+                            );
+                        }
+                    },
+                    (error) => {
+                        this.helperService.showMessage(
+                            MessageType.WARNING,
+                            error.error.message
+                        );
+                    }
                 );
+            } else {
+                this.frmOrdenesPedidosProductos.reset();
+                this.buildSelect();
+                this.Id = null;
             }
-        );
+        })
     }
 
     refrescarTablas(entrada: boolean) {
@@ -197,6 +216,7 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
                 {
                     title: 'Cantidad',
                     data: 'cantidad',
+                    className: "pl-1 pr-0 text-center",
                 },
                 {
                     title: "Acciones",
@@ -271,18 +291,38 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
                     title: 'Producto',
                     data: 'producto',
                 },
-
                 {
                     title: 'Cantidad',
                     data: 'cantidad',
+                    className: "pl-1 pr-0 text-center",
+                },
+                {
+                    title: "Terminado",
+                    orderable: false,
+                    data: 'productoTerminado',
+                    render: function (productoTerminado: boolean) {
+                        if (productoTerminado) {
+                            return "<label class='text-center badge badge-success'>Si</label>";
+                        } else {
+                            return "<label class='text-center badge badge-danger'>No</label>";
+                        }
+                    },
+                    className: "pl-1 pr-0 text-center",
                 },
                 {
                     title: "Acciones",
                     orderable: false,
-                    data: "id",
-                    render: function (id: any, type: any, row: any) {
-                        const boton = that.botonesDatatable;
-                        return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(id);
+                    data: {
+                        "id": "id",
+                        "productoTerminado": "productoTerminado"
+                    },
+                    render: function (data: any) {
+                        const boton = that.botonesDatatableEntrada;
+                        if (data.productoTerminado) {
+                            return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(data.id).split('btn-dropdown-terminado').join('btn-dropdown-terminado d-none');
+                        }else{
+                            return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(data.id);
+                        }
                     },
                     className: "pl-1 pr-0 text-center",
                     responsivePriority: 7
@@ -299,6 +339,66 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
                                 this.frmOrdenesPedidosProductos.controls.Producto_Id.setValue(data.producto_Id);
                                 this.frmOrdenesPedidosProductos.controls.Cantidad.setValue(data.cantidad);
                                 this.frmOrdenesPedidosProductos.controls.Entrada.setValue(data.entrada);
+                            });
+                    });
+
+                $('.btn-dropdown-terminado')
+                    .off()
+                    .on('click', (event: any) => {
+                        this.service
+                            .getOrdenesPedidosProductosById(event.target.dataset.id)
+                            .subscribe(({ data }) => {
+                                this.Id = data.id;
+                                this.frmOrdenesPedidosProductos.controls.Producto_Id.setValue(data.producto_Id);
+                                this.frmOrdenesPedidosProductos.controls.Cantidad.setValue(data.cantidad);
+                                this.frmOrdenesPedidosProductos.controls.Entrada.setValue(data.entrada);
+                                this.frmOrdenesPedidosProductos.controls.ProductoTerminado.setValue(true);
+
+
+                                Swal.fire({
+                                    title: '¿Esta seguro que desea ingresar el producto a inventario?',
+                                    text: 'Una vez ingresado no se puede cambiar.',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Guardar',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        let dataSave = {
+                                            id: data.id,
+                                            ...this.frmOrdenesPedidosProductos.value,
+                                            OrdenPedido_Id: this.OrdenPedido_Id,
+                                        };
+
+                                        this.service.save(this.Id, dataSave).subscribe(
+                                            (response) => {
+                                                if (response.status) {
+                                                    if (!this.frmOrdenesPedidosProductos.controls.Entrada.value) {
+                                                        this.refrescarTablas(false);
+                                                    } else {
+                                                        this.refrescarTablas(true);
+                                                    }
+
+                                                    this.frmOrdenesPedidosProductos.reset();
+                                                    this.buildSelect();
+                                                    this.Id = null;
+                                                    this.helperService.showMessage(
+                                                        MessageType.SUCCESS,
+                                                        Messages.SAVESUCCESS
+                                                    );
+                                                }
+                                            },
+                                            (error) => {
+                                                this.helperService.showMessage(
+                                                    MessageType.WARNING,
+                                                    error.error.message
+                                                );
+                                            }
+                                        );
+                                    } else {
+                                        this.frmOrdenesPedidosProductos.reset();
+                                        this.buildSelect();
+                                        this.Id = null;
+                                    }
+                                })
                             });
                     });
             },
