@@ -6,27 +6,27 @@ import { LANGUAGE_DATATABLE } from 'src/app/admin/datatable.language';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
-import { OrdenesPedidosService } from '../ordenes-pedidos.service';
+import { FacturasService } from '../facturas.service';
 import { UsuariosRolesService } from '../../../security/usuarios/usuarios-roles.service';
 import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
 
 @Component({
-    selector: 'app-ordenes-pedidos-index',
-    templateUrl: './ordenes-pedidos-index.component.html',
-    styleUrls: ['./ordenes-pedidos-index.component.css']
+    selector: 'app-facturas-index',
+    templateUrl: './facturas-index.component.html',
+    styleUrls: ['./facturas-index.component.css']
 })
-export class OrdenesPedidosIndexComponent implements OnInit {
+export class FacturasIndexComponent implements OnInit {
     @ViewChild('botonesDatatable') botonesDatatable!: BotonesComponent;
     @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
     public dtTrigger: Subject<any> = new Subject();
     public opcionesDataTable: any = {};
     public API_URL: any;
-    public title = "Listado de Ordenes de Producción";
-    public breadcrumb = [{ name: `inicio`, icon: `fa-solid fa-house` }, { name: "Operativo", icon: "fas fa-cogs" }, { name: "OrdenesPedidos", icon: "fa-solid fa-people-group" }];
+    public title = "Listado de Ordenes de pedido";
+    public breadcrumb = [{ name: `inicio`, icon: `fa-duotone fa-house` }, { name: "Operativo", icon: "fa-duotone fa-vest-patches" }, { name: "Orden de Pedido", icon: "fa-duotone fa-file-invoice" }];
     public botones: String[] = ['btn-nuevo'];
     public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
 
-    constructor(private service: OrdenesPedidosService, private helperService: HelperService, private usuarioRoleService: UsuariosRolesService, private empleadoService: EmpleadosService, private modalService: NgbModal,
+    constructor(private service: FacturasService, private helperService: HelperService, private usuarioRoleService: UsuariosRolesService, private empleadoService: EmpleadosService, private modalService: NgbModal,
     ) {
     }
 
@@ -120,7 +120,7 @@ export class OrdenesPedidosIndexComponent implements OnInit {
                             } else {
                                 data.foreignKey = "";
                             }
-                            this.service.getAllOrdenesPedidos(data).subscribe(res => {
+                            this.service.getAllFacturas(data).subscribe(res => {
                                 callback({
                                     recordsTotal: res.meta.totalCount,
                                     recordsFiltered: res.meta.totalCount,
@@ -134,7 +134,7 @@ export class OrdenesPedidosIndexComponent implements OnInit {
                             });
                     } else {
                         data.foreignKey = "";
-                        this.service.getAllOrdenesPedidos(data).subscribe(res => {
+                        this.service.getAllFacturas(data).subscribe(res => {
                             callback({
                                 recordsTotal: res.meta.totalCount,
                                 recordsFiltered: res.meta.totalCount,
@@ -145,62 +145,39 @@ export class OrdenesPedidosIndexComponent implements OnInit {
                     }
 
                 })
-                .catch((error) => {
-                    console.error('Error al obtener el rol:', error);
-                });
+                    .catch((error) => {
+                        console.error('Error al obtener el rol:', error);
+                    });
             },
             language: LANGUAGE_DATATABLE,
             columns: [
                 {
-                    title: "Procedimiento",
-                    data: 'procedimiento'
-                },
-                {
-                    title: "Estado",
-                    data: 'estado',
-                },
-                {
-                    title: "Cantidad",
-                    data: 'cantidad'
-                },
-                {
-                    title: "Ubicacion",
-                    data: 'ubicacion'
-                },
-                {
-                    title: "Tamaño",
-                    data: 'tamaño'
-                },
-                {
-                    title: "Colores",
-                    data: 'colores'
-                },
-                {
-                    title: "Observaciones",
-                    data: 'observacion'
-                },
-                {
-                    title: "Prenda",
-                    data: 'traePrenda',
-                    render: function (item: boolean) {
-                        if (item) {
-                            return "<label class='text-center badge badge-success'>Si</label>";
-                        } else {
-                            return "<label class='text-center badge badge-danger'>No</label>";
-                        }
-                    }
+                    title: "Codigo",
+                    data: 'codigo'
                 },
                 {
                     title: "Cliente",
                     data: 'cliente'
                 },
                 {
+                    title: "SubTotal",
+                    data: 'subTotal',
+                    className: 'text-right',
+                    render: function (data: any) {
+                        return '$' + that.helperService.formaterNumber(data);
+                    },
+                },
+                {
                     title: "Empleado",
                     data: 'empleadoAsignado'
                 },
                 {
-                    title: "Entrega",
-                    data: 'fechaEntrega',
+                    title: "Estado",
+                    data: 'estado',
+                },
+                {
+                    title: "Fecha",
+                    data: 'fecha',
                     render: (item: any) => {
                         return this.helperService.convertDateUTCToDMA(item);
                     }
@@ -221,7 +198,7 @@ export class OrdenesPedidosIndexComponent implements OnInit {
 
             drawCallback: (settings: any) => {
                 $('.btn-dropdown-modificar').off().on('click', (event: any) => {
-                    this.helperService.redirectApp(`/operativo/ordenesPedidos/editar/${event.target.dataset.id}`);
+                    this.helperService.redirectApp(`/operativo/facturas/editar/${event.target.dataset.id}`);
                 });
                 $('.btn-dropdown-eliminar').off().on('click', (event: any) => {
                     this.helperService.confirmDelete(() => {
@@ -236,13 +213,13 @@ export class OrdenesPedidosIndexComponent implements OnInit {
                     });
                 });
                 $('.btn-dropdown-ver').off().on('click', (event: any) => {
-                    this.helperService.redirectApp(`operativo/ordenesPedidos/ver/${event.target.dataset.id}`);
+                    this.helperService.redirectApp(`operativo/facturas/ver/${event.target.dataset.id}`);
                 });
             }
         };
     }
 
     public nuevo() {
-        this.helperService.redirectApp(`operativo/ordenesPedidos/crear`);
+        this.helperService.redirectApp(`operativo/facturas/crear`);
     }
 }

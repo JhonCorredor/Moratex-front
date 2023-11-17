@@ -31,7 +31,6 @@ export class ClientesIndexComponent implements OnInit {
 
   ngOnInit(): void {
     this.cargarDatatable();
-    // alert("hola");
   }
 
   ngAfterViewInit() {

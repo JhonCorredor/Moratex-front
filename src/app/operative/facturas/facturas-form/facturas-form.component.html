@@ -1,0 +1,195 @@
+<app-breadcrumb [title]="titulo" [breadcrumb]="breadcrumb"></app-breadcrumb>
+<section class="content">
+    <div class="container-fluid">
+        <div class="card card-outline card-primary elevation-2">
+            <div class="card-body">
+                <form [formGroup]="frmFacturas" class="mb-4">
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3 col-sm-3">
+                            <label>Cliente</label>
+                            <ng-select [items]="listClientes" bindLabel="textoMostrar" bindValue="id"
+                                formControlName="Cliente_Id" [readonly]=disableForm>
+                            </ng-select>
+                            <app-forms-messages [error]="frmFacturas.get('Cliente_Id')"
+                                [statusForm]="statusForm"></app-forms-messages>
+                        </div>
+                        <div class="col-md-1 col-lg-1 col-sm-1">
+                            <br>
+                            <button type="button" class="btn" (click)="nuevoCliente()"><i class="fa-duotone fa-user-plus"></i></button>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-3">
+                            <label>Empleado Asignado</label>
+                            <ng-select [items]="listEmpleadoAsignado" bindLabel="textoMostrar" bindValue="id"
+                                formControlName="EmpleadoAsignado_Id" [readonly]=disableForm>
+                            </ng-select>
+                            <app-forms-messages [error]="frmFacturas.get('EmpleadoAsignado_Id')"
+                                [statusForm]="statusForm"></app-forms-messages>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-3">
+                            <label>Sub Total</label>
+                            <input type="text" class="form-control border-0" formControlName="SubTotalString"
+                                readonly="readonly"
+                                style="background-color: transparent !important; font-size:medium!important">
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-3 d-none">
+                            <label>Estado</label>
+                            <ng-select [items]="listEstados" bindLabel="textoMostrar" bindValue="id"
+                                formControlName="Estado_Id">
+                            </ng-select>
+                            <app-forms-messages [error]="frmFacturas.get('Estado_Id')"
+                                [statusForm]="statusForm"></app-forms-messages>
+                        </div>
+                        <div class="col-md-3 col-lg-3 col-sm-3 d-none">
+                            <label>Empleado</label>
+                            <ng-select [items]="listEmpleados" bindLabel="textoMostrar" bindValue="id"
+                                formControlName="Empleado_Id">
+                            </ng-select>
+                            <app-forms-messages [error]="frmFacturas.get('Empleado_Id')"
+                                [statusForm]="statusForm"></app-forms-messages>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="row float-right">
+                        <div class="col-md-12">
+                            <app-botones [botones]="botones" (eventSave)="save()"
+                                (eventCancel)="cancel()"></app-botones>
+                        </div>
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <div>
+                        <div class="card-footer">
+                            <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+                                <li ngbNavItem>
+                                    <a ngbNavLink>Detalles
+                                        <span data-bs-toggle="tooltip" data-bs-placement="left"
+                                            title="En este formulario se asocian los detalles de la orden">
+                                            <i class="fa-solid fa-circle-question"></i>
+                                        </span>
+                                    </a>
+                                    <ng-template ngbNavContent>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <form [formGroup]="frmFacturasDetalles" class="mb-4">
+                                                    <div class="row" *ngIf="!id">
+                                                        <div class="col-md-3 col-sm-3 col-lg-3">
+                                                            <label>Producto</label>
+                                                            <ng-select [items]="listProductos" bindLabel="textoMostrar"
+                                                                bindValue="id" formControlName="Producto_Id"
+                                                                [(ngModel)]="selectedItem" (change)="onSelect($event)">
+                                                            </ng-select>
+                                                            <app-forms-messages
+                                                                [error]="frmFacturasDetalles.get('Producto_Id')"
+                                                                [statusForm]=statusFormDetalles></app-forms-messages>
+                                                        </div>
+                                                        <div class="col-md-2 col-sm-2 col-lg-2">
+                                                            <label>Cantidad</label>
+                                                            <input type="number" min="1"
+                                                                class="form-control form-control-sm"
+                                                                formControlName="Cantidad">
+                                                            <app-forms-messages
+                                                                [error]="frmFacturasDetalles.get('Cantidad')"
+                                                                [statusForm]=statusFormDetalles></app-forms-messages>
+                                                        </div>
+                                                        <div class="col-md-3 col-sm-3 col-lg-3">
+                                                            <label>Valor</label>
+                                                            <input type="number" class="form-control form-control-sm"
+                                                                formControlName="Valor">
+                                                            <app-forms-messages
+                                                                [error]="frmFacturasDetalles.get('Valor')"
+                                                                [statusForm]=statusFormDetalles></app-forms-messages>
+                                                        </div>
+
+                                                    </div>
+                                                    <br>
+                                                    <div class="row float-right" *ngIf="!id">
+                                                        <div class="col-md-12">
+                                                            <app-botones [botones]="botonesDetalles"
+                                                                (eventSave)="agregar()"></app-botones>
+                                                        </div>
+                                                    </div>
+                                                    <br><br>
+                                                    <div class="dt-responsive">
+                                                        <div class="row">
+                                                            <div class="col-md-12 table-responsive">
+                                                                <br>
+                                                                <table
+                                                                    class="table table-bordered table-hover table-striped">
+                                                                    <thead>
+                                                                        <tr class="text-center">
+                                                                            <th class="d-none">Id</th>
+                                                                            <th>Producto</th>
+                                                                            <th>Cantidad</th>
+                                                                            <th>Valor</th>
+                                                                            <th>Eliminar</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody id="content">
+                                                                        <tr *ngFor="let dato of listFacturaDetalles"
+                                                                            class="text-center">
+                                                                            <td class="d-none">{{ dato.producto }}</td>
+                                                                            <td>{{ dato.nombre }}</td>
+
+                                                                            <td>
+                                                                                <input type="number"
+                                                                                    class="form-control"
+                                                                                    id="Cantidad_{{ dato.producto }}"
+                                                                                    (change)="ActualizarCantidad(dato)"
+                                                                                    value="{{ dato.cantidad }}"
+                                                                                    [readonly]=disableForm />
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number"
+                                                                                    class="form-control"
+                                                                                    id="Valor_{{ dato.producto }}"
+                                                                                    (change)="ActualizarValor(dato)"
+                                                                                    value="{{ dato.valor }}"
+                                                                                    [readonly]=disableForm />
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="button" class="btn btn-sm"
+                                                                                    value="Eliminar"
+                                                                                    (click)="EliminarDetalle(dato.producto)" />
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr *ngIf="tablaVacia">
+                                                                            <td colspan="4" class="text-center">Ningún
+                                                                                dato disponible en la tabla</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                                <li ngbNavItem *ngIf="id">
+                                    <a ngbNavLink>Detalles de Pagos
+                                        <span data-bs-toggle="tooltip" data-bs-placement="left"
+                                            title="En este formulario se asocian los detalles de pago pertenecientes al la orden">
+                                            <i class="fa-solid fa-circle-question"></i>
+                                        </span>
+                                    </a>
+                                    <ng-template ngbNavContent>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <app-facturas-detalles-pagos-form [Factura_Id]="id">
+                                                </app-facturas-detalles-pagos-form>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </li>
+                            </ul>
+                            <div [ngbNavOutlet]="nav" class="mt-2"></div>
+                        </div>
+                    </div>
+                </form>
+                <br />
+            </div>
+        </div>
+    </div>
+</section>

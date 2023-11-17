@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Router } from '@angular/router';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { ProveedoresService } from '../proveedores.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-proveedores-form',
@@ -22,7 +23,7 @@ export class ProveedoresFormComponent implements OnInit {
   public listEmpresas: any[] = [];
   public listBancos: any[] = [];
 
-  constructor(public routerActive: ActivatedRoute, private service: ProveedoresService ,
+  constructor(private router: Router, private modalService: NgbModal, public routerActive: ActivatedRoute, private service: ProveedoresService ,
      private helperService: HelperService, private fb: FormBuilder,) 
   { 
     this.routerActive.params.subscribe(e => this.id = e.id);
@@ -79,13 +80,17 @@ export class ProveedoresFormComponent implements OnInit {
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
       } else {
         this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-        this.helperService.redirectApp(`parametros/proveedores`);
+        this.cancel();
       }
     })
   }
 
   cancel() {
-    this.helperService.redirectApp('/parametros/proveedores')
+    if(this.router.url.toString() == "/parametros/facturaCompra/crear"){
+      this.modalService.dismissAll();
+    }else{
+      this.helperService.redirectApp('/parametros/proveedores');
+    }
   }
 
 }

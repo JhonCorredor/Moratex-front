@@ -17,7 +17,7 @@ export class ProductosService {
   }
 
   public datatable(data: DatatableParameter) : Observable<any> {
-    return this.http.get<any>(`${this.url}Productos/datatable?PageNumber=${data.pageNumber}&PageSize=${data.pageSize}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}`, {headers: this.header})
+    return this.http.get<any>(`${this.url}Productos/datatable?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, {headers: this.header});
   }
 
   public getById(id: any) : Observable<any> {

@@ -78,6 +78,11 @@ const routes: Routes = [
         (m) => m.OrdenesPedidosModule
       ),
   },
+  {
+    path: 'facturas',
+    loadChildren: () =>
+      import('./facturas/facturas.module').then((m) => m.FacturasModule),
+  },
 ];
 
 @NgModule({

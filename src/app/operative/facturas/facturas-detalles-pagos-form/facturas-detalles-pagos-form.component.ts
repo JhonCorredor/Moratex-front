@@ -11,18 +11,18 @@ import {
   MessageType,
 } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
-import { OrdenesPedidosDetallesPagosService } from '../ordenes-pedidos-detalles-pagos.service';
-import { OrdenesPedidosService } from '../ordenes-pedidos.service';
+import { FacturasDetallesPagosService } from '../facturas-detalles-pagos.service';
+import { FacturasService } from '../facturas.service';
 import { EmpleadosService } from '../../../parameters/empleados/empleados.service';
 import { DatePipe } from '@angular/common';
 import Swal from 'sweetalert2'
 
 @Component({
-  selector: 'app-ordenes-pedidos-detalles-form',
-  templateUrl: './ordenes-pedidos-detalles-pagos-form.component.html',
-  styleUrls: ['./ordenes-pedidos-detalles-pagos-form.component.css'],
+  selector: 'app-facturas-detalles-pagos-form',
+  templateUrl: './facturas-detalles-pagos-form.component.html',
+  styleUrls: ['./facturas-detalles-pagos-form.component.css'],
 })
-export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
+export class FacturasDetallesPagosFormComponent implements OnInit {
   @ViewChild('botonesDatatable') botonesDatatable!: BotonesComponent;
   @ViewChild(DataTableDirective) dtElement!: DataTableDirective;
   public dtTrigger: Subject<any> = new Subject();
@@ -32,18 +32,18 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
   public Id = null;
   public persona_Id!: string | number;
 
-  @Input() OrdenPedido_Id: any = null;
+  @Input() Factura_Id: any = null;
 
-  public frmOrdenesPedidosDetallesPagos!: FormGroup;
+  public frmFacturasDetallesPagos!: FormGroup;
   public statusForm: boolean = true;
   public listEmpleados: any[] = [];
   public listMediosPagos: any[] = [];
 
   constructor(
     public routerActive: ActivatedRoute,
-    private service: OrdenesPedidosDetallesPagosService,
+    private service: FacturasDetallesPagosService,
     private empleadoService: EmpleadosService,
-    private OrdenPedidoService: OrdenesPedidosService,
+    private facturaService: FacturasService,
     private helperService: HelperService,
     private fb: FormBuilder,
     private datePipe: DatePipe
@@ -55,7 +55,7 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
   }
 
   buildForm(): void {
-    this.frmOrdenesPedidosDetallesPagos = this.fb.group({
+    this.frmFacturasDetallesPagos = this.fb.group({
       Fecha: [null, Validators.required],
       Valor: [null, Validators.required],
       Empleado_Id: [null, Validators.required],
@@ -81,9 +81,9 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     this.calcularSaldo();
   }
 
-  ValorTotalPagosById(ordenPedido_Id: any): Promise<any> {
+  ValorTotalPagosById(factura_Id: any): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.service.GetTotalPagos(ordenPedido_Id).subscribe(
+      this.service.GetTotalPagos(factura_Id).subscribe(
         (datos) => {
           resolve(datos);
         },
@@ -98,16 +98,16 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
     var saldoString = "$ 0"
     var subtotal: any;
 
-    this.OrdenPedidoService.getOrdenesPedidosById(this.OrdenPedido_Id).subscribe(({ data }) => {
+    this.facturaService.getFacturasById(this.Factura_Id).subscribe(({ data }) => {
       subtotal = data.subTotal;
 
-      this.ValorTotalPagosById(this.OrdenPedido_Id)
+      this.ValorTotalPagosById(this.Factura_Id)
         .then((valorTotal) => {
           if (subtotal !== null && valorTotal !== null) {
             var saldo = parseInt(subtotal) - parseInt(valorTotal);
             saldoString = `$ ${this.helperService.formaterNumber(saldo)}`;
           }
-          this.frmOrdenesPedidosDetallesPagos.controls.SaldoString.setValue(saldoString);
+          this.frmFacturasDetallesPagos.controls.SaldoString.setValue(saldoString);
         })
         .catch((error) => {
           console.error('Error al obtener el valor total de los pagos:', error);
@@ -134,14 +134,14 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
           textoMostrar: res.data[0].codigo + ' - ' + res.data[0].persona,
         },
       ];
-      this.frmOrdenesPedidosDetallesPagos.controls.Empleado_Id.setValue(
+      this.frmFacturasDetallesPagos.controls.Empleado_Id.setValue(
         res.data[0].id
       );
     });
   }
 
   save() {
-    if (this.frmOrdenesPedidosDetallesPagos.invalid) {
+    if (this.frmFacturasDetallesPagos.invalid) {
       this.statusForm = false;
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
       return;
@@ -156,14 +156,14 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
       if (result.isConfirmed) {
         let data = {
           id: this.Id ?? 0,
-          ...this.frmOrdenesPedidosDetallesPagos.value,
-          OrdenPedido_Id: this.OrdenPedido_Id,
+          ...this.frmFacturasDetallesPagos.value,
+          Factura_Id: this.Factura_Id,
         };
         this.service.save(this.Id, data).subscribe(
           (response) => {
             if (response.status) {
               this.refrescarTabla();
-              this.frmOrdenesPedidosDetallesPagos.reset();
+              this.frmFacturasDetallesPagos.reset();
               this.buildSelect();
               this.calcularSaldo();
               this.Id = null;
@@ -178,13 +178,13 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
               MessageType.WARNING,
               error.error.message
             );
-            this.frmOrdenesPedidosDetallesPagos.reset();
+            this.frmFacturasDetallesPagos.reset();
             this.buildSelect();
             this.Id = null;
           }
         );
       } else {
-        this.frmOrdenesPedidosDetallesPagos.reset();
+        this.frmFacturasDetallesPagos.reset();
         this.buildSelect();
         this.Id = null;
       }
@@ -245,9 +245,9 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
           ].data.toString()
         );
         data.directionOrder = dataTablesParameters.order[0].dir;
-        data.foreignKey = this.OrdenPedido_Id;
+        data.foreignKey = this.Factura_Id;
         this.service
-          .getAllOrdenesPedidosDetallesPagos(data)
+          .getAllFacturasDetallesPagos(data)
           .subscribe((res: any) => {
             callback({
               recordsTotal: res.meta.totalCount,
@@ -303,7 +303,7 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
           .off()
           .on('click', (event: any) => {
             this.service
-              .getOrdenesPedidosDetallesPagosById(event.target.dataset.id)
+              .getFacturasDetallesPagosById(event.target.dataset.id)
               .subscribe(({ data }) => {
                 const formattedDate = this.datePipe.transform(
                   data.fecha,
@@ -311,13 +311,13 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
                 );
 
                 this.Id = data.id;
-                this.frmOrdenesPedidosDetallesPagos.controls.Fecha.setValue(
+                this.frmFacturasDetallesPagos.controls.Fecha.setValue(
                   formattedDate
                 );
-                this.frmOrdenesPedidosDetallesPagos.controls.Valor.setValue(
+                this.frmFacturasDetallesPagos.controls.Valor.setValue(
                   data.valor
                 );
-                this.frmOrdenesPedidosDetallesPagos.controls.MedioPago_Id.setValue(
+                this.frmFacturasDetallesPagos.controls.MedioPago_Id.setValue(
                   data.medioPago_Id
                 );
               });
@@ -327,7 +327,7 @@ export class OrdenesPedidosDetallesPagosFormComponent implements OnInit {
           .off()
           .on('click', (event: any) => {
             this.service
-              .getOrdenesPedidosDetallesPagosById(event.target.dataset.id)
+              .getFacturasDetallesPagosById(event.target.dataset.id)
               .subscribe(({ data }) => {
                 this.ImprimirTicket(data.id);
               });

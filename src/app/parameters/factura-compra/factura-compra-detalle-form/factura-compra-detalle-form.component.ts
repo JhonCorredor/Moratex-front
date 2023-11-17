@@ -39,7 +39,7 @@ export class FacturaCompraDetalleFormComponent implements OnInit {
       Id: new FormControl(0, Validators.required),
       Codigo: new FormControl(null),
       FacturaCompra_Id: new FormControl(this.facturaCompra_Id, Validators.required),
-      Cantidad: new FormControl(null, Validators.required),
+      Cantidad: new FormControl(1.0, Validators.required),
       PrecioCosto: new FormControl(null, Validators.required),
       SubTotal: new FormControl(null),
       SubTotalString: new FormControl("$ 0"),

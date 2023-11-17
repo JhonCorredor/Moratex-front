@@ -15,7 +15,11 @@
                 <app-forms-messages [error]="frmFacturaCompra.get('Proveedor_Id')" [statusForm]=statusForm>
                 </app-forms-messages>
               </div>
-              <div class="col-md-2">
+              <div class="col-md-1 col-lg-1 col-sm-1">
+                <br>
+                <button type="button" class="btn" (click)="nuevoProveedor()"><i class="fa-duotone fa-user-plus"></i></button>
+            </div>
+              <div class="col-md-2 col-lg-2 col-sm-2">
                 <label>Número de Factura</label>
                 <input type="text" class="form-control" formControlName="NumeroFactura" [disabled]=disableForm>
                 <app-forms-messages [error]="frmFacturaCompra.get('NumeroFactura')" [statusForm]=statusForm>

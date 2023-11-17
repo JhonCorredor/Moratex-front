@@ -25,6 +25,7 @@ export class ProductosFormComponent implements OnInit {
   public listCategorias = [];
   public listUnidadesMedidas = [];
   public checkMax: boolean = false;
+  public ProductoVenta: boolean = false;
 
   public img = '../../../../assets/imagen-producto.png';
 
@@ -40,7 +41,9 @@ export class ProductosFormComponent implements OnInit {
     this.frmProductos = new FormGroup({
       Minimo: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
       Maximo: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
-      PrecioCosto: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
+      PrecioCosto: new FormControl(0, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
+      PrecioVenta: new FormControl(0),
+      ProductoVenta: new FormControl(false, [Validators.required]),
       Codigo: new FormControl(null, [Validators.required, Validators.maxLength(20),]),
       Nombre: new FormControl(null, [Validators.required, Validators.maxLength(100),]),
       CaracteristicaData: new FormControl(null, [Validators.required, Validators.maxLength(500),]),
@@ -61,6 +64,7 @@ export class ProductosFormComponent implements OnInit {
         this.frmProductos.controls.Minimo.setValue(l.data.minimo);
         this.frmProductos.controls.Maximo.setValue(l.data.maximo);
         this.frmProductos.controls.PrecioCosto.setValue(l.data.precioCosto);
+        this.frmProductos.controls.PrecioVenta.setValue(l.data.precioVenta);
         this.frmProductos.controls.Codigo.setValue(l.data.codigo);
         this.frmProductos.controls.Nombre.setValue(l.data.nombre);
         this.frmProductos.controls.CaracteristicaData.setValue(
@@ -68,6 +72,9 @@ export class ProductosFormComponent implements OnInit {
         );
         this.frmProductos.controls.ProductoTerminado.setValue(
           l.data.productoTerminado
+        );
+        this.frmProductos.controls.ProductoVenta.setValue(
+          l.data.productoVenta
         );
         this.frmProductos.controls.Estado.setValue(l.data.estado);
         this.frmProductos.controls.Categoria_Id.setValue(l.data.categoria_Id);
@@ -225,5 +232,9 @@ export class ProductosFormComponent implements OnInit {
         this.img = archivo;
       };
     }
+  }
+
+  onChange(event: any) {
+    this.ProductoVenta = event;
   }
 }

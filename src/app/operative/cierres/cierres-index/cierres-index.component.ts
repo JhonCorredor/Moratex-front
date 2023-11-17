@@ -115,11 +115,15 @@ export class CierresIndexComponent implements OnInit {
                     },
                 },
                 {
-                    title: 'Observación',
-                    data: 'observacion',
+                    title: 'Base',
+                    data: 'base',
+                    className: 'text-right',
+                    render: function (data: any) {
+                        return '$' + that.helperService.formaterNumber(data);
+                    },
                 },
                 {
-                    title: 'Total Ingreso',
+                    title: 'Total Ingresos',
                     data: 'totalIngreso',
                     className: 'text-right',
                     render: function (data: any) {
@@ -151,12 +155,8 @@ export class CierresIndexComponent implements OnInit {
                     },
                 },
                 {
-                    title: 'Base',
-                    data: 'base',
-                    className: 'text-right',
-                    render: function (data: any) {
-                        return '$' + that.helperService.formaterNumber(data);
-                    },
+                    title: 'Observaciones',
+                    data: 'observacion',
                 },
                 {
                     title: 'Acciones',

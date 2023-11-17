@@ -7,7 +7,8 @@ import { FacturaCompraService } from '../factura-compra.service';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
 import { GeneralParameterService } from 'src/app/parameters/general-parameter/general-parameter.service';
-
+import { ProveedoresFormComponent } from 'src/app/parameters/proveedor/proveedores-form/proveedores-form.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-factura-compra-form',
@@ -28,8 +29,9 @@ export class FacturaCompraFormComponent implements OnInit {
   public listProveedores: any[] = [];
   public id!: number;
   public disableForm: boolean = false;
+  public serviceName: string = "";
 
-  constructor(public routerActive: ActivatedRoute, private service: FacturaCompraService, public helperService: HelperService, private fb: FormBuilder, private router: Router, private datePipe: DatePipe, private empleadoService: EmpleadosService, private generalParameterService: GeneralParameterService) {
+  constructor(private modalService: NgbModal, public routerActive: ActivatedRoute, private service: FacturaCompraService, public helperService: HelperService, private fb: FormBuilder, private router: Router, private datePipe: DatePipe, private empleadoService: EmpleadosService, private generalParameterService: GeneralParameterService) {
     this.routerActive.params.subscribe(l => this.id = l.id);
 
     this.router.events.subscribe((event: any) => {
@@ -192,5 +194,11 @@ export class FacturaCompraFormComponent implements OnInit {
   cancel() {
     this.helperService.redirectApp('parametros/facturaCompra');
   }
+
+  public nuevoProveedor() {
+    let modal = this.modalService.open(ProveedoresFormComponent, { size: 'xl', keyboard: false, backdrop: "static" });
+    modal.componentInstance.titleData = "Crear Proveedor";
+    modal.componentInstance.serviceName = this.serviceName;
+}
 
 }

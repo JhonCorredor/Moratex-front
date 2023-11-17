@@ -1,8 +1,8 @@
-import { DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { PersonasFormComponent } from 'src/app/security/personas/personas-form/personas-form.component';
 import { PersonasService } from 'src/app/security/personas/personas.service';
@@ -24,13 +24,14 @@ export class ClientesFormComponent implements OnInit {
   public listPersonas: any[] = [];
 
 
-  constructor(public routerActive: ActivatedRoute, 
+  constructor(
+    private router: Router,
+    public routerActive: ActivatedRoute, 
     private service: ClientesService , 
     private personaService: PersonasService,
     private helperService: HelperService, 
     private fb: FormBuilder,
-    private modalService: NgbModal,
-    private datePipe: DatePipe    
+    private modalService: NgbModal, 
     ) 
   { 
     this.routerActive.params.subscribe(e => this.id = e.id);
@@ -46,7 +47,6 @@ export class ClientesFormComponent implements OnInit {
         this.frmClientes.controls.Estado.setValue(data.estado);
 
         this.personaService.getById(data.persona_Id).subscribe(resPersona => {
-          resPersona
           if (resPersona.status && resPersona.status == true) { // se deja validado == true porque en caso de no encontrarn un registro el backend devuelve un status 404
             this.frmClientes.controls.Documento.setValue(`${resPersona.data.documento}`);
             this.frmClientes.controls.Nombres.setValue(`${resPersona.data.primerNombre} ${resPersona.data.segundoNombre}`);
@@ -65,7 +65,7 @@ export class ClientesFormComponent implements OnInit {
       Documento: [null, Validators.required],  
       Nombres:  [null],
       Apellidos: [null],
-      Codigo: [null, [Validators.required , Validators.maxLength(50)]],
+      Codigo: [""],
       Persona_Id: [null, [Validators.required]],
       Estado : [true, [Validators.required]]
     });
@@ -92,13 +92,17 @@ export class ClientesFormComponent implements OnInit {
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
       } else {
         this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-        this.helperService.redirectApp(`parametros/clientes`);
+        this.cancel();
       }
     })
   }
 
   cancel() {
-    this.helperService.redirectApp('/parametros/clientes');
+    if(this.router.url.toString() == "/operativo/facturas/crear"){
+      this.modalService.dismissAll();
+    }else{
+      this.helperService.redirectApp('/parametros/clientes');
+    }
   }
 
   searchByDocument() {

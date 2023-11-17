@@ -4,7 +4,6 @@ import { OrdenesPedidosRoutingModule } from './ordenes-pedidos-routing.module';
 import { OrdenesPedidosFormComponent } from './ordenes-pedidos-form/ordenes-pedidos-form.component';
 import { OrdenesPedidosIndexComponent } from './ordenes-pedidos-index/ordenes-pedidos-index.component';
 import { SeguimientosFormComponent } from './seguimientos-form/seguimientos-form.component';
-import { OrdenesPedidosDetallesPagosFormComponent } from './ordenes-pedidos-detalles-pagos-form/ordenes-pedidos-detalles-pagos-form.component';
 import { OrdenesPedidosProductosFormComponent } from './ordenes-pedidos-productos-form/ordenes-pedidos-productos-form.component';
 import { FormsModule , ReactiveFormsModule } from '@angular/forms';
 import { DataTablesModule } from 'angular-datatables';
@@ -17,7 +16,6 @@ import { GeneralModule } from 'src/app/general/general.module';
     OrdenesPedidosFormComponent,
     OrdenesPedidosIndexComponent,
     SeguimientosFormComponent,
-    OrdenesPedidosDetallesPagosFormComponent,
     OrdenesPedidosProductosFormComponent,
   ],
   imports: [

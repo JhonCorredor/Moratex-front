@@ -7,32 +7,22 @@ import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 @Injectable({
   providedIn: 'root'
 })
-export class OrdenesPedidosDetallesPagosService {
+export class FacturasService {
 
   private url = environment.url;
-  private ruta =  "OrdenesPedidosDetallesPagos";
-  // private BASE_URL : any;
+  private ruta =  "Facturas";
   private header = new HttpHeaders();
 
   constructor(private http: HttpClient) { 
     this.header.set("Content-Type", "application/json");
-    // this.header.set("allow-origin", "*");
   }
 
-  public getAllOrdenesPedidosDetallesPagos( data : DatatableParameter) : Observable<any> {
+  public getAllFacturas( data : DatatableParameter) : Observable<any> {
     return this.http.get<any>(`${this.url}${this.ruta}/datatable?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, {headers: this.header});
   }
 
-  public getOrdenesPedidosDetallesPagosById(id : any) : Observable<any> {
+  public getFacturasById(id : any) : Observable<any> {
     return this.http.get<any>(`${this.url}${this.ruta}/${id}`, {headers: this.header});
-  }
-
-  public GetTotalPagos(id : any) : Observable<any> {
-    return this.http.get<any>(`${this.url}${this.ruta}/GetTotalPagos/${id}`, {headers: this.header});
-  }
-
-  public GetArchivoPago(id : any) : Observable<any> {
-    return this.http.get<any>(`${this.url}${this.ruta}/GetArchivoPago/${id}`, {headers: this.header});
   }
 
   public getAll(ruta: String) : Observable<any> {

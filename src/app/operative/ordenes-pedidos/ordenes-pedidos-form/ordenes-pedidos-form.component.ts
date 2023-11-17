@@ -55,7 +55,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
         },
     ];
 
-    public colors = ['Amarillo', 'Azul', 'Rojo'];
+    public colors = ['Amarillo', 'Azul', 'Rojo', 'Naraja', 'Morado'];
     public selectedColors: string[] = [];
 
     public dataArchivo: any = undefined;
@@ -70,6 +70,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
             }
         });
         this.frmOrdenesPedidos = new FormGroup({
+            Codigo: new FormControl(""),
             DocumentoCliente: new FormControl(null),
             DocumentoEmpleado: new FormControl(null),
             NombresCliente: new FormControl(null),
@@ -101,16 +102,17 @@ export class OrdenesPedidosFormComponent implements OnInit {
         this.cargarListas();
         this.frmOrdenesPedidos.controls.Fecha.setValue(new Date());
         if (this.disableForm) {
-            this.titulo = "Ver Registro de Ordenes de Pedidos";
+            this.titulo = "Ver Registro de Ordenes de Producción";
             this.botones = ['btn-cancelar'];
-        }else{
-            this.titulo = "Editar Ordenes de Pedidos";
+        } else {
+            this.titulo = "Editar Ordenes de Producción";
         }
         if (this.id != undefined && this.id != null) {
             this.service.getOrdenesPedidosById(this.id).subscribe(({ data }) => {
                 const formattedDate = this.datePipe.transform(data.fechaEntrega, 'yyyy-MM-dd');
                 this.frmOrdenesPedidos.controls.Fecha.setValue(data.fecha);
                 this.frmOrdenesPedidos.controls.FechaEntrega.setValue(formattedDate);
+                this.frmOrdenesPedidos.controls.Codigo.setValue(data.codigo);
                 this.frmOrdenesPedidos.controls.Cantidad.setValue(data.cantidad);
                 this.frmOrdenesPedidos.controls.Ubicacion.setValue(data.ubicacion);
                 this.frmOrdenesPedidos.controls.Tamaño.setValue(data.tamaño);
@@ -171,7 +173,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
                 }
             })
         } else {
-            this.titulo = "Crear Ordenes de Pedidos";
+            this.titulo = "Crear Ordenes de Producción";
         }
     }
 

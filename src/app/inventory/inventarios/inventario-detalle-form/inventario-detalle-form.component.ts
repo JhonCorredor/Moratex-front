@@ -169,24 +169,15 @@ export class InventarioDetalleFormComponent implements OnInit {
         },
         {
           title: "Cantidad Ingresada",
-          data: "cantidadIngresada",
-          render: function (data: any,) {
-            return that.helperService.formaterNumber(data);
-          }
+          data: "cantidadIngresada"
         },
         {
           title: "Cantidad Usada",
-          data: 'cantidadUsada',
-          render: function (data: any,) {
-            return that.helperService.formaterNumber(data);
-          }
+          data: 'cantidadUsada'
         },
         {
           title: "Cantidad Total",
-          data: 'cantidadTotal',
-          render: function (data: any,) {
-            return that.helperService.formaterNumber(data);
-          }
+          data: 'cantidadTotal'
         },
         {
           title: "Acciones",

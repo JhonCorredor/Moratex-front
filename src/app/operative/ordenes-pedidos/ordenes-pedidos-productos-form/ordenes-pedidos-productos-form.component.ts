@@ -114,6 +114,7 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
             confirmButtonText: 'Guardar',
         }).then((result) => {
             if (result.isConfirmed) {
+                this.ProgressAlert();
                 let data = {
                     id: this.Id ?? 0,
                     ...this.frmOrdenesPedidosProductos.value,
@@ -246,6 +247,10 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
             },
         };
 
+    }
+
+    ProgressAlert() {
+        this.helperService.showMessage(MessageType.PROGRESS, Messages.PROGRESS)
     }
 
     cargarDatatableEntrada() {

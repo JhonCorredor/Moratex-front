@@ -6,74 +6,93 @@
       <div class="card-body">
         <form [formGroup]="frmProductos" class="mb-4">
           <div class="row">
-            <div class="input-group">
-              <label class="col-lg-2 col-md-4 col-sm-12">Activo</label>
-              <div class="form-group col-lg-2 col-md-6 col-sm-12">
-                <ui-switch formControlName="Estado"></ui-switch>
-              </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>Código</label>
+              <input type="text" class="form-control form-control-sm" formControlName="Codigo">
+              <app-forms-messages [error]="frmProductos.get('Codigo')" [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>Nombre</label>
+              <input type="text" class="form-control form-control-sm" formControlName="Nombre">
+              <app-forms-messages [error]="frmProductos.get('Nombre')" [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>Categoria</label>
+              <ng-select [items]="listCategorias" bindLabel="textoMostrar" bindValue="id"
+                formControlName="Categoria_Id"> </ng-select>
+              <app-forms-messages [error]="frmProductos.get('Categoria_Id')"
+                [statusForm]=statusForm></app-forms-messages>
             </div>
           </div>
+          <br>
           <div class="row">
-            <div class="input-group">
-              <label class="col-lg-2 col-md-4 col-sm-12">Código</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input type="text" class="form-control form-control-sm" formControlName="Codigo">
-                <app-forms-messages [error]="frmProductos.get('Codigo')" [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Nombre</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input type="text" class="form-control form-control-sm" formControlName="Nombre">
-                <app-forms-messages [error]="frmProductos.get('Nombre')" [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Categoria</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <ng-select [items]="listCategorias" bindLabel="textoMostrar" bindValue="id"  formControlName="Categoria_Id" > </ng-select>
-                <app-forms-messages [error]="frmProductos.get('Categoria_Id')"    [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Unidad Medida</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <ng-select [items]="listUnidadesMedidas" bindLabel="textoMostrar" bindValue="id"  formControlName="UnidadMedida_Id"></ng-select>
-                <app-forms-messages [error]="frmProductos.get('UnidadMedida_Id')"    [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Minimo</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input type="number" class="form-control form-control-sm" formControlName="Minimo" (change)="chececkMaxAndMin()"  >
-                <app-forms-messages [error]="frmProductos.get('Minimo')" [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Maximo</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input type="number" class="form-control form-control-sm" formControlName="Maximo" (change)="chececkMaxAndMin()"  >
-                <div *ngIf="checkMax" class="error">
-                  Maximo debe ser mayor a Minimo
-                </div>
-                <app-forms-messages [error]="frmProductos.get('Maximo')" [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Precio Costo</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <input type="number" class="form-control form-control-sm" formControlName="PrecioCosto">
-                <app-forms-messages [error]="frmProductos.get('PrecioCosto')" [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Producto Terminado</label>
-              <div class="form-group col-lg-2 col-md-6 col-sm-12">
-                <ui-switch formControlName="ProductoTerminado"></ui-switch>
-              </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>Unidad Medida</label>
+              <ng-select [items]="listUnidadesMedidas" bindLabel="textoMostrar" bindValue="id"
+                formControlName="UnidadMedida_Id"></ng-select>
+              <app-forms-messages [error]="frmProductos.get('UnidadMedida_Id')"
+                [statusForm]=statusForm></app-forms-messages>
             </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>Minimo</label>
+              <input type="number" class="form-control form-control-sm" formControlName="Minimo"
+                (change)="chececkMaxAndMin()">
+              <app-forms-messages [error]="frmProductos.get('Minimo')" [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>Maximo</label>
+              <input type="number" class="form-control form-control-sm" formControlName="Maximo"
+                (change)="chececkMaxAndMin()">
+              <div *ngIf="checkMax" class="error">
+                Maximo debe ser mayor a Minimo
+              </div>
+              <app-forms-messages [error]="frmProductos.get('Maximo')" [statusForm]=statusForm></app-forms-messages>
+            </div>
+
           </div>
+          <br>
           <div class="row">
-            <div class="input-group">
-              <label class="col-lg-2 col-md-4 col-sm-12">Caracteristica</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                <textarea type="text" class="form-control" formControlName="CaracteristicaData"> </textarea>
-                <app-forms-messages [error]="frmProductos.get('CaracteristicaData')" [statusForm]=statusForm ></app-forms-messages>
-              </div>
-              <label class="col-lg-2 col-md-4 col-sm-12">Imagen</label>
-              <div class="form-group col-lg-4 col-md-6 col-sm-12">
-                  <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
-                  <br>
-                  <img [src]="img" alt="" width="200" height="150">
-              </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>Precio Costo</label>
+              <input type="number" class="form-control form-control-sm" formControlName="PrecioCosto">
+              <app-forms-messages [error]="frmProductos.get('PrecioCosto')"
+                [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-lg-1 col-md-1 col-sm-1">
+              <label>Activo</label><br>
+              <ui-switch formControlName="Estado"></ui-switch>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2">
+              <label>Producto de Venta</label><br>
+              <ui-switch formControlName="ProductoVenta" (change)="onChange($event)"></ui-switch>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-2">
+              <label>Producto Terminado</label><br>
+              <ui-switch formControlName="ProductoTerminado"></ui-switch>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="ProductoVenta">
+              <label>Precio de Venta</label>
+              <input type="number" class="form-control form-control-sm" formControlName="PrecioVenta">
+              <app-forms-messages [error]="frmProductos.get('PrecioVenta')"
+                [statusForm]=statusForm></app-forms-messages>
             </div>
           </div>
+          <br>
+          <div class="row">
+            <div class="col-lg-8 col-md-8 col-sm-8">
+              <label>Caracteristica</label>
+              <textarea type="text" class="form-control" formControlName="CaracteristicaData"></textarea>
+              <app-forms-messages [error]="frmProductos.get('CaracteristicaData')"
+                [statusForm]=statusForm></app-forms-messages>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-4">
+              <label>Imagen</label>
+              <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)">
+              <br>
+              <img [src]="img" alt="" width="200" height="150">
+            </div>
+          </div>
+          <br>
           <div class="row float-right">
             <div class="col-md-12">
               <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
