@@ -28,6 +28,7 @@
     "datatables.net-colreorder": "^1.5.5",
     "datatables.net-colreorder-dt": "^1.5.5",
     "jquery": "^3.4.1",
+    "ngx-currency": "^3.0.0",
     "ngx-spinner": "^12.0.0",
     "ngx-toastr": "^14.3.0",
     "ngx-ui-switch": "^13.0.2",

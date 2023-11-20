@@ -16,7 +16,7 @@
             </div>
             <div class="col-md-2 col-lg-2 col-sm-2">
                 <label>Precio Costo</label>
-                <input type="number" class="form-control" formControlName="PrecioCosto" (blur)="calcularSubTotal()">
+                <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text" class="form-control" formControlName="PrecioCosto" (blur)="calcularSubTotal()">
                 <app-forms-messages [error]="frmFacturaCompraDetalle.get('PrecioCosto')"
                     [statusForm]=statusForm></app-forms-messages>
             </div>

@@ -22,7 +22,7 @@ export class OrdenesPedidosIndexComponent implements OnInit {
     public opcionesDataTable: any = {};
     public API_URL: any;
     public title = "Listado de Ordenes de Producción";
-    public breadcrumb = [{ name: `inicio`, icon: `fa-solid fa-house` }, { name: "Operativo", icon: "fas fa-cogs" }, { name: "OrdenesPedidos", icon: "fa-solid fa-people-group" }];
+    public breadcrumb = [{ name: `Inicio`, icon: `fa-duotone fa-house` }, { name: "Operativo", icon: "fa-duotone fa-vest-patches" }, { name: "Ordenes de producción", icon: "fa-duotone fa-file-invoice" }];
     public botones: String[] = ['btn-nuevo'];
     public arrayBotonesDatatable: String[] = ['btn-modificar', 'btn-eliminar'];
 

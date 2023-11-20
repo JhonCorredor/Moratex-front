@@ -11,6 +11,7 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { DatePipe } from '@angular/common';
 import { InterceptorInterceptor } from './admin/interceptor/interceptor.interceptor';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 @NgModule({
   declarations: [
@@ -36,7 +37,8 @@ import { NgSelectModule } from '@ng-select/ng-select';
       uncheckedLabel: 'No'
     }),
     NgxSpinnerModule,
-    NgSelectModule
+    NgSelectModule,
+    NgxCurrencyModule
   ],
   providers: [
     DatePipe,

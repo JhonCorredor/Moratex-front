@@ -1,17 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { DataTableDirective } from 'angular-datatables';
 import { Subject } from 'rxjs';
 import { LANGUAGE_DATATABLE } from 'src/app/admin/datatable.language';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
-import {
-  HelperService,
-  Messages,
-  MessageType,
-} from 'src/app/admin/helper.service';
+import { HelperService, Messages, MessageType, } from 'src/app/admin/helper.service';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
-import { ProductosFormComponent } from '../productos-form/productos-form.component';
 import { ProductosService } from '../productos.service';
 
 @Component({
@@ -26,7 +19,7 @@ export class ProductosIndexComponent implements OnInit {
   public opcionesDataTable: any = {};
 
   public API_URL: any;
-  public title = 'Listado de  Insumos';
+  public title = 'Listado de Productos';
   public breadcrumb = [
     { name: `Inicio`, icon: `fa-solid fa-house` },
     { name: 'Inventario', icon: 'fas fa-cogs' },
@@ -37,8 +30,6 @@ export class ProductosIndexComponent implements OnInit {
   constructor(
     private service: ProductosService,
     private helperService: HelperService,
-    private route: Router,
-    private modalService: NgbModal
   ) {}
 
   ngOnInit(): void {
@@ -88,6 +79,7 @@ export class ProductosIndexComponent implements OnInit {
           ].data.toString()
         );
         data.directionOrder = dataTablesParameters.order[0].dir;
+        data.foreignKey = "";
         this.service.datatable(data).subscribe((res) => {
           callback({
             recordsTotal: res.meta.totalCount,

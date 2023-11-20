@@ -34,8 +34,8 @@ export class CierresFormComponent implements OnInit {
             FechaCreacion: new FormControl(null),
             FechaInicial: new FormControl(null, Validators.required),
             FechaFinal: new FormControl(null, Validators.required),
-            Base: new FormControl(0, Validators.required),
-            SaldoEmpleado: new FormControl(0, Validators.required),
+            Base: new FormControl(null, Validators.required),
+            SaldoEmpleado: new FormControl(null, Validators.required),
             Observacion: new FormControl(""),
             Empleado_Id: new FormControl(null, Validators.required),
         });

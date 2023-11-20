@@ -54,7 +54,7 @@
           <div class="row">
             <div class="col-lg-4 col-md-4 col-sm-4">
               <label>Precio Costo</label>
-              <input type="number" class="form-control form-control-sm" formControlName="PrecioCosto">
+              <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text" class="form-control form-control-sm" formControlName="PrecioCosto">
               <app-forms-messages [error]="frmProductos.get('PrecioCosto')"
                 [statusForm]=statusForm></app-forms-messages>
             </div>
@@ -72,7 +72,7 @@
             </div>
             <div class="col-lg-3 col-md-3 col-sm-3" *ngIf="ProductoVenta">
               <label>Precio de Venta</label>
-              <input type="number" class="form-control form-control-sm" formControlName="PrecioVenta">
+              <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text" class="form-control form-control-sm" formControlName="PrecioVenta">
               <app-forms-messages [error]="frmProductos.get('PrecioVenta')"
                 [statusForm]=statusForm></app-forms-messages>
             </div>

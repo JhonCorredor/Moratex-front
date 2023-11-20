@@ -5,6 +5,8 @@ import { HelperService, Messages, MessageType } from 'src/app/admin/helper.servi
 import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
 import { ClientesService } from 'src/app/parameters/clientes/clientes.service';
 import { ClientesFormComponent } from 'src/app/parameters/clientes/clientes-form/clientes-form.component';
+import { OrdenesPedidosService } from 'src/app/operative/ordenes-pedidos/ordenes-pedidos.service';
+import { OrdenesPedidosFormComponent } from 'src/app/operative/ordenes-pedidos/ordenes-pedidos-form/ordenes-pedidos-form.component';
 import { GeneralParameterService } from 'src/app/parameters/general-parameter/general-parameter.service';
 import { PersonasService } from 'src/app/security/personas/personas.service';
 import { FacturasService } from '../facturas.service';
@@ -13,6 +15,7 @@ import { ProductosService } from 'src/app/inventory/productos/productos.service'
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { DatePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2'
 
 @Component({
     selector: 'app-facturas-form',
@@ -42,7 +45,7 @@ export class FacturasFormComponent implements OnInit {
     public selectedItem: any;
     public serviceName: string = "";
 
-    constructor(public routerActive: ActivatedRoute, private service: FacturasService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private productoService: ProductosService, private router: Router, private FacturasDetallesService: FacturasDetallesService, private modalService: NgbModal, private routeActual: ActivatedRoute) {
+    constructor(public OrdenesPedidosService: OrdenesPedidosService, public routerActive: ActivatedRoute, private service: FacturasService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private productoService: ProductosService, private router: Router, private FacturasDetallesService: FacturasDetallesService, private modalService: NgbModal, private routeActual: ActivatedRoute) {
         this.router.events.subscribe((event: any) => {
             if (event instanceof NavigationEnd) {
                 let url = event.url.split('/')[3];
@@ -67,7 +70,7 @@ export class FacturasFormComponent implements OnInit {
         this.frmFacturasDetalles = new FormGroup({
             Producto_Id: new FormControl(null, [Validators.required]),
             Cantidad: new FormControl("1", [Validators.required]),
-            Valor: new FormControl("", [Validators.required]),
+            Valor: new FormControl(null, [Validators.required]),
         });
 
         this.routerActive.params.subscribe(l => this.id = l.id);
@@ -170,7 +173,7 @@ export class FacturasFormComponent implements OnInit {
         data.foreignKey = 1;
 
         this.productoService.datatable(data).subscribe(res => {
-            var lstProductosVenta:any = [];
+            var lstProductosVenta: any = [];
             res.data.forEach((dato: any) => {
                 var producto = {
                     id: dato.id,
@@ -181,7 +184,7 @@ export class FacturasFormComponent implements OnInit {
             this.listProductos = lstProductosVenta;
         });
     }
-    
+
     save() {
         this.ProgressAlert();
         if (this.frmFacturas.invalid) {
@@ -212,6 +215,9 @@ export class FacturasFormComponent implements OnInit {
     }
 
     cancel() {
+        localStorage.removeItem("lstFacturaDetalle");
+        localStorage.removeItem("OrdenProduccionProducto");
+        localStorage.removeItem("Producto");
         this.helperService.redirectApp('/operativo/facturas');
     }
 
@@ -237,7 +243,13 @@ export class FacturasFormComponent implements OnInit {
 
             if (jsonString) {
                 lstFacturaDetalles = JSON.parse(jsonString);
-                lstFacturaDetalles.push(FacturaDetalle);
+
+                const detalleAgregar: any | undefined = lstFacturaDetalles.find((detalle: any) => detalle.producto === producto.data.id);
+                if (!detalleAgregar) {
+                    lstFacturaDetalles.push(FacturaDetalle);
+                } else {
+                    this.helperService.showMessage(MessageType.WARNING, "El producto ya fue agregado");
+                }
             } else {
                 lstFacturaDetalles = [];
                 lstFacturaDetalles.push(FacturaDetalle);
@@ -278,11 +290,62 @@ export class FacturasFormComponent implements OnInit {
             });
 
             setTimeout(() => {
-                localStorage.removeItem("lstFacturaDetalle");
-                this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-                this.helperService.redirectApp(`operativo/facturas`);
+                this.saveOrdenesPedidos(factura_Id);
             }, 1000);
         }
+    }
+
+    saveOrdenesPedidos(factura_Id: any) {
+        var jsonOrdenes = localStorage.getItem("OrdenProduccionProducto");
+        if (jsonOrdenes) {
+            var lstOrdenesProduccionProductos = JSON.parse(jsonOrdenes);
+            lstOrdenesProduccionProductos.forEach((dato: any) => {
+                var OrdenProduccionProducto = {
+                    "producto_Id": dato.producto_Id,
+                    "ordenProduccion_Id": dato.ordenProduccion_Id,
+                    "factura_Id": factura_Id,
+                }
+
+                this.updateOrdenesPedidos(OrdenProduccionProducto);
+            })
+        }
+
+        setTimeout(() => {
+            localStorage.removeItem("lstFacturaDetalle");
+            localStorage.removeItem("OrdenProduccionProducto");
+            localStorage.removeItem("Producto");
+            this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
+            this.helperService.redirectApp(`operativo/facturas`);
+        }, 1000);
+    }
+
+    updateOrdenesPedidos(OrdenProduccionProducto: any) {
+
+        var data = new DatatableParameter();
+        data.pageNumber = "1";
+        data.pageSize = "10";
+        data.filter = "";
+        data.columnOrder = "";
+        data.directionOrder = "";
+        data.foreignKey = Number(OrdenProduccionProducto.factura_Id);
+
+        this.FacturasDetallesService.getAllFacturasDetalles(data).subscribe(res => {
+            res.data.forEach((dato: any) => {
+                if (dato.producto_Id == OrdenProduccionProducto.producto_Id) {
+                    this.OrdenProduccionById(OrdenProduccionProducto.ordenProduccion_Id).then((orden) => {
+                        orden.data.facturaDetalle_Id = dato.id;
+
+                        this.OrdenesPedidosService.save(orden.data.id, orden.data).subscribe(l => {
+                            if (!l.status) {
+                                console.log(Messages.SAVEERROR);
+                            }
+                        })
+                    });
+                }
+            })
+        });
+
+
     }
 
     LlenarTablaDetalle() {
@@ -309,8 +372,31 @@ export class FacturasFormComponent implements OnInit {
             // Actualiza localStorage con la nueva lista
             localStorage.setItem('lstFacturaDetalle', JSON.stringify(this.listFacturaDetalles));
         }
-
         this.calcularSubTotalDetalles();
+
+        if (this.listFacturaDetalles.length == 0) {
+            this.tablaVacia = true;
+        }
+
+        this.EliminarOrdenesProduccionProducto(producto);
+    }
+
+    EliminarOrdenesProduccionProducto(producto: any) {
+        var jsonString = localStorage.getItem('OrdenProduccionProducto');
+        if (jsonString) {
+            var lstOrdenesProduccionProducto = JSON.parse(jsonString);
+
+            const detalleAEliminar: any | undefined = lstOrdenesProduccionProducto.find((detalle: any) => detalle.producto_Id == producto);
+
+            if (detalleAEliminar) {
+                const index = lstOrdenesProduccionProducto.indexOf(detalleAEliminar);
+                lstOrdenesProduccionProducto.splice(index, 1);
+
+                // Actualiza localStorage con la nueva lista
+                localStorage.setItem('OrdenProduccionProducto', JSON.stringify(lstOrdenesProduccionProducto));
+            }
+        }
+
     }
 
     calcularSubTotalDetalles() {
@@ -344,9 +430,23 @@ export class FacturasFormComponent implements OnInit {
         });
     }
 
+    OrdenProduccionById(ordenProduccion_Id: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.OrdenesPedidosService.getOrdenesPedidosById(ordenProduccion_Id).subscribe(
+                (datos) => {
+                    resolve(datos);
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
+        });
+    }
+
     ActualizarCantidad(dato: any) {
         var NuevaCantidad = $(`#Cantidad_${dato.producto}`).val();
         var NuevoValor = $(`#Valor_${dato.producto}`).val();
+
         if (NuevaCantidad !== undefined && NuevaCantidad !== "") {
             const detalleActualizar: any | undefined = this.listFacturaDetalles.find((detalle: any) => detalle.producto === dato.producto);
             if (detalleActualizar) {
@@ -424,9 +524,42 @@ export class FacturasFormComponent implements OnInit {
         });
     }
 
-    public nuevoCliente() {
+    nuevoCliente() {
         let modal = this.modalService.open(ClientesFormComponent, { size: 'lg', keyboard: false, backdrop: "static" });
         modal.componentInstance.titleData = "Crear Cliente";
         modal.componentInstance.serviceName = this.serviceName;
+    }
+
+    generarOrdenProduccion(producto_Id: any) {
+        Swal.fire({
+            title: '¿Desea generar la orden de producción con este producto?',
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var jsonString = localStorage.getItem("OrdenProduccionProducto");
+                var lstOrdenProduccionProducto;
+
+                var OrdenProduccionProducto = {
+                    "producto_Id": producto_Id,
+                    "ordenProduccion_Id": null
+                }
+
+                if (jsonString) {
+                    lstOrdenProduccionProducto = JSON.parse(jsonString);
+                    lstOrdenProduccionProducto.push(OrdenProduccionProducto);
+                } else {
+                    lstOrdenProduccionProducto = [];
+                    lstOrdenProduccionProducto.push(OrdenProduccionProducto);
+                }
+
+                localStorage.setItem("OrdenProduccionProducto", JSON.stringify(lstOrdenProduccionProducto));
+                localStorage.setItem("Producto", producto_Id);
+
+                let modal = this.modalService.open(OrdenesPedidosFormComponent, { size: 'xl', keyboard: false, backdrop: "static" });
+                modal.componentInstance.titleData = "Crear Orden de Producción";
+                modal.componentInstance.serviceName = this.serviceName;
+            }
+        })
     }
 }

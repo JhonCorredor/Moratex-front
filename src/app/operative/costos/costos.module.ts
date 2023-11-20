@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { CostosRoutingModule } from './costos-routing.module';
 import { CostosIndexComponent } from './costos-index/costos-index.component';
 import { CostosFormComponent } from './costos-form/costos-form.component';
@@ -13,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TextMaskModule } from 'angular2-text-mask';
 import { ArchivoModule } from 'src/app/parameters/archivo/archivo.module';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 @NgModule({
   declarations: [CostosIndexComponent, CostosFormComponent],
@@ -29,6 +29,7 @@ import { ArchivoModule } from 'src/app/parameters/archivo/archivo.module';
     NgbModule,
     TextMaskModule,
     ArchivoModule,
+    NgxCurrencyModule,
   ],
 })
 export class CostosModule {}

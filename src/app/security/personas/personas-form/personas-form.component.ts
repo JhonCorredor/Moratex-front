@@ -125,51 +125,23 @@ export class PersonasFormComponent implements OnInit {
 
   save() {
     if (this.frmPersonas.invalid) {
-      this.statusForm = false;
+      this.statusForm = false
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
       return;
     }
 
-    if (this.id != undefined && this.id != null) {
-      if (this.dataArchivo != undefined) {
-        if (this.frmPersonas.controls.imagenPersonaId_Id.value) {
-          this.ArchivoService.delete(
-            this.frmPersonas.controls.imagenPersonaId_Id.value
-          ).subscribe(() => {});
+    if (this.dataArchivo != undefined && this.dataArchivo != null) {
+      this.ArchivoService.save(this.dataArchivo).subscribe(l => {
+        if (l.status != "Error") {
+          this.frmPersonas.controls.imagenPersonaId_Id.setValue(l.data.id);
+          this.guardarPersona();
+          this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS);
+        } else {
+          this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR);
         }
-        this.ArchivoService.save(this.dataArchivo).subscribe((l) => {
-          if (l.status != 'Error') {
-            this.helperService.showMessage(
-              MessageType.SUCCESS,
-              Messages.SAVESUCCESS
-            );
-            this.frmPersonas.controls.imagenPersonaId_Id.setValue(l.data.id);
-            this.guardarPersona();
-          } else {
-            this.helperService.showMessage(
-              MessageType.ERROR,
-              Messages.SAVEERROR
-            );
-          }
-        });
-      } else {
-        this.guardarPersona();
-      }
+      })
     } else {
-      if (this.dataArchivo != undefined) {
-        this.ArchivoService.save(this.dataArchivo).subscribe((l) => {
-          if (l.status != 'Error') {
-            this.helperService.showMessage(
-              MessageType.SUCCESS,
-              Messages.SAVESUCCESS
-            );
-            this.frmPersonas.controls.imagenPersonaId_Id.setValue(l.data.id);
-          } else {
-            this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR);
-          }
-        });
-      }
-      this.guardarPersona();
+      this.guardarPersona()
     }
   }
 
@@ -187,7 +159,7 @@ export class PersonasFormComponent implements OnInit {
           MessageType.SUCCESS,
           Messages.SAVESUCCESS
         );
-        this.cancel();
+        this.modalActive.close(null);
       }
     });
   }

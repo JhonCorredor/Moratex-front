@@ -5,7 +5,7 @@
       <div class="card-body">
         <form [formGroup]="frmOrdenesPedidos" class="mb-4">
           <div class="row">
-            <div class="col-md-3 col-lg-3 col-sm-3">
+            <div class="col-md-3 col-lg-3 col-sm-3 mb-3" *ngIf="id">
               <label>Cliente</label>
               <ng-select [items]="listClientes" bindLabel="textoMostrar" bindValue="id" formControlName="Cliente_Id"
                 [readonly]=disableForm>
@@ -13,39 +13,45 @@
               <app-forms-messages [error]="frmOrdenesPedidos.get('Cliente_Id')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3 col-lg-3 col-sm-3">
+            <div class="col-md-3 col-lg-3 col-sm-3 mb-3">
               <label>Procedimiento</label>
               <ng-select [items]="listProcedimientos" bindLabel="textoMostrar" bindValue="id"
-                formControlName="Procedimiento_Id" [readonly]=disableForm>
+                formControlName="Procedimiento_Id" [(ngModel)]="selectedItem" (change)="onSelectProcedimiento($event)"
+                [readonly]=disableForm>
               </ng-select>
               <app-forms-messages [error]="frmOrdenesPedidos.get('Procedimiento_Id')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-2 col-lg-2 col-sm-2">
+            <div class="col-md-2 col-lg-2 col-sm-2 mb-3">
               <label>Cantidad</label>
               <input type="number" class="form-control form-control-sm" formControlName="Cantidad"
-                (blur)="calcularSubTotal()" [readonly]=disableForm />
+              [readonly]=disableForm /> <!--(blur)="calcularSubTotal()"-->
               <app-forms-messages [error]="frmOrdenesPedidos.get('Cantidad')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-2 col-lg-2 col-sm-2">
+            <div class="col-md-3 col-lg-3 col-sm-3 mb-3" *ngIf="bordado">
               <label>Ubicacion</label>
-              <ng-select [items]="listUbicaciones" bindLabel="Nombre" bindValue="Nombre" formControlName="Ubicacion"
-                [readonly]=disableForm>
+              <ng-select [multiple]="true" [items]="listUbicaciones" bindLabel="Nombre" bindValue="Nombre"
+                formControlName="Ubicacion" [readonly]=disableForm>
               </ng-select>
               <app-forms-messages [error]="frmOrdenesPedidos.get('Ubicacion')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-2 col-lg-2 col-sm-2">
+            <div class="col-md-3 col-lg-3 col-sm-3 mb-3" *ngIf="bordado">
+              <label>Colores</label>
+              <ng-select [multiple]="true" [items]="listColors" bindLabel="Nombre" bindValue="Nombre"
+                formControlName="Colores" [readonly]=disableForm>
+              </ng-select>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Colores')"
+                [statusForm]="statusForm"></app-forms-messages>
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2 mb-3" *ngIf="bordado">
               <label>Tamaño</label>
               <input type="text" class="form-control form-control-sm" formControlName="Tamaño" [readonly]=disableForm />
               <app-forms-messages [error]="frmOrdenesPedidos.get('Tamaño')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-          </div>
-          <br />
-          <div class="row">
-            <div class="col-md-3 col-lg-3 col-sm-3">
+            <div class="col-md-2 col-lg-2 col-sm-2 mb-3">
               <label>Taller</label>
               <ng-select [items]="listTalleres" bindLabel="textoMostrar" bindValue="id" formControlName="Taller_Id"
                 [readonly]=disableForm>
@@ -53,14 +59,14 @@
               <app-forms-messages [error]="frmOrdenesPedidos.get('Taller_Id')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-2 col-lg-2 col-sm-2">
+            <div class="col-md-2 col-lg-2 col-sm-2 mb-3">
               <label>Fecha de Entrega</label>
               <input type="date" class="form-control form-control-sm" formControlName="FechaEntrega"
                 [readonly]=disableForm />
               <app-forms-messages [error]="frmOrdenesPedidos.get('FechaEntrega')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3 col-lg-3 col-sm-3">
+            <div class="col-md-3 col-lg-3 col-sm-3 mb-3">
               <label>Empleado Asignado</label>
               <ng-select [items]="listEmpleadoAsignado" bindLabel="textoMostrar" bindValue="id"
                 formControlName="EmpleadoAsignado_Id" [readonly]=disableForm>
@@ -73,9 +79,11 @@
               <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)"
                 [disabled]=disableForm />
             </div>
-            <div class="col-md-1 col-lg-1 col-sm-1">
-              <label>Trae Prenda</label><br />
-              <ui-switch formControlName="TraePrenda" [disabled]=disableForm></ui-switch>
+            <div class="col-md-9 col-lg-9 col-sm-9">
+              <label>Observación</label>
+              <textarea class="form-control" formControlName="Observacion" rows="4" [readonly]=disableForm></textarea>
+              <app-forms-messages [error]="frmOrdenesPedidos.get('Observacion')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
           </div>
           <br />
@@ -94,31 +102,16 @@
               <app-forms-messages [error]="frmOrdenesPedidos.get('Estado_Id')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-
-            <div class="col-md-9 col-lg-9 col-sm-9">
-              <label>Observación</label>
-              <textarea class="form-control" formControlName="Observacion" rows="4" [readonly]=disableForm></textarea>
-              <app-forms-messages [error]="frmOrdenesPedidos.get('Observacion')"
-                [statusForm]="statusForm"></app-forms-messages>
-            </div>
-            <div class="col-md-3 col-lg-3 col-sm-3">
-              <label>Colores</label>
-              <select formControlName="Colores" [(ngModel)]="selectedColors" multiple class="form-control"
-                [disabled]=disableForm>
-                <option *ngFor="let color of colors" [value]="color">
-                  {{ color }}
-                </option>
-              </select>
-              <app-forms-messages [error]="frmOrdenesPedidos.get('Colores')"
-                [statusForm]="statusForm"></app-forms-messages>
-            </div>
           </div>
           <br />
           <div class="row">
+            <div class="col-md-1 col-lg-1 col-sm-1">
+              <label>Trae Prenda</label><br />
+              <ui-switch formControlName="TraePrenda" [disabled]=disableForm></ui-switch>
+            </div>
             <div class="col-md-3 col-lg-3 col-sm-3">
               <label>Sub Total</label>
-              <input type="text" class="form-control border-0" formControlName="SubTotalString" readonly="readonly"
-                style="background-color: transparent !important; font-size:medium!important">
+              <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text" class="form-control" formControlName="SubTotal" >
             </div>
           </div>
           <div class="row float-right">

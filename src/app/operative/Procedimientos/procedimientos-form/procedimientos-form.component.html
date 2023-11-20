@@ -16,54 +16,30 @@
           <div class="row">
             <div class="col-md-2">
               <label>Código</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="Codigo"
-              />
-              <app-forms-messages
-                [error]="frmProcedimientos.get('Codigo')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <input type="text" class="form-control form-control-sm" formControlName="Codigo" />
+              <app-forms-messages [error]="frmProcedimientos.get('Codigo')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
             <div class="col-md-3">
               <label>Nombre</label>
-              <input
-                type="text"
-                class="form-control form-control-sm"
-                formControlName="Nombre"
-              />
-              <app-forms-messages
-                [error]="frmProcedimientos.get('Nombre')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <input type="text" class="form-control form-control-sm" formControlName="Nombre" />
+              <app-forms-messages [error]="frmProcedimientos.get('Nombre')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
             <div class="col-md-2">
               <label>Valor</label>
-
-              <input
-                type="text"
-                formControlName="Valor"
-                class="form-control form-control-sm text-right"
-              />
-              <app-forms-messages
-                [error]="frmProcedimientos.get('Valor')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text"
+                formControlName="Valor" class="form-control form-control-sm text-right" />
+              <app-forms-messages [error]="frmProcedimientos.get('Valor')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
             <div class="col-md-2">
               <label>Unidad de Medida</label>
-              <ng-select
-                [items]="listUnidadMedidas"
-                bindLabel="textoMostrar"
-                bindValue="id"
-                formControlName="UnidadMedida_Id"
-              >
+              <ng-select [items]="listUnidadMedidas" bindLabel="textoMostrar" bindValue="id"
+                formControlName="UnidadMedida_Id">
               </ng-select>
-              <app-forms-messages
-                [error]="frmProcedimientos.get('UnidadMedida_Id')"
-                [statusForm]="statusForm"
-              ></app-forms-messages>
+              <app-forms-messages [error]="frmProcedimientos.get('UnidadMedida_Id')"
+                [statusForm]="statusForm"></app-forms-messages>
             </div>
             <div class="col-md-2">
               <label>Afecta Inventario</label><br />
@@ -72,11 +48,7 @@
           </div>
           <div class="row float-right">
             <div class="col-md-12">
-              <app-botones
-                [botones]="botones"
-                (eventSave)="save()"
-                (eventCancel)="cancel()"
-              ></app-botones>
+              <app-botones [botones]="botones" (eventSave)="save()" (eventCancel)="cancel()"></app-botones>
             </div>
           </div>
         </form>

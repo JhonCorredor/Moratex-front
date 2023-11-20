@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormBuilder,  FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
@@ -15,33 +15,32 @@ import { ClientesService } from '../clientes.service';
 })
 export class ClientesFormComponent implements OnInit {
 
-  public frmClientes! : FormGroup;
-  public statusForm : boolean = true
-  public id! : number;
+  public frmClientes!: FormGroup;
+  public statusForm: boolean = true
+  public id!: number;
   public botones = ['btn-guardar', 'btn-cancelar'];
-  public breadcrumb = [{name: `Inicio` , icon: `fa-solid fa-house`},   {name: "Parametros" , icon: "fas fa-cogs"}, {name: "Cliente"}, {name: "Crear"}];
+  public breadcrumb = [{ name: `Inicio`, icon: `fa-solid fa-house` }, { name: "Parametros", icon: "fas fa-cogs" }, { name: "Cliente" }, { name: "Crear" }];
   public titulo = "";
   public listPersonas: any[] = [];
 
 
   constructor(
     private router: Router,
-    public routerActive: ActivatedRoute, 
-    private service: ClientesService , 
+    public routerActive: ActivatedRoute,
+    private service: ClientesService,
     private personaService: PersonasService,
-    private helperService: HelperService, 
+    private helperService: HelperService,
     private fb: FormBuilder,
-    private modalService: NgbModal, 
-    ) 
-  { 
+    private modalService: NgbModal,
+  ) {
     this.routerActive.params.subscribe(e => this.id = e.id);
   }
 
   ngOnInit(): void {
     this.buildForm();
     if (this.id != undefined && this.id != null) {
-      this.titulo = "Editar Clientes"; 
-      this.service.getClientesById(this.id).subscribe(({data}) => {
+      this.titulo = "Editar Clientes";
+      this.service.getClientesById(this.id).subscribe(({ data }) => {
         this.frmClientes.controls.Codigo.setValue(data.codigo);
         this.frmClientes.controls.Persona_Id.setValue(data.persona_Id);
         this.frmClientes.controls.Estado.setValue(data.estado);
@@ -54,39 +53,39 @@ export class ClientesFormComponent implements OnInit {
           }
         })
       })
-    }else {
+    } else {
       this.titulo = "Crear Clientes";
     }
   }
 
   buildForm(): void {
-    
+
     this.frmClientes = this.fb.group({
-      Documento: [null, Validators.required],  
-      Nombres:  [null],
+      Documento: [null, Validators.required],
+      Nombres: [null],
       Apellidos: [null],
       Codigo: [""],
       Persona_Id: [null, [Validators.required]],
-      Estado : [true, [Validators.required]]
+      Estado: [true, [Validators.required]]
     });
 
   }
 
   save() {
     if (this.frmClientes.invalid) {
-      this.statusForm  = false
+      this.statusForm = false
       this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
       return;
     }
     this.guardarCliente();
   }
-  
+
   guardarCliente() {
-    let data  = { 
+    let data = {
       id: this.id ?? 0,
       ...this.frmClientes.value
     };
-    
+
     this.service.save(this.id, data).subscribe(l => {
       if (!l.status) {
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
@@ -97,10 +96,13 @@ export class ClientesFormComponent implements OnInit {
     })
   }
 
+
   cancel() {
-    if(this.router.url.toString() == "/operativo/facturas/crear"){
+    var ruta: string[] = this.router.url.toString().split('/');
+
+    if (ruta[2] != 'clientes') {
       this.modalService.dismissAll();
-    }else{
+    } else {
       this.helperService.redirectApp('/parametros/clientes');
     }
   }
@@ -113,11 +115,11 @@ export class ClientesFormComponent implements OnInit {
         this.frmClientes.controls.Nombres.setValue(`${l.data.primerNombre} ${l.data.segundoNombre}`);
         this.frmClientes.controls.Apellidos.setValue(`${l.data.primerApellido} ${l.data.segundoApellido}`);
       }
-    }, (error : any) => {
+    }, (error: any) => {
       if (error && error.status == 404) {
         // Usuario no existe y se procede a lanzar la modal
         this.helperService.showDesicionCustom("¿Desea crear la persona?", "La persona no se encuentra registrada", "warning", () => {
-          let modal = this.modalService.open(PersonasFormComponent, {size: 'lg', keyboard: false, backdrop: "static"});
+          let modal = this.modalService.open(PersonasFormComponent, { size: 'lg', keyboard: false, backdrop: "static" });
 
           modal.result.then(res => {
             if (res) {

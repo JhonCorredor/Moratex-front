@@ -9,6 +9,7 @@ import { DataTablesModule } from 'angular-datatables';
 import { UiSwitchModule } from 'ngx-ui-switch';
 import {  NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { GeneralModule } from 'src/app/general/general.module';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { GeneralModule } from 'src/app/general/general.module';
     GeneralModule,
     DataTablesModule,
     UiSwitchModule,
-    NgbModule
+    NgbModule,
+    NgxCurrencyModule
   ],
   providers: [
     // {

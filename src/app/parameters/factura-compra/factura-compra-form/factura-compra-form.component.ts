@@ -149,11 +149,11 @@ export class FacturaCompraFormComponent implements OnInit {
       this.generalParameterService.getById("Estados", estado_Id).subscribe(r => {
         if (r.data.nombre == 'Pagada') {
           this.Pagada = true;
-        }else{
+        } else {
           this.Pagada = false;
         }
       })
-    }else{
+    } else {
       this.Pagada = false;
     }
   }
@@ -199,6 +199,6 @@ export class FacturaCompraFormComponent implements OnInit {
     let modal = this.modalService.open(ProveedoresFormComponent, { size: 'xl', keyboard: false, backdrop: "static" });
     modal.componentInstance.titleData = "Crear Proveedor";
     modal.componentInstance.serviceName = this.serviceName;
-}
+  }
 
 }

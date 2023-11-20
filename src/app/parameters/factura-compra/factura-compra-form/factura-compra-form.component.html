@@ -27,7 +27,7 @@
               </div>
               <div class="col-md-2 col-lg-2 col-sm-2">
                 <label>Total</label>
-                <input type="number" class="form-control" formControlName="Total"
+                <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text" class="form-control" formControlName="Total"
                   [disabled]=disableForm>
                 <app-forms-messages [error]="frmFacturaCompra.get('Total')" [statusForm]=statusForm>
                 </app-forms-messages>
@@ -109,6 +109,22 @@
               </div>
             </ng-template>
           </li>
+          <li ngbNavItem>
+            <a ngbNavLink>Detalles de Pagos
+                <span data-bs-toggle="tooltip" data-bs-placement="left"
+                    title="En este formulario se asocian los detalles de pago pertenecientes al la factura de compra">
+                    <i class="fa-solid fa-circle-question"></i>
+                </span>
+            </a>
+            <ng-template ngbNavContent>
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12">
+                        <app-facturas-compras-detalles-pagos-form [FacturaCompra_Id]="id">
+                        </app-facturas-compras-detalles-pagos-form>
+                    </div>
+                </div>
+            </ng-template>
+        </li>
         </ul>
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </div>

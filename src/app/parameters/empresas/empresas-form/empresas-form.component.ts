@@ -4,6 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HelperService, Messages, MessageType } from 'src/app/admin/helper.service';
 import { ArchivoService } from '../../archivo/archivo.service';
 import { EmpresasService } from '../empresas.service';
+import { Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-empresas-form',
@@ -22,7 +24,7 @@ export class EmpresasFormComponent implements OnInit {
   public dataArchivo: any;
   public listCiudades = [];
 
-  constructor(public routerActive: ActivatedRoute, private service: EmpresasService, private helperService: HelperService, private fb: FormBuilder, private ArchivoService: ArchivoService) {
+  constructor(private router: Router, public routerActive: ActivatedRoute, private modalService: NgbModal, private service: EmpresasService, private helperService: HelperService, private fb: FormBuilder, private ArchivoService: ArchivoService) {
     this.routerActive.params.subscribe(l => this.id = l.id);
   }
 
@@ -130,14 +132,18 @@ export class EmpresasFormComponent implements OnInit {
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
       } else {
         this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-        this.helperService.redirectApp(`parametros/empresas`);
+        this.cancel();
       }
     })
   }
 
-
   cancel() {
-    this.helperService.redirectApp('parametros/empresas');
+    var ruta: string[] = this.router.url.toString().split('/');
+    if (ruta[2] != 'empresas') {
+      this.modalService.dismissAll();
+    } else {
+      this.helperService.redirectApp('/parametros/empresas');
+    }
   }
 
 }

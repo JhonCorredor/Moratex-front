@@ -8,11 +8,7 @@ import { ProductosService } from '../productos.service';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
 
-@Component({
-  selector: 'app-productos-form',
-  templateUrl: './productos-form.component.html',
-  styleUrls: ['./productos-form.component.css'],
-})
+@Component({ selector: 'app-productos-form', templateUrl: './productos-form.component.html', styleUrls: ['./productos-form.component.css'], })
 
 export class ProductosFormComponent implements OnInit {
   public frmProductos: FormGroup;
@@ -36,12 +32,12 @@ export class ProductosFormComponent implements OnInit {
     private categoriasservice: GeneralParameterService,
     private unidadesMedidasservice: GeneralParameterService,
     private ArchivoService: ArchivoService,
-    private empleadoService: EmpleadosService
+    private empleadoService: EmpleadosService,
   ) {
     this.frmProductos = new FormGroup({
       Minimo: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
       Maximo: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
-      PrecioCosto: new FormControl(0, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
+      PrecioCosto: new FormControl(null, [Validators.required, Validators.pattern(/^([0-9])*$/),]),
       PrecioVenta: new FormControl(0),
       ProductoVenta: new FormControl(false, [Validators.required]),
       Codigo: new FormControl(null, [Validators.required, Validators.maxLength(20),]),

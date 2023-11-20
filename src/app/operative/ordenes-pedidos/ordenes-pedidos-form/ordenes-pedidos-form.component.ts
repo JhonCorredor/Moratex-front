@@ -12,7 +12,7 @@ import { ArchivoService } from 'src/app/parameters/archivo/archivo.service';
 import { ProcedimientosService } from 'src/app/operative/Procedimientos/procedimientos.service';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { DatePipe } from '@angular/common';
-
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'app-ordenes-pedidos-form',
@@ -22,10 +22,11 @@ import { DatePipe } from '@angular/common';
 
 export class OrdenesPedidosFormComponent implements OnInit {
     public frmOrdenesPedidos: FormGroup;
-    public statusForm: boolean = true
+    public statusForm: boolean = true;
+    public bordado: boolean = false;
     public id!: number;
     public botones = ['btn-guardar', 'btn-cancelar'];
-    public breadcrumb = [{ name: `Inicio`, icon: `fa-solid fa-house` }, { name: "Operativo", icon: "fas fa-cogs" }, { name: "OrdenPedido" }, { name: "Crear" }];
+    public breadcrumb = [{ name: `Inicio`, icon: `fa-duotone fa-house` }, { name: "Operativo", icon: "fa-duotone fa-vest-patches" }, { name: "Ordenes de producción", icon: "fa-duotone fa-file-invoice" }, { name: "Crear" }];
     public titulo = "";
     public estadoProceso: any;
     public listEstados: any = [];
@@ -55,14 +56,32 @@ export class OrdenesPedidosFormComponent implements OnInit {
         },
     ];
 
-    public colors = ['Amarillo', 'Azul', 'Rojo', 'Naraja', 'Morado'];
-    public selectedColors: string[] = [];
-
+    public listColors = [
+        {
+            "Nombre": "Rojo",
+        },
+        {
+            "Nombre": "Amarillo",
+        },
+        {
+            "Nombre": "Azul",
+        },
+        {
+            "Nombre": "Naraja",
+        },
+        {
+            "Nombre": "Verde",
+        },
+        {
+            "Nombre": "Morado",
+        },
+    ];
+    public selectedItem: any;
     public dataArchivo: any = undefined;
     public disableForm: boolean = false;
+    public serviceName: string = "";
 
-
-    constructor(public routerActive: ActivatedRoute, private service: OrdenesPedidosService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private ArchivoService: ArchivoService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private procedimientoService: ProcedimientosService, private generalKeyParameterService: GeneralKeyParameterService, private router: Router) {
+    constructor(private modalService: NgbModal, public routerActive: ActivatedRoute, private service: OrdenesPedidosService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private ArchivoService: ArchivoService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private procedimientoService: ProcedimientosService, private generalKeyParameterService: GeneralKeyParameterService, private router: Router) {
         this.router.events.subscribe((event: any) => {
             if (event instanceof NavigationEnd) {
                 let url = event.url.split('/')[3];
@@ -80,9 +99,9 @@ export class OrdenesPedidosFormComponent implements OnInit {
             Fecha: new FormControl(null),
             FechaEntrega: new FormControl(null, Validators.required),
             Cantidad: new FormControl(null, Validators.required),
-            Ubicacion: new FormControl(null, Validators.required),
-            Tamaño: new FormControl(null, Validators.required),
-            Colores: new FormControl(null, Validators.required),
+            Ubicacion: new FormControl(""),
+            Tamaño: new FormControl(""),
+            Colores: new FormControl(""),
             TraePrenda: new FormControl(true, [Validators.required]),
             Observacion: new FormControl(null),
             Cliente_Id: new FormControl(null, [Validators.required]),
@@ -104,6 +123,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
         if (this.disableForm) {
             this.titulo = "Ver Registro de Ordenes de Producción";
             this.botones = ['btn-cancelar'];
+            this.breadcrumb = [{ name: `Inicio`, icon: `fa-duotone fa-house` }, { name: "Operativo", icon: "fa-duotone fa-vest-patches" }, { name: "Ordenes de producción", icon: "fa-duotone fa-file-invoice" }, { name: "Ver" }];
         } else {
             this.titulo = "Editar Ordenes de Producción";
         }
@@ -178,10 +198,6 @@ export class OrdenesPedidosFormComponent implements OnInit {
     }
 
     cargarListas() {
-        this.generalParameterService.getAll("Clientes").subscribe(r => {
-            this.listClientes = r.data;
-        })
-
         this.generalParameterService.getAll("Procedimientos").subscribe(r => {
             this.listProcedimientos = r.data;
         })
@@ -194,6 +210,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
             this.listEmpleadoAsignado = res.data;
         });
 
+        this.cargarCliente();
         this.cargarEmpleado();
         this.cargarEstados();
     }
@@ -239,6 +256,26 @@ export class OrdenesPedidosFormComponent implements OnInit {
         })
     }
 
+    cargarCliente() {
+        var data = new DatatableParameter();
+        data.pageNumber = "1";
+        data.pageSize = "10";
+        data.filter = "C-2023-0001";
+        data.columnOrder = "";
+        data.directionOrder = "";
+        this.generalParameterService.datatable("Clientes", data).subscribe(res => {
+            this.PersonaById(res.data[0].persona_Id).then((persona) => {
+                this.listClientes = [
+                    {
+                        id: res.data[0].id,
+                        textoMostrar: res.data[0].codigo + " - " + persona.data.primerNombre + " " + persona.data.segundoNombre + " " + persona.data.primerApellido + " " + persona.data.segundoApellido
+                    }
+                ];
+            });
+            this.frmOrdenesPedidos.controls.Cliente_Id.setValue(res.data[0].id);
+        })
+    }
+
     ProcedimientoById(procedimiento_Id: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.procedimientoService.getById(procedimiento_Id).subscribe(
@@ -252,38 +289,59 @@ export class OrdenesPedidosFormComponent implements OnInit {
         });
     }
 
-    calcularSubTotal() {
-        let data = this.frmOrdenesPedidos.value;
-        var ProcedimientoValor;
-        var subtotal = 0;
-
-        this.ProcedimientoById(data.Procedimiento_Id)
-            .then((procedimiento) => {
-                ProcedimientoValor = procedimiento.data.valor;
-
-                if (ProcedimientoValor !== null) {
-                    subtotal = parseInt(ProcedimientoValor) * parseInt(data.Cantidad);
+    PersonaById(persona_Id: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.personaService.getById(persona_Id).subscribe(
+                (datos) => {
+                    resolve(datos);
+                },
+                (error) => {
+                    reject(error);
                 }
-
-                var subTotalString = `$ 0`;
-
-                if (!isNaN(subtotal)) {
-                    subTotalString = `$ ${this.helperService.formaterNumber(subtotal)}`;
-                }
-
-                this.frmOrdenesPedidos.controls.SubTotal.setValue(subtotal);
-                this.frmOrdenesPedidos.controls.SubTotalString.setValue(subTotalString);
-            })
-            .catch((error) => {
-                console.error('Error al obtener el procedimiento:', error);
-            });
+            );
+        });
     }
+
+    // calcularSubTotal() {
+    //     let data = this.frmOrdenesPedidos.value;
+    //     var ProcedimientoValor;
+    //     var subtotal = 0;
+
+    //     this.ProcedimientoById(data.Procedimiento_Id)
+    //         .then((procedimiento) => {
+    //             ProcedimientoValor = procedimiento.data.valor;
+
+    //             if (ProcedimientoValor !== null) {
+    //                 subtotal = parseInt(ProcedimientoValor) * parseInt(data.Cantidad);
+    //             }
+
+    //             var subTotalString = `$ 0`;
+
+    //             if (!isNaN(subtotal)) {
+    //                 subTotalString = `$ ${this.helperService.formaterNumber(subtotal)}`;
+    //             }
+
+    //             this.frmOrdenesPedidos.controls.SubTotal.setValue(subtotal);
+    //             this.frmOrdenesPedidos.controls.SubTotalString.setValue(subTotalString);
+    //         })
+    //         .catch((error) => {
+    //             console.error('Error al obtener el procedimiento:', error);
+    //         });
+    // }
 
     save() {
         if (this.frmOrdenesPedidos.invalid) {
             this.statusForm = false
             this.helperService.showMessage(MessageType.WARNING, Messages.EMPTYFIELD);
             return;
+        }
+
+        if(this.frmOrdenesPedidos.controls.Ubicacion.value != '') {
+            this.frmOrdenesPedidos.controls.Ubicacion.setValue(this.frmOrdenesPedidos.controls.Ubicacion.value.join(', '));
+        }
+
+        if(this.frmOrdenesPedidos.controls.Colores.value != ''){
+            this.frmOrdenesPedidos.controls.Colores.setValue(this.frmOrdenesPedidos.controls.Colores.value.join(', '));
         }
 
         if (this.id != undefined && this.id != null) {
@@ -322,8 +380,6 @@ export class OrdenesPedidosFormComponent implements OnInit {
     }
 
     guardarOrdenesPedidos() {
-        const selectedColorsString = this.selectedColors.join(',');
-        this.frmOrdenesPedidos.controls.Colores.setValue(selectedColorsString);
         let data = {
             id: this.id ?? 0,
             ...this.frmOrdenesPedidos.value
@@ -333,14 +389,26 @@ export class OrdenesPedidosFormComponent implements OnInit {
             if (!l.status) {
                 this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR)
             } else {
+                this.guardarOrdenesPedidosFacturasDetalles(l.data.id);
                 this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-                this.helperService.redirectApp(`operativo/ordenesPedidos`);
+                if (this.router.url.toString() != '/operativo/ordenesPedidos/crear') {
+                    this.modalService.dismissAll();
+                } else {
+                    this.helperService.redirectApp('/operativo/ordenesPedidos');
+                }
             }
         })
     }
 
     cancel() {
-        this.helperService.redirectApp('/operativo/ordenesPedidos');
+        var ruta: string[] = this.router.url.toString().split('/');
+        if (ruta[2] != 'ordenesPedidos') {
+            localStorage.removeItem("OrdenProduccionProducto");
+            localStorage.removeItem("Producto");
+            this.modalService.dismissAll();
+        } else {
+            this.helperService.redirectApp('/operativo/ordenesPedidos');
+        }
     }
 
     fileEvent(event: any) {
@@ -364,4 +432,37 @@ export class OrdenesPedidosFormComponent implements OnInit {
         }
     }
 
+    onSelectProcedimiento(event: any) {
+        if (this.selectedItem != null) {
+            this.ProcedimientoById(this.selectedItem).then((procedimiento) => {
+                if (procedimiento.data.nombre == "Bordado") {
+                    this.bordado = true;
+                } else {
+                    this.bordado = false;
+                }
+            });
+        } else {
+            this.bordado = false;
+        }
+    }
+
+    guardarOrdenesPedidosFacturasDetalles(ordenPedido_Id:any){
+        var producto = localStorage.getItem("Producto");
+        var jsonString = localStorage.getItem("OrdenProduccionProducto");
+        var lstOrdenProduccionProducto;
+
+        if(jsonString){
+            lstOrdenProduccionProducto = JSON.parse(jsonString);
+            const detalleActualizar: any | undefined = lstOrdenProduccionProducto.find((detalle: any) => detalle.producto_Id == producto);
+            if (detalleActualizar) {
+                detalleActualizar.ordenProduccion_Id = ordenPedido_Id;                
+                const index = lstOrdenProduccionProducto.indexOf(detalleActualizar);
+                lstOrdenProduccionProducto.splice(index, 1);
+
+                // Actualiza localStorage con la nueva lista
+                lstOrdenProduccionProducto.push(detalleActualizar);
+                localStorage.setItem('OrdenProduccionProducto', JSON.stringify(lstOrdenProduccionProducto));
+            }
+        }
+    }
 }

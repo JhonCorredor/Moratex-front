@@ -17,7 +17,7 @@
             </div>
             <div class="col-md-3">
               <label>Valor</label>
-              <input type="number" class="form-control form-control-sm" formControlName="Valor">
+              <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text" class="form-control form-control-sm" formControlName="Valor">
               <app-forms-messages [error]="frmCostos.get('Valor')" [statusForm]=statusForm></app-forms-messages>
             </div>
             <div class="col-md-3">

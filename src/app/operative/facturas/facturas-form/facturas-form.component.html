@@ -15,7 +15,8 @@
                         </div>
                         <div class="col-md-1 col-lg-1 col-sm-1">
                             <br>
-                            <button type="button" class="btn" (click)="nuevoCliente()"><i class="fa-duotone fa-user-plus"></i></button>
+                            <button type="button" class="btn" (click)="nuevoCliente()"><i
+                                    class="fa-duotone fa-user-plus"></i></button>
                         </div>
                         <div class="col-md-3 col-lg-3 col-sm-3">
                             <label>Empleado Asignado</label>
@@ -94,7 +95,9 @@
                                                         </div>
                                                         <div class="col-md-3 col-sm-3 col-lg-3">
                                                             <label>Valor</label>
-                                                            <input type="number" class="form-control form-control-sm"
+                                                            <input currencyMask
+                                                                [options]="{ prefix: '$ ', thousands: '.', precision: 0 }"
+                                                                type="text" class="form-control form-control-sm"
                                                                 formControlName="Valor">
                                                             <app-forms-messages
                                                                 [error]="frmFacturasDetalles.get('Valor')"
@@ -122,7 +125,7 @@
                                                                             <th>Producto</th>
                                                                             <th>Cantidad</th>
                                                                             <th>Valor</th>
-                                                                            <th>Eliminar</th>
+                                                                            <th>Acciones</th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody id="content">
@@ -148,9 +151,8 @@
                                                                                     [readonly]=disableForm />
                                                                             </td>
                                                                             <td>
-                                                                                <input type="button" class="btn btn-sm"
-                                                                                    value="Eliminar"
-                                                                                    (click)="EliminarDetalle(dato.producto)" />
+                                                                                <button type="button" title="Eliminar" class="btn btn-sm btn-outline-default text-secondary" (click)="EliminarDetalle(dato.producto)"><i class="fa-duotone fa-trash-can"></i></button>
+                                                                                <a title="Generar Orden de Producción" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-generarOP" data-id="{{dato.producto}}" (click)="generarOrdenProduccion(dato.producto)"><i class="fa-duotone fa-file-invoice" data-id="{{dato.producto}}"></i></a>
                                                                             </td>
                                                                         </tr>
                                                                         <tr *ngIf="tablaVacia">

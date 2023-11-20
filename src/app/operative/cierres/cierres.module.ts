@@ -12,6 +12,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TextMaskModule } from 'angular2-text-mask';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 @NgModule({
   declarations: [CierresIndexComponent, CierresFormComponent],
@@ -27,6 +28,7 @@ import { TextMaskModule } from 'angular2-text-mask';
     HttpClientModule,
     NgbModule,
     TextMaskModule,
+    NgxCurrencyModule,
   ],
 })
 export class CierresModule {}

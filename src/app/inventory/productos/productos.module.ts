@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { ProductosRoutingModule } from './productos-routing.module';
 import { ProductosIndexComponent } from './productos-index/productos-index.component';
 import { ProductosFormComponent } from './productos-form/productos-form.component';
@@ -13,6 +12,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TextMaskModule } from 'angular2-text-mask';
 import { ArchivoModule } from 'src/app/parameters/archivo/archivo.module';
+import { NgxCurrencyModule } from 'ngx-currency';
 
 
 @NgModule({
@@ -32,7 +32,8 @@ import { ArchivoModule } from 'src/app/parameters/archivo/archivo.module';
     HttpClientModule,
     NgbModule,
     TextMaskModule,
-    ArchivoModule
+    ArchivoModule,
+    NgxCurrencyModule
   ]
 })
 export class ProductosModule { }
