@@ -204,6 +204,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
 
         this.generalKeyParameterService.getAll("Talleres").subscribe(r => {
             this.listTalleres = r.data;
+            this.frmOrdenesPedidos.controls.Taller_Id.setValue(r.data[0].id);
         })
 
         this.empleadoService.getAll("Empleados").subscribe(res => {

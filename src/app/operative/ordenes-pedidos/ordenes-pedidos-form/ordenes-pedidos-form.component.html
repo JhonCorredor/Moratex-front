@@ -25,11 +25,11 @@
             <div class="col-md-2 col-lg-2 col-sm-2 mb-3">
               <label>Cantidad</label>
               <input type="number" class="form-control form-control-sm" formControlName="Cantidad"
-              [readonly]=disableForm /> <!--(blur)="calcularSubTotal()"-->
+                [readonly]=disableForm /> <!--(blur)="calcularSubTotal()"-->
               <app-forms-messages [error]="frmOrdenesPedidos.get('Cantidad')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3 col-lg-3 col-sm-3 mb-3" *ngIf="bordado">
+            <div class="col-md-4 col-lg-4 col-sm-4 mb-3" *ngIf="bordado">
               <label>Ubicacion</label>
               <ng-select [multiple]="true" [items]="listUbicaciones" bindLabel="Nombre" bindValue="Nombre"
                 formControlName="Ubicacion" [readonly]=disableForm>
@@ -50,6 +50,15 @@
               <input type="text" class="form-control form-control-sm" formControlName="Tamaño" [readonly]=disableForm />
               <app-forms-messages [error]="frmOrdenesPedidos.get('Tamaño')"
                 [statusForm]="statusForm"></app-forms-messages>
+            </div>
+            <div class="col-md-2 col-lg-2 col-sm-2" *ngIf="bordado">
+              <label>Archivo</label>
+              <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)"
+                [disabled]=disableForm />
+            </div>
+            <div class="col-md-1 col-lg-1 col-sm-1" *ngIf="bordado">
+              <label>Trae Prenda</label><br />
+              <ui-switch formControlName="TraePrenda" [disabled]=disableForm></ui-switch>
             </div>
             <div class="col-md-2 col-lg-2 col-sm-2 mb-3">
               <label>Taller</label>
@@ -74,12 +83,7 @@
               <app-forms-messages [error]="frmOrdenesPedidos.get('EmpleadoAsignado_Id')"
                 [statusForm]="statusForm"></app-forms-messages>
             </div>
-            <div class="col-md-3 col-lg-3 col-sm-3">
-              <label>Archivo</label>
-              <input type="file" class="form-control form-control-sm" (change)="fileEvent($event)"
-                [disabled]=disableForm />
-            </div>
-            <div class="col-md-9 col-lg-9 col-sm-9">
+            <div class="col-md-12 col-lg-12 col-sm-12">
               <label>Observación</label>
               <textarea class="form-control" formControlName="Observacion" rows="4" [readonly]=disableForm></textarea>
               <app-forms-messages [error]="frmOrdenesPedidos.get('Observacion')"
@@ -105,13 +109,10 @@
           </div>
           <br />
           <div class="row">
-            <div class="col-md-1 col-lg-1 col-sm-1">
-              <label>Trae Prenda</label><br />
-              <ui-switch formControlName="TraePrenda" [disabled]=disableForm></ui-switch>
-            </div>
             <div class="col-md-3 col-lg-3 col-sm-3">
               <label>Sub Total</label>
-              <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text" class="form-control" formControlName="SubTotal" >
+              <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text"
+                class="form-control" formControlName="SubTotal">
             </div>
           </div>
           <div class="row float-right">
