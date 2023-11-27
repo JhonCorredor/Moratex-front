@@ -47,13 +47,16 @@ export class PersonasFormComponent implements OnInit {
         Validators.maxLength(20),
       ]),
       TipoDocumento: new FormControl(null, [Validators.required]),
-      PrimerNombre: new FormControl(null),
-      SegundoNombre: new FormControl(null, [Validators.maxLength(100)]),
-      PrimerApellido: new FormControl(null, [
+      PrimerNombre: new FormControl("",[
         Validators.required,
-        Validators.maxLength(100),
+        Validators.maxLength(100)
       ]),
-      SegundoApellido: new FormControl(null, [Validators.maxLength(100)]),
+      SegundoNombre: new FormControl(""),
+      PrimerApellido: new FormControl("", [
+        Validators.required,
+        Validators.maxLength(100)
+      ]),
+      SegundoApellido: new FormControl(""),
       Email: new FormControl(null, [Validators.maxLength(50)]),
       Direccion: new FormControl(null, [
         Validators.required,
