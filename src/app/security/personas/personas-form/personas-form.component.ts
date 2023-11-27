@@ -66,7 +66,6 @@ export class PersonasFormComponent implements OnInit {
       Estado: new FormControl(true, Validators.required),
       Ciudad_Id: new FormControl(null, Validators.required),
       Genero: new FormControl(null, [Validators.required]),
-      imagenPersonaId_Id: new FormControl(null),
     });
   }
 
@@ -89,15 +88,6 @@ export class PersonasFormComponent implements OnInit {
         this.frmPersonas.controls.Estado.setValue(data.estado);
         this.frmPersonas.controls.Ciudad_Id.setValue(data.ciudad_Id);
         this.frmPersonas.controls.Genero.setValue(data.genero);
-
-        if (data.imagenPersonaId_Id > 0) {
-          this.ArchivoService.getArchivoById(data.imagenPersonaId_Id).subscribe(
-            ({ data }) => {
-              this.img = data.archivo;
-              this.frmPersonas.controls.imagenPersonaId_Id.setValue(data.id);
-            }
-          );
-        }
       });
     } else {
       this.titulo = 'Crear persona';
@@ -130,22 +120,6 @@ export class PersonasFormComponent implements OnInit {
       return;
     }
 
-    if (this.dataArchivo != undefined && this.dataArchivo != null) {
-      this.ArchivoService.save(this.dataArchivo).subscribe(l => {
-        if (l.status != "Error") {
-          this.frmPersonas.controls.imagenPersonaId_Id.setValue(l.data.id);
-          this.guardarPersona();
-          this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS);
-        } else {
-          this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR);
-        }
-      })
-    } else {
-      this.guardarPersona()
-    }
-  }
-
-  guardarPersona() {
     let data = {
       id: this.id ?? 0,
       ...this.frmPersonas.value,
@@ -155,13 +129,23 @@ export class PersonasFormComponent implements OnInit {
       if (!l.status) {
         this.helperService.showMessage(MessageType.ERROR, Messages.SAVEERROR);
       } else {
-        this.helperService.showMessage(
-          MessageType.SUCCESS,
-          Messages.SAVESUCCESS
-        );
-        this.modalActive.close(null);
+        if (this.dataArchivo != undefined && this.dataArchivo != null) {
+          this.dataArchivo.TablaId = l.data.id;
+          this.guardarArchivoPersona(this.dataArchivo);
+        } else {
+          this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS);
+          this.modalActive.close(true);
+        }
       }
     });
+  }
+
+  guardarArchivoPersona(data: any) {
+    this.ArchivoService.save(data).subscribe(l => {
+      this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS);
+      this.modalActive.close(true);
+    })
+
   }
 
   cancel() {
@@ -179,7 +163,7 @@ export class PersonasFormComponent implements OnInit {
         archivo = await e.target.result; //imagen en base 64
         this.dataArchivo = {
           Tabla: 'Persona',
-          TablaId: 1,
+          TablaId: 0,
           Extension: type,
           Archivo: archivo,
           Nombre: name,
