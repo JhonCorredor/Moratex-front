@@ -109,7 +109,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
             Empleado_Id: new FormControl(null, [Validators.required]),
             EmpleadoAsignado_Id: new FormControl(null, [Validators.required]),
             Procedimiento_Id: new FormControl(null, [Validators.required]),
-            SubTotal: new FormControl(null, [Validators.required]),
+            SubTotal: new FormControl(0),
             SubTotalString: new FormControl("$ 0"),
             Taller_Id: new FormControl(null, [Validators.required]),
             ArchivoOrdenPedido_Id: new FormControl(null),
