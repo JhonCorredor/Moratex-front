@@ -23,6 +23,18 @@ export class FacturasDetallesPagosService {
     return this.http.get<any>(`${this.url}${this.ruta}/datatable?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, {headers: this.header});
   }
 
+  public getAllFacturasDetallesPagosDay(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.url}${this.ruta}/getSalesDay?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
+
+  public getAllFacturasDetallesPagosMonth(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.url}${this.ruta}/getSalesMonth?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
+
+  public getAllFacturasDetallesPagosCalendar(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.url}${this.ruta}/getSalesCalendar?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
+
   public getFacturasDetallesPagosById(id : any) : Observable<any> {
     return this.http.get<any>(`${this.url}${this.ruta}/${id}`, {headers: this.header});
   }
@@ -38,7 +50,6 @@ export class FacturasDetallesPagosService {
   public getAll(ruta: String) : Observable<any> {
     return this.http.get<any>(`${environment.url}${ruta}/AllSelect`, {headers: this.header});
   }
-
 
   public save(id : any, data : any) : Observable<any> {
     if (id != null && id != undefined) {

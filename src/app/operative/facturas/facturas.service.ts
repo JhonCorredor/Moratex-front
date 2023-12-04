@@ -10,36 +10,44 @@ import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 export class FacturasService {
 
   private url = environment.url;
-  private ruta =  "Facturas";
+  private ruta = "Facturas";
   private header = new HttpHeaders();
 
-  constructor(private http: HttpClient) { 
+  constructor(private http: HttpClient) {
     this.header.set("Content-Type", "application/json");
   }
 
-  public getAllFacturas( data : DatatableParameter) : Observable<any> {
-    return this.http.get<any>(`${this.url}${this.ruta}/datatable?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, {headers: this.header});
+  public getAllFacturas(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.url}${this.ruta}/datatable?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
   }
 
-  public getFacturasById(id : any) : Observable<any> {
-    return this.http.get<any>(`${this.url}${this.ruta}/${id}`, {headers: this.header});
+  public getAllFacturasDay(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.url}${this.ruta}/getSalesDay?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
   }
 
-  public getAll(ruta: String) : Observable<any> {
-    return this.http.get<any>(`${environment.url}${ruta}/AllSelect`, {headers: this.header});
+  public getAllFacturasMonth(data: DatatableParameter, fecha: string): Observable<any> {
+    return this.http.get<any>(`${this.url}${this.ruta}/getSalesMonth?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}&Fecha=${fecha}`, { headers: this.header });
+  }
+
+  public getFacturasById(id: any): Observable<any> {
+    return this.http.get<any>(`${this.url}${this.ruta}/${id}`, { headers: this.header });
+  }
+
+  public getAll(ruta: String): Observable<any> {
+    return this.http.get<any>(`${environment.url}${ruta}/AllSelect`, { headers: this.header });
   }
 
 
-  public save(id : any, data : any) : Observable<any> {
+  public save(id: any, data: any): Observable<any> {
     if (id != null && id != undefined) {
-      return this.http.put<any>(`${this.url}${this.ruta}/${id}`, data, {headers: this.header});
+      return this.http.put<any>(`${this.url}${this.ruta}/${id}`, data, { headers: this.header });
     } else {
-      return this.http.post<any>(`${this.url}${this.ruta}`, data, {headers: this.header});
+      return this.http.post<any>(`${this.url}${this.ruta}`, data, { headers: this.header });
     }
   }
 
-  public delete(id : any ) : Observable<any> {
-    return this.http.delete<any>(`${this.url}${this.ruta}/${id}`, {headers: this.header});
+  public delete(id: any): Observable<any> {
+    return this.http.delete<any>(`${this.url}${this.ruta}/${id}`, { headers: this.header });
   }
 
 }

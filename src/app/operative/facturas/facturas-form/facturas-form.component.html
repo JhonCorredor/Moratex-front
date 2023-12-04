@@ -62,6 +62,22 @@
                     <div>
                         <div class="card-footer">
                             <ul ngbNav #nav="ngbNav" [destroyOnHide]="false" class="nav-tabs">
+                                <li ngbNavItem *ngIf="id">
+                                    <a ngbNavLink>Detalles de Pagos
+                                        <span data-bs-toggle="tooltip" data-bs-placement="left"
+                                            title="En este formulario se asocian los detalles de pago pertenecientes al la orden">
+                                            <i class="fa-solid fa-circle-question"></i>
+                                        </span>
+                                    </a>
+                                    <ng-template ngbNavContent>
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                                <app-facturas-detalles-pagos-form [Factura_Id]="id">
+                                                </app-facturas-detalles-pagos-form>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </li>
                                 <li ngbNavItem>
                                     <a ngbNavLink>Detalles
                                         <span data-bs-toggle="tooltip" data-bs-placement="left"
@@ -125,6 +141,7 @@
                                                                             <th>Producto</th>
                                                                             <th>Cantidad</th>
                                                                             <th>Valor</th>
+                                                                            <th>Cantidad Inventario</th>
                                                                             <th>Acciones</th>
                                                                         </tr>
                                                                     </thead>
@@ -150,13 +167,24 @@
                                                                                     value="{{ dato.valor }}"
                                                                                     [readonly]=disableForm />
                                                                             </td>
+                                                                            <td>{{ dato.cantidadTotal }}</td>
                                                                             <td>
-                                                                                <button type="button" title="Eliminar" class="btn btn-sm btn-outline-default text-secondary" (click)="EliminarDetalle(dato.producto)"><i class="fa-duotone fa-trash-can"></i></button>
-                                                                                <a title="Generar Orden de Producción" class="btn btn-sm btn-outline-default text-secondary btn-dropdown-generarOP" data-id="{{dato.producto}}" (click)="generarOrdenProduccion(dato.producto)"><i class="fa-duotone fa-file-invoice" data-id="{{dato.producto}}"></i></a>
+                                                                                <button type="button" title="Eliminar"
+                                                                                    class="btn btn-sm btn-outline-primary"
+                                                                                    (click)="EliminarDetalle(dato.producto)"><i
+                                                                                        class="fa-duotone fa-trash-can"></i> Eliminar</button>
+
+
+                                                                                <a *ngIf="dato.ordenProduccion" title="Generar Orden de Producción"
+                                                                                    class="btn btn-sm btn-outline-warning btn-dropdown-generarOP"
+                                                                                    data-id="{{dato.producto}}"
+                                                                                    (click)="generarOrdenProduccion(dato.producto)"><i
+                                                                                        class="fa-duotone fa-file-invoice"
+                                                                                        data-id="{{dato.producto}}"></i> Generar Orden</a>
                                                                             </td>
                                                                         </tr>
                                                                         <tr *ngIf="tablaVacia">
-                                                                            <td colspan="4" class="text-center">Ningún
+                                                                            <td colspan="5" class="text-center">Ningún
                                                                                 dato disponible en la tabla</td>
                                                                         </tr>
                                                                     </tbody>
@@ -165,22 +193,6 @@
                                                         </div>
                                                     </div>
                                                 </form>
-                                            </div>
-                                        </div>
-                                    </ng-template>
-                                </li>
-                                <li ngbNavItem *ngIf="id">
-                                    <a ngbNavLink>Detalles de Pagos
-                                        <span data-bs-toggle="tooltip" data-bs-placement="left"
-                                            title="En este formulario se asocian los detalles de pago pertenecientes al la orden">
-                                            <i class="fa-solid fa-circle-question"></i>
-                                        </span>
-                                    </a>
-                                    <ng-template ngbNavContent>
-                                        <div class="row">
-                                            <div class="col-lg-12 col-md-12 col-sm-12">
-                                                <app-facturas-detalles-pagos-form [Factura_Id]="id">
-                                                </app-facturas-detalles-pagos-form>
                                             </div>
                                         </div>
                                     </ng-template>

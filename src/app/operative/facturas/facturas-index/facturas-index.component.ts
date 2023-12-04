@@ -136,8 +136,8 @@ export class FacturasIndexComponent implements OnInit {
                         data.foreignKey = "";
                         this.service.getAllFacturas(data).subscribe(res => {
                             callback({
-                                recordsTotal: res.meta.totalCount,
-                                recordsFiltered: res.meta.totalCount,
+                                recordsTotal: res.data.length,
+                                recordsFiltered: res.data.length,
                                 draw: dataTablesParameters.draw,
                                 data: res.data
                             });

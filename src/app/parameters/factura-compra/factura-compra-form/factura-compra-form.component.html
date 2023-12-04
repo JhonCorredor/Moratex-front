@@ -17,8 +17,9 @@
               </div>
               <div class="col-md-1 col-lg-1 col-sm-1">
                 <br>
-                <button type="button" class="btn" (click)="nuevoProveedor()"><i class="fa-duotone fa-user-plus"></i></button>
-            </div>
+                <button type="button" class="btn" (click)="nuevoProveedor()"><i
+                    class="fa-duotone fa-user-plus"></i></button>
+              </div>
               <div class="col-md-2 col-lg-2 col-sm-2">
                 <label>Número de Factura</label>
                 <input type="text" class="form-control" formControlName="NumeroFactura" [disabled]=disableForm>
@@ -27,8 +28,8 @@
               </div>
               <div class="col-md-2 col-lg-2 col-sm-2">
                 <label>Total</label>
-                <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text" class="form-control" formControlName="Total"
-                  [disabled]=disableForm>
+                <input currencyMask [options]="{ prefix: '$ ', thousands: '.', precision: 0 }" type="text"
+                  class="form-control" formControlName="Total" [disabled]=disableForm>
                 <app-forms-messages [error]="frmFacturaCompra.get('Total')" [statusForm]=statusForm>
                 </app-forms-messages>
               </div>
@@ -62,10 +63,18 @@
                 <app-forms-messages [error]="frmFacturaCompra.get('Estado_Id')" [statusForm]=statusForm>
                 </app-forms-messages>
               </div>
-              <div class="col-md-3 col-lg-3 col-sm-3" *ngIf="Pagada">
-                <label>Pago de caja</label><br>
-                <ui-switch formControlName="PagoCaja"></ui-switch>
-              </div>
+                <div class="col-md-1 col-lg-1 col-sm-1" *ngIf="Pagada">
+                  <label>Pago de caja</label><br>
+                  <ui-switch formControlName="PagoCaja"></ui-switch>
+                </div>
+                <div class="col-md-3 col-lg-3 col-sm-3" *ngIf="Pagada">
+                  <label>Medio de pago</label>
+                  <ng-select [items]="listMediosPagos" bindLabel="textoMostrar" bindValue="id"
+                    formControlName="MedioPago_Id">
+                  </ng-select>
+                  <app-forms-messages [error]="frmFacturaCompra.get('MedioPago_Id')"
+                    [statusForm]=statusForm></app-forms-messages>
+                </div>
               <div class="col-md-3 col-lg-3 col-sm-3 d-none">
                 <label>Codigo</label>
                 <input type="text" class="form-control form-control-sm" formControlName="Codigo">
@@ -111,20 +120,20 @@
           </li>
           <li ngbNavItem>
             <a ngbNavLink>Detalles de Pagos
-                <span data-bs-toggle="tooltip" data-bs-placement="left"
-                    title="En este formulario se asocian los detalles de pago pertenecientes al la factura de compra">
-                    <i class="fa-solid fa-circle-question"></i>
-                </span>
+              <span data-bs-toggle="tooltip" data-bs-placement="left"
+                title="En este formulario se asocian los detalles de pago pertenecientes al la factura de compra">
+                <i class="fa-solid fa-circle-question"></i>
+              </span>
             </a>
             <ng-template ngbNavContent>
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12">
-                        <app-facturas-compras-detalles-pagos-form [FacturaCompra_Id]="id">
-                        </app-facturas-compras-detalles-pagos-form>
-                    </div>
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                  <app-facturas-compras-detalles-pagos-form [FacturaCompra_Id]="id">
+                  </app-facturas-compras-detalles-pagos-form>
                 </div>
+              </div>
             </ng-template>
-        </li>
+          </li>
         </ul>
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </div>

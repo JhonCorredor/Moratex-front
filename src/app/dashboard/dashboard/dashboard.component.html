@@ -1,1 +1,97 @@
-<p></p>
+<section class="content">
+    <div class="container-fluid">
+        <div class="modal-body">
+            <form [formGroup]="frmDashBoard" class="mb-4">
+                <div class="d-flex justify-content-center">
+                    <div>
+                        <br>
+                        <button type="button" class="btn btn-primary btnVentasDia"
+                            (click)="onChangeVentas()">Día</button>
+                    </div>
+                    <div class="mx-2">
+                        <h6>Mes:</h6>
+                        <ng-select [items]="litsMeses" bindLabel="textoMostrar" bindValue="id" class="h6"
+                            style="width: 150px;" formControlName="Mes_Id" (change)="onchangeMes($event)">
+                        </ng-select>
+                    </div>
+                </div>
+                <br>
+                <div class="d-flex justify-content-around">
+                    <div class="card rounded shadow-lg border-0 p-4 w-100">
+                        <h5>{{year}}</h5>
+                        <br>
+                        <canvas id="chartCalendar" height="100" width="400"></canvas>
+                    </div>
+                </div>
+                <br>
+                <div class="d-flex justify-content-around">
+                    <div class="d-flex flex-column card rounded shadow-lg border-0 p-4 w-25">
+                        <div>
+                            <h5>Total de ventas</h5>
+                            <br>
+                            <h1 class="text-center">{{ totalVentas }}</h1>
+                        </div>
+                        <br>
+                        <div>
+                            <h5>Medios de pago</h5>
+                            <br>
+                            <table datatable [dtOptions]="dtOptionsVentas" [dtTrigger]="dtTrigger"
+                                class="display compact responsive w-100 table table-striped table-bordered  ">
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card rounded shadow-lg border-0 p-4 w-25 mx-3">
+                        <h5>Medios de pago</h5>
+                        <br>
+                        <br>
+                        <canvas id="chartVentas" height="250" width="400"></canvas>
+                    </div>
+
+                    <div class="card rounded shadow-lg border-0 p-4 w-50 ">
+                        <h5>{{mesActual}}</h5>
+                        <br>
+                        <canvas id="chartVentasCalendar" height="250" width="400"></canvas>
+                    </div>
+                </div>
+                <br>
+                <div class="d-flex justify-content-around">
+                    <div class="d-flex flex-column card rounded shadow-lg border-0 p-4 w-25">
+                        <div>
+                            <h5>Total de gastos</h5>
+                            <br>
+                            <h1 class="text-center">{{ totalGastos }}</h1>
+                        </div>
+                        <br>
+                        <div>
+                            <h5>Tipos de gasto</h5>
+                            <br>
+                            <table datatable [dtOptions]="dtOptionsGastos" [dtTrigger]="dtTriggerGastos"
+                                class="display compact responsive w-100 table table-striped table-bordered  ">
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="card rounded shadow-lg border-0 p-4 w-25 mx-3">
+                        <h5>Tipo de gasto</h5>
+                        <br>
+                        <br>
+                        <canvas id="chartGastos" height="250" width="400"></canvas>
+                    </div>
+
+                    <div class="card rounded shadow-lg border-0 p-4 w-50 ">
+                        <h5>{{mesActual}}</h5>
+                        <br>
+                        <canvas id="chartGastosCalendar" height="250" width="400"></canvas>
+                    </div>
+                </div>
+                <br>
+                <div class="d-flex justify-content-around">
+                    <div class="d-flex flex-column card rounded shadow-lg border-0 p-4 w-25"></div>
+                    <div class="card rounded shadow-lg border-0 p-4 w-25 mx-3"></div>
+                    <div class="card rounded shadow-lg border-0 p-4 w-50"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>

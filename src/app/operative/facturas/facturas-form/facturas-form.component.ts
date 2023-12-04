@@ -12,6 +12,7 @@ import { PersonasService } from 'src/app/security/personas/personas.service';
 import { FacturasService } from '../facturas.service';
 import { FacturasDetallesService } from '../facturas-detalles.service';
 import { ProductosService } from 'src/app/inventory/productos/productos.service';
+import { InventarioDetalleService } from 'src/app/inventory/inventarios/inventario-detalle.service';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { DatePipe } from '@angular/common';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -44,8 +45,9 @@ export class FacturasFormComponent implements OnInit {
     public disableForm: boolean = false;
     public selectedItem: any;
     public serviceName: string = "";
+    public activeNavItem: number = 1;
 
-    constructor(public OrdenesPedidosService: OrdenesPedidosService, public routerActive: ActivatedRoute, private service: FacturasService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private productoService: ProductosService, private router: Router, private FacturasDetallesService: FacturasDetallesService, private modalService: NgbModal, private routeActual: ActivatedRoute) {
+    constructor(public OrdenesPedidosService: OrdenesPedidosService, public routerActive: ActivatedRoute, private service: FacturasService, private empleadoService: EmpleadosService, private clienteService: ClientesService, private generalParameterService: GeneralParameterService, private personaService: PersonasService, private helperService: HelperService, private datePipe: DatePipe, private productoService: ProductosService, private router: Router, private FacturasDetallesService: FacturasDetallesService, private modalService: NgbModal, private routeActual: ActivatedRoute, private inventarioDetalleService: InventarioDetalleService) {
         this.router.events.subscribe((event: any) => {
             if (event instanceof NavigationEnd) {
                 let url = event.url.split('/')[3];
@@ -232,32 +234,45 @@ export class FacturasFormComponent implements OnInit {
         var lstFacturaDetalles;
 
         this.ProductoById(this.frmFacturasDetalles.controls.Producto_Id.value).then((producto) => {
-            var FacturaDetalle = {
-                "id": null,
-                "producto": producto.data.id,
-                "nombre": producto.data.nombre,
-                "cantidad": this.frmFacturasDetalles.controls.Cantidad.value,
-                "valor": this.frmFacturasDetalles.controls.Valor.value,
-                "subTotal": (parseInt(this.frmFacturasDetalles.controls.Valor.value) * parseInt(this.frmFacturasDetalles.controls.Cantidad.value)),
-            }
-
-            if (jsonString) {
-                lstFacturaDetalles = JSON.parse(jsonString);
-
-                const detalleAgregar: any | undefined = lstFacturaDetalles.find((detalle: any) => detalle.producto === producto.data.id);
-                if (!detalleAgregar) {
-                    lstFacturaDetalles.push(FacturaDetalle);
-                } else {
-                    this.helperService.showMessage(MessageType.WARNING, "El producto ya fue agregado");
+            this.InventarioDetalleByProducto(producto.data.id).then((inventarioDetalle) => {
+                var generarOrden = false;
+                if(inventarioDetalle.data.cantidadTotal <= 0){
+                    generarOrden = true;
+                    Swal.fire({
+                        title: 'El insumo no tiene cantidades en inventario, genere una orde de producción.',
+                        showCancelButton: false,
+                        confirmButtonText: 'Ok',
+                    })
+                } 
+                var FacturaDetalle = {
+                    "id": null,
+                    "producto": producto.data.id,
+                    "nombre": producto.data.nombre,
+                    "cantidad": this.frmFacturasDetalles.controls.Cantidad.value,
+                    "valor": this.frmFacturasDetalles.controls.Valor.value,
+                    "subTotal": (parseInt(this.frmFacturasDetalles.controls.Valor.value) * parseInt(this.frmFacturasDetalles.controls.Cantidad.value)),
+                    "cantidadTotal": inventarioDetalle.data.cantidadTotal,
+                    "ordenProduccion": generarOrden,
                 }
-            } else {
-                lstFacturaDetalles = [];
-                lstFacturaDetalles.push(FacturaDetalle);
-            }
 
-            localStorage.setItem("lstFacturaDetalle", JSON.stringify(lstFacturaDetalles));
-            this.LlenarTablaDetalle();
-            this.calcularSubTotalDetalles();
+                if (jsonString) {
+                    lstFacturaDetalles = JSON.parse(jsonString);
+
+                    const detalleAgregar: any | undefined = lstFacturaDetalles.find((detalle: any) => detalle.producto === producto.data.id);
+                    if (!detalleAgregar) {
+                        lstFacturaDetalles.push(FacturaDetalle);
+                    } else {
+                        this.helperService.showMessage(MessageType.WARNING, "El producto ya fue agregado");
+                    }
+                } else {
+                    lstFacturaDetalles = [];
+                    lstFacturaDetalles.push(FacturaDetalle);
+                }
+
+                localStorage.setItem("lstFacturaDetalle", JSON.stringify(lstFacturaDetalles));
+                this.LlenarTablaDetalle();
+                this.calcularSubTotalDetalles();
+            });
         });
     }
 
@@ -314,8 +329,8 @@ export class FacturasFormComponent implements OnInit {
             localStorage.removeItem("lstFacturaDetalle");
             localStorage.removeItem("OrdenProduccionProducto");
             localStorage.removeItem("Producto");
-            this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS)
-            this.helperService.redirectApp(`operativo/facturas`);
+            this.helperService.showMessage(MessageType.SUCCESS, Messages.SAVESUCCESS);
+            this.helperService.redirectApp(`operativo/facturas/editar/${factura_Id}`);
         }, 1000);
     }
 
@@ -420,6 +435,19 @@ export class FacturasFormComponent implements OnInit {
     ProductoById(producto_Id: any): Promise<any> {
         return new Promise((resolve, reject) => {
             this.productoService.getById(producto_Id).subscribe(
+                (datos) => {
+                    resolve(datos);
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
+        });
+    }
+
+    InventarioDetalleByProducto(producto_Id: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.inventarioDetalleService.getInventarioDetalleByProductoId(producto_Id).subscribe(
                 (datos) => {
                     resolve(datos);
                 },

@@ -30,6 +30,7 @@ export class FacturaCompraFormComponent implements OnInit {
   public id!: number;
   public disableForm: boolean = false;
   public serviceName: string = "";
+  public listMediosPagos: any[] = [];
 
   constructor(private modalService: NgbModal, public routerActive: ActivatedRoute, private service: FacturaCompraService, public helperService: HelperService, private fb: FormBuilder, private router: Router, private datePipe: DatePipe, private empleadoService: EmpleadosService, private generalParameterService: GeneralParameterService) {
     this.routerActive.params.subscribe(l => this.id = l.id);
@@ -87,7 +88,8 @@ export class FacturaCompraFormComponent implements OnInit {
       Estado_Id: new FormControl(null, [Validators.required]),
       Empleado_Id: new FormControl(null, [Validators.required]),
       FechaCreacion: new FormControl(parseFecha, [Validators.required]),
-      PagoCaja: new FormControl(false, [Validators.required])
+      PagoCaja: new FormControl(false, [Validators.required]),
+      MedioPago_Id: new FormControl(null, [Validators.required]),
     });
   }
 
@@ -96,8 +98,16 @@ export class FacturaCompraFormComponent implements OnInit {
       this.listProveedores = data;
     });
 
+    this.cargarMediosPagos();
     this.cargarEmpleado();
     this.cargarEstados();
+  }
+
+  cargarMediosPagos() {
+    this.service.getAll('MediosPagos').subscribe(({ data }) => {
+      this.listMediosPagos = data;
+      this.frmFacturaCompra.controls.MedioPago_Id.setValue(data[0].id);
+    });
   }
 
   cargarEstados() {
@@ -151,10 +161,12 @@ export class FacturaCompraFormComponent implements OnInit {
           this.Pagada = true;
         } else {
           this.Pagada = false;
+          this.cargarMediosPagos();
         }
       })
     } else {
       this.Pagada = false;
+      this.cargarMediosPagos();
     }
   }
 

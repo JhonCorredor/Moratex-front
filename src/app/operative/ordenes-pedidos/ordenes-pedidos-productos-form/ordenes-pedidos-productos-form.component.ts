@@ -9,6 +9,8 @@ import { LANGUAGE_DATATABLE } from 'src/app/admin/datatable.language';
 import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 import { BotonesComponent } from 'src/app/general/botones/botones.component';
 import { EmpleadosService } from 'src/app/parameters/empleados/empleados.service';
+import { ProcedimientosService } from 'src/app/operative/Procedimientos/procedimientos.service';
+import { ProductosService } from 'src/app/inventory/productos/productos.service';
 import Swal from 'sweetalert2'
 
 @Component({
@@ -41,7 +43,9 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
         private service: OrdenesPedidosProductosService,
         private helperService: HelperService,
         private fb: FormBuilder,
-        private empleadoService: EmpleadosService
+        private empleadoService: EmpleadosService,
+        private procedimientoService: ProcedimientosService,
+        private productosService: ProductosService
     ) { }
 
     ngOnInit(): void {
@@ -72,22 +76,39 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
     }
 
     buildSelect() {
-        this.service.getAll('Productos').subscribe(({ data }) => {
-            this.listProductos = data;
-        });
+        this.cargarProductos();
         this.cargarEmpleado();
+    }
+
+    cargarProductos(){
+        var procedimiento_Id = localStorage.getItem("Procedimiento");
+
+        this.ProcedimientoById(procedimiento_Id).then((procedimiento) => {
+            var data = new DatatableParameter(); data.pageNumber = "1"; data.pageSize = "10"; data.filter = ""; data.columnOrder = ""; data.directionOrder = ""; data.foreignKey = "";
+
+            var lstProductos: any[] = [];
+            this.productosService.datatable(data).subscribe(res => {
+                res.data.forEach((item: any) => {
+                    var procedimiento = {
+                        id: item.id,
+                        textoMostrar: item.codigo + " - " + item.nombre
+                    }
+
+                    lstProductos.push(procedimiento);
+                })
+            });
+
+            setTimeout(() => {
+                this.listProductos = lstProductos;
+            }, 200);
+        })
+        
     }
 
     cargarEmpleado() {
         var persona_Id = localStorage.getItem("persona_Id");
 
-        var data = new DatatableParameter();
-        data.pageNumber = "1";
-        data.pageSize = "10";
-        data.filter = "";
-        data.columnOrder = "";
-        data.directionOrder = "";
-        data.foreignKey = Number(persona_Id);
+        var data = new DatatableParameter(); data.pageNumber = "1"; data.pageSize = "10"; data.filter = ""; data.columnOrder = ""; data.directionOrder = ""; data.foreignKey = Number(persona_Id);
 
         this.empleadoService.getAllEmpleados(data).subscribe(res => {
             this.listEmpleados = [
@@ -97,6 +118,19 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
                 }
             ];
             this.frmOrdenesPedidosProductos.controls.Empleado_Id.setValue(res.data[0].id);
+        });
+    }
+
+    ProcedimientoById(procedimiento_Id: any): Promise<any> {
+        return new Promise((resolve, reject) => {
+            this.procedimientoService.getById(procedimiento_Id).subscribe(
+                (datos) => {
+                    resolve(datos);
+                },
+                (error) => {
+                    reject(error);
+                }
+            );
         });
     }
 
@@ -155,18 +189,18 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
     }
 
     refrescarTablas(entrada: boolean) {
-        if (typeof this.dtElement.dtInstance != 'undefined') {
-            this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
-                dtInstance.ajax.reload();
-            });
-        }
-
         if (entrada) {
             //Refrescar manualmente tabla Entrada
             $("#DataTables_Table_1").DataTable().destroy();
             $("#DataTables_Table_1").html("");
             this.cargarDatatableEntrada();
             this.dtTriggerEntrada.next();
+        } else {
+            if (typeof this.dtElement.dtInstance != 'undefined') {
+                this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+                    dtInstance.ajax.reload();
+                });
+            }
         }
     }
 
@@ -256,6 +290,7 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
     cargarDatatableEntrada() {
         const that = this;
         that.opcionesDataTableEntrada = {
+            destroy: true,
             serverSide: true,
             processing: true,
             ordering: true,
@@ -325,7 +360,7 @@ export class OrdenesPedidosProductosFormComponent implements OnInit {
                         const boton = that.botonesDatatableEntrada;
                         if (data.productoTerminado) {
                             return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(data.id).split('btn-dropdown-terminado').join('btn-dropdown-terminado d-none');
-                        }else{
+                        } else {
                             return boton.botonesDropdown.nativeElement.outerHTML.split('$id').join(data.id);
                         }
                     },

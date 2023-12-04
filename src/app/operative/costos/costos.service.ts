@@ -22,6 +22,18 @@ export class CostosService {
     );
   }
 
+  public getAllCostosDay(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.url}Costos/getBillsDay?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
+
+  public getAllCostosMonth(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.url}Costos/getBillsMonth?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
+
+  public getAllCostosCalendar(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.url}Costos/getBillsCalendar?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
+
   public getById(id: any): Observable<any> {
     return this.http.get<any>(`${this.url}Costos/${id}`, {
       headers: this.header,

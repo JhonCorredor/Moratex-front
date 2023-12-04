@@ -35,6 +35,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
     public listEmpleados: any = [];
     public listEmpleadoAsignado: any = [];
     public listTalleres: any = [];
+
     public listUbicaciones = [
         {
             "Nombre": "Superior Derecha",
@@ -76,6 +77,7 @@ export class OrdenesPedidosFormComponent implements OnInit {
             "Nombre": "Morado",
         },
     ];
+
     public selectedItem: any;
     public dataArchivo: any = undefined;
     public disableForm: boolean = false;
@@ -134,9 +136,6 @@ export class OrdenesPedidosFormComponent implements OnInit {
                 this.frmOrdenesPedidos.controls.FechaEntrega.setValue(formattedDate);
                 this.frmOrdenesPedidos.controls.Codigo.setValue(data.codigo);
                 this.frmOrdenesPedidos.controls.Cantidad.setValue(data.cantidad);
-                this.frmOrdenesPedidos.controls.Ubicacion.setValue(data.ubicacion);
-                this.frmOrdenesPedidos.controls.Tamaño.setValue(data.tamaño);
-                this.frmOrdenesPedidos.controls.Colores.setValue(data.colores);
                 this.frmOrdenesPedidos.controls.TraePrenda.setValue(data.traePrenda);
                 this.frmOrdenesPedidos.controls.Observacion.setValue(data.observacion);
                 this.frmOrdenesPedidos.controls.Cliente_Id.setValue(data.cliente_Id);
@@ -148,43 +147,30 @@ export class OrdenesPedidosFormComponent implements OnInit {
                 this.frmOrdenesPedidos.controls.Taller_Id.setValue(data.taller_Id);
                 var subTotalString = `$ ${this.helperService.formaterNumber(data.subTotal)}`;
                 this.frmOrdenesPedidos.controls.SubTotalString.setValue(subTotalString);
+                localStorage.setItem("Procedimiento", data.procedimiento_Id);
+                this.ProcedimientoById(data.procedimiento_Id).then((procedimiento) => {
+                    if (procedimiento.data.nombre == "Bordado") {
+                        this.bordado = true;
+                        this.frmOrdenesPedidos.controls.Tamaño.setValue(data.tamaño);
 
-                this.empleadoService.getEmpleadosById(data.empleado_Id).subscribe(resEmpleado => {
-                    resEmpleado
-                    if (resEmpleado.status && resEmpleado.status == true) { // se deja validado == true porque en caso de no encontrarn un registro el backend devuelve un status 404
-                        this.frmOrdenesPedidos.controls.PersonaEmpleado.setValue(`${resEmpleado.data.persona_Id}`);
-                    }
-                })
-                this.clienteService.getClientesById(data.cliente_Id).subscribe(resCliente => {
-                    resCliente
-                    if (resCliente.status && resCliente.status == true) { // se deja validado == true porque en caso de no encontrarn un registro el backend devuelve un status 404
-                        this.frmOrdenesPedidos.controls.PersonaCliente.setValue(`${resCliente.data.persona_Id}`);
-                    }
-                })
-                this.generalParameterService.getById("Estados", data.estado_Id).subscribe(resEstado => {
-                    resEstado
-                    if (resEstado.status && resEstado.status == true) { // se deja validado == true porque en caso de no encontrarn un registro el backend devuelve un status 404
-                        this.frmOrdenesPedidos.controls.Estado.setValue(`${resEstado.data.nombre}`);
-                    }
-                })
+                        const ubicaciones = data.ubicacion.split(', ');
+                        var selectedItemsUbicacion: any = []
+                        ubicaciones.forEach((ubicacion: any) => {
+                            selectedItemsUbicacion.push(ubicacion);
+                        });
 
-                this.personaService.getById(this.frmOrdenesPedidos.controls.PersonaEmpleado).subscribe(resPersona => {
-                    resPersona
-                    if (resPersona.status && resPersona.status == true) { // se deja validado == true porque en caso de no encontrarn un registro el backend devuelve un status 404
-                        this.frmOrdenesPedidos.controls.DocumentoCliente.setValue(`${resPersona.data.documento}`);
-                        this.frmOrdenesPedidos.controls.NombresCliente.setValue(`${resPersona.data.primerNombre} ${resPersona.data.segundoNombre}`);
-                        this.frmOrdenesPedidos.controls.ApellidosCliente.setValue(`${resPersona.data.primerApellido} ${resPersona.data.segundoApellido}`);
-                    }
-                })
+                        const colores = data.colores.split(', ');
+                        var selectedItemsColor: any = [];
+                        colores.forEach((color: any) => {
+                            selectedItemsColor.push(color);
+                        });
 
-                this.personaService.getById(this.frmOrdenesPedidos.controls.PersonaCliente).subscribe(resPersona => {
-                    resPersona
-                    if (resPersona.status && resPersona.status == true) { // se deja validado == true porque en caso de no encontrarn un registro el backend devuelve un status 404
-                        this.frmOrdenesPedidos.controls.DocumentoEmpleado.setValue(`${resPersona.data.documento}`);
-                        this.frmOrdenesPedidos.controls.NombresEmpleado.setValue(`${resPersona.data.primerNombre} ${resPersona.data.segundoNombre}`);
-                        this.frmOrdenesPedidos.controls.ApellidosEmpleado.setValue(`${resPersona.data.primerApellido} ${resPersona.data.segundoApellido}`);
+                        this.frmOrdenesPedidos.controls.Ubicacion.setValue(selectedItemsUbicacion);
+                        this.frmOrdenesPedidos.controls.Colores.setValue(selectedItemsColor);
+                    } else {
+                        this.bordado = false;
                     }
-                })
+                });
 
                 if (data.archivoOrdenPedido_Id && data.archivoOrdenPedido_Id > 0) {
                     this.ArchivoService.getArchivoById(data.archivoOrdenPedido_Id).subscribe((res) => {
@@ -303,33 +289,6 @@ export class OrdenesPedidosFormComponent implements OnInit {
         });
     }
 
-    // calcularSubTotal() {
-    //     let data = this.frmOrdenesPedidos.value;
-    //     var ProcedimientoValor;
-    //     var subtotal = 0;
-
-    //     this.ProcedimientoById(data.Procedimiento_Id)
-    //         .then((procedimiento) => {
-    //             ProcedimientoValor = procedimiento.data.valor;
-
-    //             if (ProcedimientoValor !== null) {
-    //                 subtotal = parseInt(ProcedimientoValor) * parseInt(data.Cantidad);
-    //             }
-
-    //             var subTotalString = `$ 0`;
-
-    //             if (!isNaN(subtotal)) {
-    //                 subTotalString = `$ ${this.helperService.formaterNumber(subtotal)}`;
-    //             }
-
-    //             this.frmOrdenesPedidos.controls.SubTotal.setValue(subtotal);
-    //             this.frmOrdenesPedidos.controls.SubTotalString.setValue(subTotalString);
-    //         })
-    //         .catch((error) => {
-    //             console.error('Error al obtener el procedimiento:', error);
-    //         });
-    // }
-
     save() {
         if (this.frmOrdenesPedidos.invalid) {
             this.statusForm = false
@@ -337,11 +296,11 @@ export class OrdenesPedidosFormComponent implements OnInit {
             return;
         }
 
-        if(this.frmOrdenesPedidos.controls.Ubicacion.value != '') {
+        if (this.frmOrdenesPedidos.controls.Ubicacion.value != '') {
             this.frmOrdenesPedidos.controls.Ubicacion.setValue(this.frmOrdenesPedidos.controls.Ubicacion.value.join(', '));
         }
 
-        if(this.frmOrdenesPedidos.controls.Colores.value != ''){
+        if (this.frmOrdenesPedidos.controls.Colores.value != '') {
             this.frmOrdenesPedidos.controls.Colores.setValue(this.frmOrdenesPedidos.controls.Colores.value.join(', '));
         }
 
@@ -447,16 +406,16 @@ export class OrdenesPedidosFormComponent implements OnInit {
         }
     }
 
-    guardarOrdenesPedidosFacturasDetalles(ordenPedido_Id:any){
+    guardarOrdenesPedidosFacturasDetalles(ordenPedido_Id: any) {
         var producto = localStorage.getItem("Producto");
         var jsonString = localStorage.getItem("OrdenProduccionProducto");
         var lstOrdenProduccionProducto;
 
-        if(jsonString){
+        if (jsonString) {
             lstOrdenProduccionProducto = JSON.parse(jsonString);
             const detalleActualizar: any | undefined = lstOrdenProduccionProducto.find((detalle: any) => detalle.producto_Id == producto);
             if (detalleActualizar) {
-                detalleActualizar.ordenProduccion_Id = ordenPedido_Id;                
+                detalleActualizar.ordenProduccion_Id = ordenPedido_Id;
                 const index = lstOrdenProduccionProducto.indexOf(detalleActualizar);
                 lstOrdenProduccionProducto.splice(index, 1);
 

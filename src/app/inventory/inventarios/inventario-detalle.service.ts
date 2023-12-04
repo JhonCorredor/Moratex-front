@@ -27,6 +27,10 @@ export class InventarioDetalleService {
     return this.http.get<any>(`${this.BASE_URL}${id}`, {headers: this.headers});
   }
 
+  public getInventarioDetalleByProductoId(id : any) : Observable<any> {
+    return this.http.get<any>(`${this.BASE_URL}getByIdProducto/${id}`, {headers: this.headers});
+  }
+
   public getAll(ruta: String) : Observable<any> {
     return this.http.get<any>(`${environment.url}${ruta}/AllSelect`, {headers: this.headers});
   }
