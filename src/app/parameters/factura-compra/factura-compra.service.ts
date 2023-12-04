@@ -10,8 +10,10 @@ import { DatatableParameter } from 'src/app/admin/datatable.parameters';
 export class FacturaCompraService {
 
   private BASE_URL = environment.url + "FacturasCompras/";
-
+  private header = new HttpHeaders();
+  
   constructor(private http: HttpClient) { }
+  
   public datatable(data: DatatableParameter) : Observable<any> {
     return this.http.get<any>(`${this.BASE_URL}datatable?PageNumber=${data.pageNumber}&PageSize=${data.pageSize}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}` )
   }
@@ -31,6 +33,17 @@ export class FacturaCompraService {
     return this.http.get<any>(`${environment.url}${ruta}/AllSelect`);
   }
 
+  public getAllBillsDay(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.BASE_URL}getBillsDay?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
+
+  public getAllBillsMonth(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.BASE_URL}getBillsMonth?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
+
+  public getAllBillsCalendar(data: DatatableParameter): Observable<any> {
+    return this.http.get<any>(`${this.BASE_URL}getBillsCalendar?PageSize=${data.pageSize}&PageNumber=${data.pageNumber}&Filter=${data.filter}&ColumnOrder=${data.columnOrder}&DirectionOrder=${data.directionOrder}&ForeignKey=${data.foreignKey}`, { headers: this.header });
+  }
 
   public delete(id: any) : Observable<any> {
     return this.http.delete<any>(`${this.BASE_URL}${id}` );

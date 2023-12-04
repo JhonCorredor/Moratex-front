@@ -3,16 +3,22 @@
         <div class="modal-body">
             <form [formGroup]="frmDashBoard" class="mb-4">
                 <div class="d-flex justify-content-center">
-                    <div>
-                        <br>
-                        <button type="button" class="btn btn-primary btnVentasDia"
-                            (click)="onChangeVentas()">Día</button>
-                    </div>
                     <div class="mx-2">
                         <h6>Mes:</h6>
                         <ng-select [items]="litsMeses" bindLabel="textoMostrar" bindValue="id" class="h6"
                             style="width: 150px;" formControlName="Mes_Id" (change)="onchangeMes($event)">
                         </ng-select>
+                    </div>
+                    <div class="mx-2">
+                        <h6>Año:</h6>
+                        <ng-select [items]="listAnos" bindLabel="textoMostrar" bindValue="id" class="h6"
+                            style="width: 150px;" formControlName="Ano_Id" (change)="onchangeAno($event)">
+                        </ng-select>
+                    </div>
+                    <div>
+                        <br>
+                        <button type="button" class="btn btn-outline-primary btnVentasDia"
+                            (click)="onChangeVentas()">Día</button>
                     </div>
                 </div>
                 <br>
@@ -49,7 +55,7 @@
                     </div>
 
                     <div class="card rounded shadow-lg border-0 p-4 w-50 ">
-                        <h5>{{mesActual}}</h5>
+                        <h5>{{mesActual}} - {{year}}</h5>
                         <br>
                         <canvas id="chartVentasCalendar" height="250" width="400"></canvas>
                     </div>
@@ -80,16 +86,39 @@
                     </div>
 
                     <div class="card rounded shadow-lg border-0 p-4 w-50 ">
-                        <h5>{{mesActual}}</h5>
+                        <h5>{{mesActual}} - {{year}}</h5>
                         <br>
                         <canvas id="chartGastosCalendar" height="250" width="400"></canvas>
                     </div>
                 </div>
                 <br>
                 <div class="d-flex justify-content-around">
-                    <div class="d-flex flex-column card rounded shadow-lg border-0 p-4 w-25"></div>
-                    <div class="card rounded shadow-lg border-0 p-4 w-25 mx-3"></div>
-                    <div class="card rounded shadow-lg border-0 p-4 w-50"></div>
+                    <div class="d-flex flex-column card rounded shadow-lg border-0 p-4 w-25">
+                        <div>
+                            <h5>Total por pagar</h5>
+                            <br>
+                            <h1 class="text-center">{{ totalDeudas }}</h1>
+                        </div>
+                        <br>
+                        <div>
+                            <h5>Facturas de compra</h5>
+                            <br>
+                            <table datatable [dtOptions]="dtOptionsDeudas" [dtTrigger]="dtTriggerDeudas"
+                                class="display compact responsive w-100 table table-striped table-bordered  ">
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card rounded shadow-lg border-0 p-4 w-25 mx-3">
+                        <h5>Facturas de compra</h5>
+                        <br>
+                        <br>
+                        <canvas id="chartDeudas" height="250" width="400"></canvas>
+                    </div>
+                    <div class="card rounded shadow-lg border-0 p-4 w-50">
+                        <h5>{{mesActual}} - {{year}}</h5>
+                        <br>
+                        <canvas id="chartDeudasCalendar" height="250" width="400"></canvas>
+                    </div>
                 </div>
             </form>
         </div>
